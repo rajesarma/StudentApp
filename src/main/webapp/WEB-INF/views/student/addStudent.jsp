@@ -153,6 +153,18 @@
 							</div>
 
 							<div class="student-form-input ">
+								<label>eMail</label>
+								<div class="form-text">
+									<i class="fa fa-user" aria-hidden="true"></i>
+
+									<form:input path="email" name="email" id="email"
+												cssClass="student-form-text"/>
+								</div>
+							</div>
+
+
+
+							<div class="student-form-input " style="width: 64%">
 								<label>Gender</label>
 								<div class="form-text">
 									<i class="fa fa-user" aria-hidden="true"></i>
@@ -165,12 +177,15 @@
 								</div>
 							</div>
 
-							<div class="student-form-input ">
+							<div class="student-form-input " style="float: left">
 								<label>Photo</label>
 								<div class="form-text">
 									<i class="fa fa-user" aria-hidden="true"></i>
 
-									<input type="file" name="photoName" id="photoName" cssClass="student-form-text"/>
+									<input type="file" name="photoName" id="photoName"
+										   cssClass="student-form-text" onchange="openFile(event)" />
+
+
 
 									<div id="applicantPhotoName" ></div>
 									<script>
@@ -194,7 +209,21 @@
 										};
 									</script>
 								</div>
+								<img src='${photo}' width='80px' height='80px' id="passportPhoto" style='border: 1px solid black' ></img>
 							</div>
+
+							<div class="student-form-input " >
+								<label>Address </label>
+								<div class="form-text">
+									<i class="fa fa-user" aria-hidden="true"></i>
+
+									<form:textarea path="address" name="address" id="address"
+												cssClass="student-form-text"
+												   cssStyle="height: 100px"/>
+								</div>
+							</div>
+
+
 
 						<%--<button type="submit" class="btn submit" onclick="checkValues()">
 							Add
