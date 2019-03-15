@@ -4,17 +4,8 @@
 	clear: both;
 }
 
-.student-form {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-}
-
 .student-form-input {
-	width: 49%;
+	width: 32%;
 	margin-bottom: 1.2em;
 	float: left;
 }
@@ -36,17 +27,26 @@
 
 .student-form-text {
 	margin: 0;
-	font-size: 100%;
+	/*font-size: 100%;*/
 	font: inherit;
 	vertical-align: baseline;
 	border: 1px solid #000;
-	padding: 10px 10px 10px 40px;
+	padding: 1px 1px 5px 5px;
+}
+
+.student-form-select {
+	margin: 0;
+	vertical-align: baseline;
+	border: 1px solid #000;
+	padding: 1px 1px 5px 5px;
+	width: 58%;
 }
 
 
+/*
 .student-form input[type="text"],
 .student-form input[type="email"], select {
-	width: 100%;
+	width: 45%;
 	color: #777;
 	font-size: 0.9em;
 	padding: 10px 10px 10px 40px;
@@ -55,4 +55,4 @@
 	border: 1px solid #000;
 	box-sizing: border-box;
 
-}
+}*/

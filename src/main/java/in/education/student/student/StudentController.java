@@ -1,18 +1,15 @@
 package in.education.student.student;
 
 import in.education.student.common.util.DBDataUtils;
-import in.education.student.common.util.GeneralQueries;
 import in.education.student.model.StudentForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.sql.SQLException;
-import java.util.Map;
 
 @Controller
 //@RequestMapping(value="/student")
@@ -36,6 +33,8 @@ public class StudentController {
 			mav.addObject("academicYears", dbDataUtils.getAcademicYears());
 			mav.addObject("bloodGroups", dbDataUtils.getBloodGroups());
 			mav.addObject("branches", dbDataUtils.getBranches());
+			mav.addObject("gender", "M");
+
 
 		}catch (SQLException e) {
 			mav.addObject("message", "Problem in Fetching Data");
