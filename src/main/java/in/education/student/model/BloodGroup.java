@@ -1,4 +1,4 @@
-package in.education.student.common.model;
+package in.education.student.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,22 +9,17 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="exam_type")
-public class ExamType {
+@Table(name="blood_group")
+public class BloodGroup {
 
 	@Id
 	@NotNull
-	@Column(name="exam_type_id")
+	@Column(name="bg_id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private long examTypeId;
+	private long bloodGroupId;
 
-	@NotNull
-	@Column(name="exam_type")
-	private String examType;
-
-	@NotNull
-	@Column(name="max_marks")
-	private long maxMarks;
+	@Column(name="bg_name")
+	private String bloodGroup;
 }
 
 

@@ -1,4 +1,4 @@
-package in.education.student.common.configuration;
+package in.education.student.common.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -213,10 +213,10 @@ public class DBUtils {
 	}
 
 
-	public Map<String,Object> getSelectMap(String sql, Connection con) throws SQLException {
+	public Map<String,Object> getSelectMap(String sql) throws SQLException {
 
 		Map<String,Object> record = new HashMap<>();
-		PreparedStatement ps = con.prepareStatement(sql);
+		PreparedStatement ps = connection.prepareStatement(sql);
 
 		ResultSet rs = ps.executeQuery();
 		ResultSetMetaData rm = rs.getMetaData();

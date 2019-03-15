@@ -1,4 +1,4 @@
-package in.education.student.common;
+package in.education.student.common.util;
 
 public class GeneralQueries {
 

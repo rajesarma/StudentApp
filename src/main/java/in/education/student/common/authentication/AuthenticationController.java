@@ -1,7 +1,7 @@
 package in.education.student.common.authentication;
 
 import in.education.student.common.exception.AuthenticationException;
-import in.education.student.common.model.User;
+import in.education.student.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

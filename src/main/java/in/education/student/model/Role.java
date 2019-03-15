@@ -1,4 +1,4 @@
-package in.education.student.common.model;
+package in.education.student.model;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;

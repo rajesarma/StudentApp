@@ -1,9 +1,9 @@
 package in.education.student.common.authentication;
 
-import in.education.student.common.GeneralQueries;
-import in.education.student.common.configuration.DBUtils;
+import in.education.student.common.util.GeneralQueries;
+import in.education.student.common.util.DBUtils;
 import in.education.student.common.exception.AuthenticationException;
-import in.education.student.common.model.User;
+import in.education.student.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 @Repository
 public class AuthenticationRepository {

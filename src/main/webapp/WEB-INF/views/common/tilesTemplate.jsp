@@ -19,6 +19,8 @@
 	<%--<meta http-equiv="Refresh" content="5"; url="/logout"/>--%>
 	<%--<META HTTP-EQUIV="Refresh" CONTENT="1800;URL=/expireSession">--%>
 
+
+
 	<link rel="icon" href="<c:url value="/images/my_logo.jpg" />" type="image/x-icon" />
 
 	<link rel="stylesheet" href="<c:url value="css/loading.css" />" type="text/css" />
@@ -26,6 +28,7 @@
 	<link rel="shortcut icon" href="<c:url value="/images/my_logo.jpg" />"
 		  type="image/x-icon" />
 
+	<link rel="stylesheet" type="text/css"  href="<c:url value="css/index.css" />" />
 	<link rel="stylesheet" type="text/css"  href="<c:url value="css/styles.css" />" />
 	<link rel="stylesheet" type="text/css"  href="<c:url value="css/menus.css" />"/>
 
@@ -72,31 +75,32 @@
 	</style>
 
 </head>
-<body style="overflow-x:hidden;">
+<body style="overflow-x:hidden;" >
+	<div class="main-bg">
 
-	<div id="loading" class="loading">
-		<div class="loading-div">
-			<div id="cssload-loader" >
-				<ul>
-					<li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-				</ul>
+		<%--<div id="loading" class="loading">
+			<div class="loading-div">
+				<div id="cssload-loader" >
+					<ul>
+						<li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+					</ul>
+				</div>
+				<div style="padding-top: 10px">
+					<b>Loading... </b>
+				</div>
 			</div>
-			<div style="padding-top: 10px">
-				<b>Loading... </b>
-			</div>
-		</div>
-	</div>
+		</div>--%>
 
-	<div class="page mt-minus-20">
-		<div>
-			<div class="min-ht-50" style="background: #14b694">
-				<tiles:insertAttribute name="menu" />
-			</div>
-			<div class="min-ht-500" style="background: #cacaca">
-				<br />
-				<tiles:insertAttribute name="body" />
-				<tiles:insertAttribute name="footer" />
-			</div>
+		<div class="page mt-minus-20">
+
+				<div class="min-ht-50" style="background: #1cc7d0">
+					<tiles:insertAttribute name="menu" />
+				</div>
+				<div class="min-ht-500 bg-white" > <%--style="background: #cacaca"--%>
+					<br />
+					<tiles:insertAttribute name="body" />
+					<tiles:insertAttribute name="footer" />
+				</div>
 		</div>
 	</div>
 </body>

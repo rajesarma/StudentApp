@@ -10,44 +10,58 @@
 <head>
 	<meta charset="ISO-8859-1">
 	<title>Student Add</title>
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+
+	<link rel="stylesheet" type="text/css"  href="<c:url value="css/form-data.css" />" />
 
 </head>
 <body>
 	<div class="container_form">
-	<div class="header" >
-		<h3 style="color:#fff; text-align: center;">Add Student</h3>
-	</div>
 
-		<div class="main-bg">
-
-		<h1><!-- title --></h1>
-
-			<div class="sub-main-w3">
-				<div class="bg-content-w3pvt">
-					<div class="top-content-style">
-						<!-- <img src="images/model.jpg" alt="" /> -->
-						<%--Enter into My Site--%>
+			<div class="sub-main-w2">
+				<div class="bg-content-w2pvt">
+					<div class="top-content-style-pages">
+						<p class="legend">Add Student</p>
 					</div>
 					<form:form action="/studentAdd" method="post" modelAttribute="sudentData">
-						<p class="legend">Login Here<span class="fa fa-hand-o-down"></span></p>
+						<div class="err-message"> ${message} </div>
+
+						<div class="student-form-input">
+							<label>Full name : </label>
+							<div class="form-text">
+								<i class="fa fa-user" aria-hidden="true"></i>
+								<form:input path="name" name="name" id="name"
+											placeholder="Student Name" cssClass="student-form-text"/>
+							</div>
+						</div>
+
+						<div class="student-form-input">
+							<label>Student Roll No. : </label>
+							<div class="form-text">
+								<i class="fa fa-user" aria-hidden="true"></i>
+
+								<form:input path="rollno" name="rollno" id="rollno"
+											placeholder="Student Roll No." cssClass="student-form-text"/>
+							</div>
+						</div>
+
 						<div class="input">
-							<form:select path="branches" name="branches" id="branches"
+							<form:select path="branch" name="branch" id="branch"
 										 multiple="false">
 							<form:option value="NONE" label="Select" />
 							<form:options items="${branches}" />
 							</form:select>
 						</div>
+
+
 						</div>
-						<div class="err-message">
-								${message}
-						</div>
+
 						<%--<button type="submit" class="btn submit" onclick="checkValues()">
 							Add
 						</button>--%>
 					</form:form>
 				</div>
 			</div>
-		</div>
 	</div>
 </body>
 </html>

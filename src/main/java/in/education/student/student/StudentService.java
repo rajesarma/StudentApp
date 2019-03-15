@@ -1,6 +1,6 @@
-package in.education.student.common.student;
+package in.education.student.student;
 
-import in.education.student.common.model.StudentData;
+import in.education.student.model.StudentForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class StudentService {
 		this.studentRepository = studentRepository;
 	}
 
-	public StudentData getStudentData() {
+	public StudentForm getStudentData() {
 
 		return studentRepository.getStudentData();
 	}

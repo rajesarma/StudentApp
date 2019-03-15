@@ -26,7 +26,9 @@
 		<div id="title" style="text-align: left;  margin-left: 20px" >
 			<%--<H1 style="font-size: 36px; margin-top: -5px; margin-bottom:-25px; font-stretch: extra-expanded;">ALIET</H1>--%>
 			<%--<h3 style="font-size: 30px; margin-bottom: 0px">Student Information Retrieval</h3>--%>
-			<H1>Hi</H1>
+			<%--<H1></H1>--%>
+			<div class="heading">Hi</div>
+
 		</div>
 	</div>
 	<div class="container">
