@@ -19,21 +19,25 @@
 	<%--<meta http-equiv="Refresh" content="5"; url="/logout"/>--%>
 	<%--<META HTTP-EQUIV="Refresh" CONTENT="1800;URL=/expireSession">--%>
 
-
-
-	<link rel="icon" href="<c:url value="/images/my_logo.jpg" />" type="image/x-icon" />
-
-	<link rel="stylesheet" href="<c:url value="css/loading.css" />" type="text/css" />
-
-	<link rel="shortcut icon" href="<c:url value="/images/my_logo.jpg" />"
+	<link rel="icon" href="<c:url value="${pageContext.request.contextPath}/images/my_logo.jpg" />" type="image/x-icon" />
+	<link rel="stylesheet" href="<c:url
+		value="${pageContext.request.contextPath}/css/loading.css" />" type="text/css" />
+	<link rel="shortcut icon" href="<c:url value="${pageContext.request.contextPath}/images/my_logo.jpg" />"
 		  type="image/x-icon" />
+	<link rel="stylesheet" type="text/css"  href="<c:url
+	value="${pageContext.request.contextPath}/css/index.css" />" />
+	<link rel="stylesheet" type="text/css"  href="<c:url
+	value="${pageContext.request.contextPath}/css/styles.css" />" />
+	<link rel="stylesheet" type="text/css"  href="<c:url
+	value="${pageContext.request.contextPath}/css/menus.css" />"/>
 
-	<link rel="stylesheet" type="text/css"  href="<c:url value="css/index.css" />" />
-	<link rel="stylesheet" type="text/css"  href="<c:url value="css/styles.css" />" />
-	<link rel="stylesheet" type="text/css"  href="<c:url value="css/menus.css" />"/>
+	<%--<script src="<c:url
+		value="${pageContext.request.contextPath}/js/jquery-1.12.4.min.js" />"></script>--%>
 
-	<script src="<c:url value="js/jquery-1.12.4.min.js" />"></script>
-	<script src="<c:url value="js/menus.js" />"></script>
+	<script src="${pageContext.request.contextPath}/js/jquery-3.3.1.js"></script>
+
+	<script
+			src="<c:url value="${pageContext.request.contextPath}/js/menus.js" />"></script>
 
 	<script>
 		if(window.history.length>0)
@@ -93,7 +97,7 @@
 
 		<div class="page mt-minus-20">
 
-				<div class="min-ht-50" style="background: #1cc7d0">
+				<div class="min-ht-50" style="background: #084B8A">  <%--#1cc7d0--%>
 					<tiles:insertAttribute name="menu" />
 				</div>
 				<div class="min-ht-500 bg-white" > <%--style="background: #cacaca"--%>

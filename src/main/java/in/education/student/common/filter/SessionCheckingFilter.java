@@ -48,7 +48,7 @@ public class SessionCheckingFilter implements Filter {
 			String[] allowedUrls = {"login", "logout", "home"};
 			List<String> allowedUrlsList = Arrays.asList(allowedUrls);
 
-			if (allowedUrlsList.stream().anyMatch(action::equalsIgnoreCase)) {
+			if (allowedUrlsList.stream().anyMatch(action :: equalsIgnoreCase)) {
 				filterChain.doFilter(request, response);
 			} else {
 
@@ -61,9 +61,11 @@ public class SessionCheckingFilter implements Filter {
 				} else if (session.getAttribute("user") == null) {
 					rd.forward(httpRequest, httpResponse);
 				} else if (session.getAttribute("services") != null) {
-					List services = (List) session.getAttribute("serviceUrls");
+					List<String> services = (List) session.getAttribute("serviceUrls");
+					//services.stream().forEach(System.out :: println);
 
-					if (services.contains(path.trim())) {
+					//if (services.contains(path.trim())) {
+					if( services.stream().anyMatch(str -> path.contains(str)) ) {
 						filterChain.doFilter(request, response);
 					} else {
 						rd.forward(httpRequest, httpResponse);
@@ -74,58 +76,6 @@ public class SessionCheckingFilter implements Filter {
 			}
 		}
 	}
-
-		//		String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
-
-		/*
-		String path = httpRequest.getRequestURI();
-		int p= path.lastIndexOf("/");
-		String action = path.substring(p+1,path.length()-3);
-		link = path.substring(p+1,path.length());
-
-
-
-		if (action!=null && (action.equalsIgnoreCase("login") || action.equalsIgnoreCase("Logout")
-				|| action.equalsIgnoreCase("home")
-				||action.equalsIgnoreCase("HomePage")
-				||action.equalsIgnoreCase("changePassword")
-		))
-		{
-			filterChain.doFilter(request, response);
-		}
-		else
-		{
-			HttpSession session=httpRequest.getSession(true);
-
-			if (session!=null && session.getAttribute("userId")==null)
-			{
-				RequestDispatcher rd=httpRequest.getRequestDispatcher("sessionExpired.do");
-				rd.forward(httpRequest, httpResponse);
-			}
-			else if (session!=null && session.getAttribute("services")!=null)
-			{
-				services = (ArrayList<HashMap<String,String>>)session.getAttribute("services");
-				for (Iterator serviceMap = services.iterator(); serviceMap.hasNext();)
-				{
-					HashMap<String, String> service = (HashMap<String, String>) serviceMap.next();
-					if(link.equals(service.get("service_url")))
-					{
-						flag = true;
-						break;
-					}
-				}
-				if (flag==true)
-				{
-					filterChain.doFilter(request, response);
-				}
-				else
-				{
-					RequestDispatcher rd = httpRequest.getRequestDispatcher
-					("sessionExpired.do");
-					rd.forward(httpRequest,httpResponse);
-				}
-			}
-		}*/
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {

@@ -21,7 +21,7 @@ function buildMenu(divid,menulist1)
 			        var target =item["service_url"];
 			        
 			        var menuposition="SHOW";
-			        var orderid= parseInt(item["dispay_order"]);
+			        var orderid= parseInt(item["display_order"]);
 					if(menuposition=='SHOW')
 					{
 			        	if (items[parentid]) 

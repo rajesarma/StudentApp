@@ -86,7 +86,7 @@ public class GeneralQueries {
 		return "select subject_id, subject_name from subjects where semester_id = "+semesterId+" and branch_id = '"+branchId+ "' order by subject_id";
 	}
 
-	public static String getYears = "select year_no, year_name from years";
+	public static String getBatches = "select year_no, year_name from batch";
 
 	public static String getMaxMarks(long examTypeId) {
 		return "select max_marks from exam_type where exam_type_id = "+examTypeId;

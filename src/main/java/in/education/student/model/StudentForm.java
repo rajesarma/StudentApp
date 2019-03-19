@@ -1,51 +1,94 @@
 package in.education.student.model;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity(name = "student_details")
 public class StudentForm {
+	@Id
+	@Column(name = "student_id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private long studentId;
 
-	private String mode=null;
+	@Column(name = "student_name")
 	private String name=null;
-	private String rollno=null;
-	private String branch=null;
-	private String batch=null;
 
+	@Column(name = "father_name")
 	private String fatherName=null;
-	private String motherName=null;
-	private String parentPhoneNo=null;
-	private String alternativePhoneNo=null;
-	private String aadharNo=null;
-	private String mentorName=null;
-	private String address=null;
-	private String email=null;
-	private String gender=null;
-	private String dob=null;
-	private String doj=null;
-	private String bloodGroup=null;
-	private String photoName=null;
-	private String branchId= null;
 
-	private String studentId= null;
+	@Column(name = "dob")
+	private String dob=null;
+
+	@Column(name = "doj")
+	private String doj=null;
+
+	@Column(name = "photo_name")
+	private String photoName=null;
+
+	@Column(name = "aadhar")
+	private String aadharNo=null;
+
+	@Column(name = "address")
+	private String address=null;
+
+	@Column(name = "email")
+	private String email=null;
+
+	@Column(name = "guardian_mobile")
+	private String parentPhoneNo=null;
+
+	@Column(name = "blood_group_id")
 	private int bloodGroupId = 0;
 
-	private int subjectId= 0;
-
-	private int batchId = 0;
-
+	@Column(name = "academic_year_id")
 	private int academicYearId = 0;
 
+	@Column(name = "branch_id")
+	private String branchId= null;
+
+	@Column(name = "roll_no")
+	private String rollNo =null;
+
+	@Column(name = "mobile_no")
+	private String alternativePhoneNo=null;
+
+	@Column(name = "mother_name")
+	private String motherName=null;
+
+	@Column(name = "gender")
+	private String gender=null;
+
+	@Column(name = "photo")
+	private MultipartFile photo;
+
+	@Column(name = "height")
+	private int height= 0;
+
+	@Column(name = "joining_year_no")
+	private String joiningYearNo= null;
+
+	private int subjectId= 0;
+	private int batchId = 0;
 	private int examTypeId = 0;
-
 	private int semesterId = 0;
-	private String yearId= null;
-	// private String displayMode = null;
 
-	//private FormFile studentPhoto = null;
+	private String branch = null;
+	private String batch = null;
+	private String bloodGroup = null;
 
-	public String getMode() {
-		return mode;
+	private String year = null;
+
+	public long getStudentId() {
+		return studentId;
 	}
 
-	public void setMode(String mode) {
-		this.mode = mode;
+	public void setStudentId(long studentId) {
+		this.studentId = studentId;
 	}
 
 	public String getName() {
@@ -56,100 +99,12 @@ public class StudentForm {
 		this.name = name;
 	}
 
-	public String getRollno() {
-		return rollno;
-	}
-
-	public void setRollno(String rollno) {
-		this.rollno = rollno;
-	}
-
-	public String getBranch() {
-		return branch;
-	}
-
-	public void setBranch(String branch) {
-		this.branch = branch;
-	}
-
-	public String getBatch() {
-		return batch;
-	}
-
-	public void setBatch(String batch) {
-		this.batch = batch;
-	}
-
 	public String getFatherName() {
 		return fatherName;
 	}
 
 	public void setFatherName(String fatherName) {
 		this.fatherName = fatherName;
-	}
-
-	public String getMotherName() {
-		return motherName;
-	}
-
-	public void setMotherName(String motherName) {
-		this.motherName = motherName;
-	}
-
-	public String getParentPhoneNo() {
-		return parentPhoneNo;
-	}
-
-	public void setParentPhoneNo(String parentPhoneNo) {
-		this.parentPhoneNo = parentPhoneNo;
-	}
-
-	public String getAlternativePhoneNo() {
-		return alternativePhoneNo;
-	}
-
-	public void setAlternativePhoneNo(String alternativePhoneNo) {
-		this.alternativePhoneNo = alternativePhoneNo;
-	}
-
-	public String getAadharNo() {
-		return aadharNo;
-	}
-
-	public void setAadharNo(String aadharNo) {
-		this.aadharNo = aadharNo;
-	}
-
-	public String getMentorName() {
-		return mentorName;
-	}
-
-	public void setMentorName(String mentorName) {
-		this.mentorName = mentorName;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getGender() {
-		return gender;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
 	}
 
 	public String getDob() {
@@ -168,20 +123,60 @@ public class StudentForm {
 		this.doj = doj;
 	}
 
-	public String getBloodGroup() {
-		return bloodGroup;
-	}
-
-	public void setBloodGroup(String bloodGroup) {
-		this.bloodGroup = bloodGroup;
-	}
-
 	public String getPhotoName() {
 		return photoName;
 	}
 
 	public void setPhotoName(String photoName) {
 		this.photoName = photoName;
+	}
+
+	public String getAadharNo() {
+		return aadharNo;
+	}
+
+	public void setAadharNo(String aadharNo) {
+		this.aadharNo = aadharNo;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getParentPhoneNo() {
+		return parentPhoneNo;
+	}
+
+	public void setParentPhoneNo(String parentPhoneNo) {
+		this.parentPhoneNo = parentPhoneNo;
+	}
+
+	public int getBloodGroupId() {
+		return bloodGroupId;
+	}
+
+	public void setBloodGroupId(int bloodGroupId) {
+		this.bloodGroupId = bloodGroupId;
+	}
+
+	public int getAcademicYearId() {
+		return academicYearId;
+	}
+
+	public void setAcademicYearId(int academicYearId) {
+		this.academicYearId = academicYearId;
 	}
 
 	public String getBranchId() {
@@ -192,20 +187,44 @@ public class StudentForm {
 		this.branchId = branchId;
 	}
 
-	public String getStudentId() {
-		return studentId;
+	public String getRollNo() {
+		return rollNo;
 	}
 
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
+	public void setRollNo(String rollNo) {
+		this.rollNo = rollNo;
 	}
 
-	public int getBloodGroupId() {
-		return bloodGroupId;
+	public String getAlternativePhoneNo() {
+		return alternativePhoneNo;
 	}
 
-	public void setBloodGroupId(int bloodGroupId) {
-		this.bloodGroupId = bloodGroupId;
+	public void setAlternativePhoneNo(String alternativePhoneNo) {
+		this.alternativePhoneNo = alternativePhoneNo;
+	}
+
+	public String getMotherName() {
+		return motherName;
+	}
+
+	public void setMotherName(String motherName) {
+		this.motherName = motherName;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public MultipartFile getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(MultipartFile photo) {
+		this.photo = photo;
 	}
 
 	public int getSubjectId() {
@@ -224,14 +243,6 @@ public class StudentForm {
 		this.batchId = batchId;
 	}
 
-	public int getAcademicYearId() {
-		return academicYearId;
-	}
-
-	public void setAcademicYearId(int academicYearId) {
-		this.academicYearId = academicYearId;
-	}
-
 	public int getExamTypeId() {
 		return examTypeId;
 	}
@@ -248,19 +259,54 @@ public class StudentForm {
 		this.semesterId = semesterId;
 	}
 
-	public String getYearId() {
-		return yearId;
+	public String getBranch() {
+		return branch;
 	}
 
-	public void setYearId(String yearId) {
-		this.yearId = yearId;
+	public void setBranch(String branch) {
+		this.branch = branch;
 	}
 
-	/*public String getDisplayMode() {
-		return displayMode;
+	public String getBatch() {
+		return batch;
 	}
 
-	public void setDisplayMode(String displayMode) {
-		this.displayMode = displayMode;
-	}*/
+	public void setBatch(String batch) {
+		this.batch = batch;
+	}
+
+	public String getBloodGroup() {
+		return bloodGroup;
+	}
+
+	public void setBloodGroup(String bloodGroup) {
+		this.bloodGroup = bloodGroup;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public String getJoiningYearNo() {
+		return joiningYearNo;
+	}
+
+	public void setJoiningYearNo(String joiningYearNo) {
+		this.joiningYearNo = joiningYearNo;
+	}
+
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
 }
+
+
+

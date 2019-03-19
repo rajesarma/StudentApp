@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,10 +31,9 @@ public class AuthenticationService {
 
 		HttpSession session = request.getSession(true);
 
-		ArrayList<HashMap<String, String>> servicesList = authenticationRepository.getServices(userName, password);
+		List<HashMap<String, String>> servicesList = authenticationRepository.getServices(userName, password);
 
 		session.setAttribute("services", servicesList);
-		session.setAttribute("servicesMenu", new JSONArray(servicesList));
 		session.setAttribute("user", user);
 		session.setAttribute("user_desc", user.getUserDesc());
 
@@ -43,7 +43,12 @@ public class AuthenticationService {
 
 		session.setAttribute("serviceUrls", serviceUrls);
 
-		//System.out.println(serviceUrls);
+		List<HashMap<String, String>> servicesShowList = servicesList.stream()
+				.filter(serviceMap -> "Y".equalsIgnoreCase(serviceMap.get("show_in_menu")))
+				.collect(Collectors.toList());
+
+		session.setAttribute("servicesMenu", new JSONArray(servicesShowList)); // Show
+		// in menu only services which are allowed to show in menu
 
 		if (user != null) {
 

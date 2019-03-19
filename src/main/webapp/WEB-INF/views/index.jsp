@@ -11,9 +11,7 @@
 	<meta charset="ISO-8859-1">
 	<title>Site</title>
 
-	<link rel="stylesheet" type="text/css" href="css/index.css">
-	<%--<script src="js/md5.js" />--%>
-	<script src="<c:url value="js/md5.js" />"></script>
+	<script src="<c:url value="${pageContext.request.contextPath}/js/md5.js" />"></script>
 	<script>
 		function checkValues()
 		{
@@ -22,14 +20,12 @@
 				alert("Enter Username");
 				document.forms[0].userName.value="";
 				return false;
-			}
-			else if (document.forms[0].password.value=="")
+			} else if (document.forms[0].password.value=="")
 			{
 				alert("Enter Password");
 				document.forms[0].password.value="";
 				return false;
-			}
-			else
+			} else
 			{
 				document.forms[0].password.value = md5(document.forms[0].password.value);
 				document.forms[0].submit();

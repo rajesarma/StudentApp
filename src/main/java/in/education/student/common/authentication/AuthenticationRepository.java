@@ -94,7 +94,7 @@ public class AuthenticationRepository {
 		try
 		{
 			String sql = "select s.service_id, s.service_url, s.service_name,s" +
-					".parent_id, s.dispay_order" +
+					".parent_id, s.display_order, s.show_in_menu" +
 					" from users u" +
 					" join role_services rs on(u.role_id = rs.role_id )" +
 					" join services s on (s.service_id = rs.service_id)" +
@@ -111,7 +111,8 @@ public class AuthenticationRepository {
 				serviceMap.put("service_url", rs.getString("service_url"));
 				serviceMap.put("service_name", rs.getString("service_name"));
 				serviceMap.put("parent_id", rs.getString("parent_id"));
-				serviceMap.put("dispay_order", rs.getString("dispay_order"));
+				serviceMap.put("display_order", rs.getString("display_order"));
+				serviceMap.put("show_in_menu", rs.getString("show_in_menu"));
 
 				services.add(serviceMap);
 			}

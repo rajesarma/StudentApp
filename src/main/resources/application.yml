@@ -5,6 +5,7 @@ server:
   #    cookie:
   #      http-only: true # Also configured in configuration file
   #      secure: true # Also configured in configuration file
+    context-path: /
 
 spring:
 

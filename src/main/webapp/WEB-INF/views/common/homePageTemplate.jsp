@@ -17,16 +17,12 @@
 	<meta http-equiv="description" content="Site"/>
 	<%--<meta http-equiv="Refresh" content="1800"; url="/logout"/>--%>
 
-	<link rel="icon" href="<c:url value="/images/my_logo.jpg" />" type="image/x-icon" />
-	<link rel="shortcut icon" href="<c:url value="/images/my_logo.jpg" />"
-		  type="image/x-icon" />
 
-	<%--<script>
-		if(window.history.length>0)
-		{
-			window.history.forward(4);
-		}
-	</script>--%>
+	<link rel="stylesheet" type="text/css"  href="<c:url
+	value="${pageContext.request.contextPath}/css/index.css" />" />
+	<link rel="icon" href="<c:url value="${pageContext.request.contextPath}/images/my_logo.jpg" />" type="image/x-icon" />
+	<link rel="shortcut icon" href="<c:url value="${pageContext.request.contextPath}/images/my_logo.jpg" />"
+		  type="image/x-icon" />
 
 </head>
 <body>

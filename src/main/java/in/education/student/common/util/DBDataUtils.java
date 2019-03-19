@@ -27,4 +27,8 @@ public class DBDataUtils {
 	public Map getBranches() throws SQLException {
 		return dbUtils.getSelectMap(GeneralQueries.getBranches);
 	}
+
+	public Map getBatches() throws SQLException {
+		return dbUtils.getSelectMap(GeneralQueries.getBatches);
+	}
 }
