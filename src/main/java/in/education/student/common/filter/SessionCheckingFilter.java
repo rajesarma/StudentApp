@@ -65,7 +65,9 @@ public class SessionCheckingFilter implements Filter {
 					//services.stream().forEach(System.out :: println);
 
 					//if (services.contains(path.trim())) {
-					if( services.stream().anyMatch(str -> path.contains(str)) ) {
+					if( services.stream().anyMatch(str -> path.contains(str))
+						|| services.stream().anyMatch(str -> str.contains(path))
+					) {
 						filterChain.doFilter(request, response);
 					} else {
 						rd.forward(httpRequest, httpResponse);

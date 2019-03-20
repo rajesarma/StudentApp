@@ -91,4 +91,39 @@ public class GeneralQueries {
 	public static String getMaxMarks(long examTypeId) {
 		return "select max_marks from exam_type where exam_type_id = "+examTypeId;
 	}
+
+	public static String isRollNoExists(String rollNo) {
+		String sql = "select count(*) as count from student_details where roll_no ='"+rollNo+"' ";
+		return sql;
+	}
+
+	public static String isAttendanceExists(long studentId) {
+		String sql = " select count(*) as count from student_attendance where " +
+				"student_id = "+studentId;
+		return sql;
+	}
+
+	public static String isMarksExists(long studentId) {
+
+		String sql =
+				"select count(*) as count from student_marks where student_id =" + studentId;
+		return sql;
+	}
+
+	public static String deleteStudentAttendance(long studentId) {
+		String sql = "delete from student_attendance where student_id = "+studentId;
+		return sql;
+	}
+
+	public static String deleteStudentMarks(long studentId) {
+		String sql = "delete from student_marks where student_id ="+studentId;
+		return sql;
+	}
+
+	public static String deleteStudenData(long studentId) {
+		String sql = "delete from student_details where student_id ="+studentId;
+		return sql;
+	}
+
+
 }

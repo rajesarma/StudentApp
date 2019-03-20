@@ -4,7 +4,6 @@ import in.education.student.model.StudentForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -27,9 +26,19 @@ public class StudentService {
 		return studentRepository.getAllStudentsData(studentData);
 	}
 
-	public StudentForm getStudentsData(int studentId) {
+	public StudentForm getStudentData(int studentId) {
+		StudentForm studentData = studentRepository.getStudentData(studentId);
+		return studentData;
+	}
 
-		return studentRepository.getStudentsData(studentId);
+	public int updateStudentData(StudentForm studentForm) {
+
+		return studentRepository.updateStudentData(studentForm);
+	}
+
+	public int deleteStudentData(StudentForm studentForm) {
+
+		return studentRepository.deleteStudentData(studentForm);
 	}
 
 }

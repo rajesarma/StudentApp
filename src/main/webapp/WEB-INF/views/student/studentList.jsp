@@ -84,6 +84,7 @@
 					<th scope="row">Roll No</th>
 					<th scope="row">Name</th>
 					<th scope="row">Father Name</th>
+					<th scope="row">Photo</th>
 					<th scope="row">DOB</th>
 					<th scope="row">DOJ</th>
 					<th scope="row">Action</th>
@@ -96,14 +97,26 @@
 							<td>${student.rollNo }</td>
 							<td>${student.name }</td>
 							<td>${student.fatherName }</td>
+							<td style="text-align: center; vertical-align: baseline">
+								<c:if test="${not empty student.photoData}">
+									<%--<img src="data:image/ext;base64,${student.photoData
+									 }" />--%>
+
+									<img src="data:image;base64, ${student.photoData }"
+										 style='border: 1px solid black' width='25px'
+										 height='30px'>
+								</c:if>
+							</td>
 							<td>${student.dob }</td>
 							<td>${student.doj }</td>
 							<td>
 								<a style="color: green; text-decoration: underline;"
-								   href="/student/edit/${student.studentId}">Edit</a>
+								   href="/student/edit/${student.studentId}/update">Edit
+								</a>
 								<span style="padding: 10px"></span>
 								<a style="color: red; text-decoration: underline;"
-								   href="/student/delete/${student.studentId}">Delete</a>
+								   href="/student/edit/${student.studentId}/delete">Delete
+								</a>
 								<span style="padding: 10px"></span>
 									<%--<spring:url value="/article/updateArticle/${article.id }" var="updateURL" />--%>
 									<%--<a class="btn btn-primary" href="${updateURL }" role="button" >Update</a>--%>

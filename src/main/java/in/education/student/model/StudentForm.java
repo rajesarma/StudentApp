@@ -83,6 +83,8 @@ public class StudentForm {
 
 	private String year = null;
 
+	private String photoData;
+
 	public long getStudentId() {
 		return studentId;
 	}
@@ -305,6 +307,14 @@ public class StudentForm {
 
 	public void setYear(String year) {
 		this.year = year;
+	}
+
+	public String getPhotoData() {
+		return photoData;
+	}
+
+	public void setPhotoData(String photoData) {
+		this.photoData = photoData;
 	}
 }
 

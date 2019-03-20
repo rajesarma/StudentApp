@@ -31,4 +31,16 @@ public class DBDataUtils {
 	public Map getBatches() throws SQLException {
 		return dbUtils.getSelectMap(GeneralQueries.getBatches);
 	}
+
+	public String isRollNoExists(String rollNo) throws SQLException {
+
+		int count = dbUtils.getNumericValue(GeneralQueries.isRollNoExists(rollNo));
+
+		if(count > 0)
+			return "{\"rollNoExists\":\"true\", \"message\":\"Roll No. already exists\"  }";
+		else
+			return "{\"rollNoExists\":\"false\" }";
+	}
+
+
 }

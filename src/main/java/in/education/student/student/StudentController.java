@@ -3,12 +3,13 @@ package in.education.student.student;
 import in.education.student.common.util.DBDataUtils;
 import in.education.student.model.StudentForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,10 +28,7 @@ public class StudentController {
 		this.dbDataUtils = dbDataUtils;
 	}
 
-	StudentForm studentForm = new StudentForm();
-	ModelAndView mav = new ModelAndView("studentAdd", "sudentData", studentForm);
-
-	static void loadDbData(DBDataUtils dbDataUtils, ModelAndView mav) {
+	private static void loadDbData(DBDataUtils dbDataUtils, ModelAndView mav) {
 
 		try {
 			mav.addObject("academicYears", dbDataUtils.getAcademicYears());
@@ -48,21 +46,41 @@ public class StudentController {
 		StudentForm studentForm = new StudentForm();
 		studentForm.setGender("M");
 
-		mav.setViewName("studentAdd");
+		ModelAndView mav = new ModelAndView("studentAdd", "sudentData", studentForm);
+
 		loadDbData(dbDataUtils, mav);
+
+		mav.addObject("buttonValue","Save");
+		mav.addObject("action","/student/add");
+
 		return mav;
+	}
+
+	@PostMapping(value = "/add/{type}/{rollNo}")
+	public ResponseEntity<?> checkData(@PathVariable("type") String type,
+			@PathVariable("rollNo") String rollNo)  {
+
+		String result = null;
+
+		try {
+			if(type.equalsIgnoreCase("checkRollNo")) {
+				result = dbDataUtils.isRollNoExists(rollNo);
+			}
+
+		} catch (SQLException e) {
+			return new ResponseEntity<>("Problem in Fetching Data", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@PostMapping("/add")
 	public ModelAndView createStudent(@ModelAttribute("sudentData") StudentForm studentData) {
 
-		/*StudentForm studentForm = new StudentForm();
-		studentForm.setGender("M");*/
-		/*ModelAndView mav = new ModelAndView("studentAdd", "sudentData",
-				studentForm);*/
-
-		mav.setViewName("studentAdd");
+		StudentForm studentForm = new StudentForm();
 		studentForm.setGender("M");
+		ModelAndView mav = new ModelAndView("studentAdd", "sudentData",
+				studentForm);
 
 		int result = studentService.addStudentData(studentData);
 
@@ -76,6 +94,9 @@ public class StudentController {
 			mav.addObject("message", "Students Information is not inserted");
 		}
 
+		mav.addObject("buttonValue","Save");
+		mav.addObject("action","/student/add");
+
 		loadDbData(dbDataUtils, mav);
 
 		return mav;
@@ -85,14 +106,17 @@ public class StudentController {
 	// list //
 	@GetMapping("/list")
 	public ModelAndView studentList() {
-		mav.setViewName("studentList");
+
+		ModelAndView mav = new ModelAndView("studentList", "sudentData",
+				new StudentForm());
 		loadDbData(dbDataUtils, mav);
 		return mav;
 	}
 
 	@PostMapping("/list")
 	public ModelAndView getStudentList(@ModelAttribute("sudentData") StudentForm studentData) {
-		mav.setViewName("studentList");
+
+		ModelAndView mav = new ModelAndView("studentList");
 		loadDbData(dbDataUtils, mav);
 		mav.addObject("studentList", studentService.getAllStudentsData(studentData));
 		return mav;
@@ -100,16 +124,22 @@ public class StudentController {
 	// list //
 
 	// Get //
-	@GetMapping("/edit/{studentId}")
-	public ModelAndView getStudentData(@PathVariable("studentId") int studentId) {
+	@GetMapping("/edit/{studentId}/{operation}")
+	public ModelAndView getStudentData(@PathVariable("studentId") int studentId,
+			@PathVariable("operation") String operation) {
 
-		/*StudentForm studentForm = studentService.getStudentsData(studentId);
+		ModelAndView mav = new ModelAndView("studentAdd");
+		StudentForm studentData = studentService.getStudentData(studentId);
 
-		ModelAndView mav = new ModelAndView("studentAdd", "sudentData",
-				studentForm);*/
+		if(studentData.getPhotoData() != null) {
+			mav.addObject("photoExt", studentData.getPhotoName().substring(studentData.getPhotoName().indexOf('.') + 1));
+			mav.addObject("photoData", studentData.getPhotoData());
+		}
 
-		mav.setViewName("studentAdd");
-		mav.addObject("sudentData", studentService.getStudentsData(studentId));
+		mav.addObject("sudentData", studentData);
+
+		mav.addObject("buttonValue", operation.toUpperCase());
+		mav.addObject("action","/student/" + operation); // operation as Update / Delete
 
 		loadDbData(dbDataUtils, mav);
 
@@ -118,16 +148,69 @@ public class StudentController {
 	// Get //
 
 	// Update //
-	@PutMapping(value = "/update")
+	@PostMapping("/update")
 	public ModelAndView updateStudentData(@ModelAttribute("sudentData") StudentForm studentData)  {
 
 		StudentForm studentForm = new StudentForm();
-		studentForm.setGender("M");
 
-		ModelAndView mav = new ModelAndView("studentAdd", "sudentData",
-				studentForm);
+		ModelAndView mav = new ModelAndView("studentAdd", "sudentData", studentForm);
 
 		loadDbData(dbDataUtils, mav);
+
+		int result = studentService.updateStudentData(studentData);
+
+		if(result > 0) {
+
+			mav.addObject("message", "Student Information updated successfully");
+
+			studentForm.setBranchId(studentData.getBranchId());
+			studentForm.setAcademicYearId(studentData.getAcademicYearId());
+
+			/*mav.addObject("branchId", studentData.getBranchId());
+			mav.addObject("academicYearId", studentData.getAcademicYearId());*/
+
+		} else {
+
+			mav = new ModelAndView("studentAdd", "sudentData",
+					studentData);
+			mav.addObject("message", "Students Information is not updated");
+		}
+
+
+		mav.addObject("buttonValue","Save");
+		mav.addObject("action","/student/add");
+
+		return mav;
+	}
+
+	// Delete //
+	@PostMapping("/delete")
+	public ModelAndView deleteStudentData(@ModelAttribute("sudentData") StudentForm studentData)  {
+
+		ModelAndView mav = new ModelAndView("studentAdd", "sudentData",
+				new StudentForm());
+
+		int result = studentService.deleteStudentData(studentData);
+
+		if(result > 0) {
+
+			mav.addObject("message", "Student Information deleted successfully");
+
+			mav.addObject("buttonValue","Save");
+			mav.addObject("action","/student/add");
+
+		} else {
+
+			mav = new ModelAndView("studentAdd", "sudentData",
+					studentData);
+			mav.addObject("message", "Students Information is not deleted");
+
+			mav.addObject("buttonValue","Delete");
+			mav.addObject("action","/student/delete");
+		}
+
+		loadDbData(dbDataUtils, mav);
+
 		return mav;
 	}
 

@@ -78,11 +78,11 @@ public class DBUtils {
 		return false;
 	}
 
-	public static String getValue(Statement st , String sql) {
+	public String getTextValue(String sql) {
 		ResultSet rs = null;
 		try
 		{
-			rs = st.executeQuery(sql);
+			rs = statement.executeQuery(sql);
 			if (rs!=null && rs.next()) {
 				if (rs.getString(1)!=null) {
 
@@ -103,6 +103,30 @@ public class DBUtils {
 		}
 
 		return null;
+	}
+
+	public int getNumericValue(String sql) {
+		ResultSet rs = null;
+		try
+		{
+			rs = statement.executeQuery(sql);
+			if (rs != null && rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return 0;
 	}
 
 	public static void closeResultSet(ResultSet _rs) {
