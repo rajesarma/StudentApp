@@ -1,5 +1,6 @@
 package in.education.student.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,34 +8,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User {
-
-	public User() {
-
-	}
-
-	public User(long userId, String userName, String email, long roleId, String userDesc)
-	{
-		super();
-		this.id = userId;
-		this.userName = userName;
-		this.email = email;
-		this.userDesc = userDesc;
-		this.role = new Role(roleId, "");
-	}
+public class User implements Serializable {
 
 	@Id
 	@Column(name="id", updatable = false, nullable = false)
 	@NotNull
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private long id;
+	private long userId;
 
 	@Column(name="user_name")
 	@NotNull
@@ -44,22 +34,21 @@ public class User {
 	@NotNull
 	private String password;
 
-	@Column(name="is_active")
-	@NotNull
-	private String isActive;
+	@Column(name="disabled")
+	private Boolean disabled;
 
-	@Column(name="role_id")
+	/*@Column(name="role_id")
 	@NotNull
-	private int roleId;
+	private int roleId;*/
 
 	@Column(name="user_desc")
 	private String userDesc;
 
 	@Column(name="student_id")
-	private long studentId;
+	private Long studentId;
 
 	@Column(name="faculty_id")
-	private long facultyId;
+	private Long facultyId;
 
 	@Column(name="email")
 	private String email;
@@ -70,16 +59,36 @@ public class User {
 	@Column(name="failed_login_attempts")
 	private Long failedLoginAttempts;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="role_id")
-	private Role role;
+	@ManyToMany(cascade= CascadeType.ALL,fetch= FetchType.EAGER)
+	@JoinTable(name="user_roles",
+			joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")},
+			inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName=
+					"role_id")}
+	)
+	private List<Role> roles;
 
-	public long getId() {
-		return id;
+
+	/*@ManyToMany
+	@JoinTable(
+			name = "user_role",
+			joinColumns = @JoinColumn(
+					name = "user_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(
+					name = "role_id", referencedColumnName = "id"))
+	private Collection<Role> roles;*/
+
+
+
+	/*@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="role_id")
+	private Role role;*/
+
+	public long getUserId() {
+		return userId;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 
 	public String getUserName() {
@@ -98,21 +107,13 @@ public class User {
 		this.password = password;
 	}
 
-	public String getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(String isActive) {
-		this.isActive = isActive;
-	}
-
-	public int getRoleId() {
+	/*public int getRoleId() {
 		return roleId;
 	}
 
 	public void setRoleId(int roleId) {
 		this.roleId = roleId;
-	}
+	}*/
 
 	public String getUserDesc() {
 		return userDesc;
@@ -146,10 +147,6 @@ public class User {
 		this.email = email;
 	}
 
-	public Role getRole() {
-		return role;
-	}
-
 	public Date getLastLogin() {
 		return lastLogin;
 	}
@@ -166,7 +163,62 @@ public class User {
 		this.failedLoginAttempts = failedLoginAttempts;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	/*public List<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}*/
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
+
+	public Boolean getDisabled() {
+		return disabled;
+	}
+
+	public User() {
+
+	}
+
+	public User(long userId, String userName, String email, boolean disabled,
+			String userDesc) {
+		super();
+		this.userId = userId;
+		this.userName = userName;
+		this.email = email;
+		this.disabled = disabled;
+		this.userDesc = userDesc;
+	}
+
+	public User (User user) {
+		this.userId = user.userId;
+		this.userName = user.userName;
+		this.password = user.password;
+		this.email = user.email;
+		this.disabled = user.disabled;
+		this.userDesc = user.userDesc;
+		this.lastLogin = user.lastLogin;
+		this.failedLoginAttempts = user.failedLoginAttempts;
+		this.roles = user.roles;
+	}
+
+	public User(long userId, String userName, String password) {
+//		, String roles
+		super();
+		this.userId = userId;
+		this.userName = userName;
+		this.password = password;
+		//this.roles = Arrays.asList(roles.split(","));
 	}
 }

@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-		 pageEncoding="ISO-8859-1" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+		 pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -30,6 +30,8 @@
 				output.height = 90;
 			};
 			reader.readAsDataURL(input.files[0]);
+
+
 		};
 
 		function checkSelection(obj, message)
@@ -51,105 +53,10 @@
 
 		function submitData(action)
 		{
-			if(document.forms[0].name.value=="")
-			{
-				alert("Please Enter Student name");
-				document.forms[0].name.focus();
-				return false;
-			}
-			else if(document.forms[0].rollNo.value=="")
-			{
-				alert("Pelase Enter Student rollNo");
-				document.forms[0].rollNo.focus();
-				return false;
-			}
-			else if(document.getElementById("academicYearId").value == "0")
-			{
-				alert("Please select Academic Year");
-				document.getElementById("academicYearId").focus();
-				return false;
-			}
-			else if(document.getElementById("branchId").value == "0")
-			{
-				alert("Please select Student Branch");
-				document.getElementById("branchId").focus();
-				return false;
-			}
-
-			else if(document.forms[0].fatherName.value=="")
-			{
-				alert("Please Enter Student Father Name");
-				document.forms[0].fatherName.focus();
-				return false;
-			}
-			else if(document.forms[0].motherName.value=="")
-			{
-				alert("Please Enter Student Mother Name");
-				document.forms[0].motherName.focus();
-				return false;
-			}
-			else if(document.forms[0].parentPhoneNo.value=="")
-			{
-				alert("Please Enter Parent phone no");
-				document.forms[0].parentPhoneNo.focus();
-				return false;
-			}
-			else if(document.forms[0].alternativePhoneNo.value=="")
-			{
-				alert("Please Enter alternative phone no");
-				document.forms[0].alternativePhoneNo.focus();
-				return false;
-			}
-			else if(document.forms[0].email.value=="")
-			{
-				alert("Please Enter Student email");
-				document.forms[0].email.focus();
-				return false;
-			}
-			else if(document.forms[0].address.value=="")
-			{
-				alert("Please Enter Student Address");
-				document.forms[0].address.focus();
-				return false;
-			}
-			else if(document.forms[0].dob.value=="")
-			{
-				alert("Please Enter Student Date of Birth");
-				document.forms[0].dob.focus();
-				return false;
-			}
-			else if(document.forms[0].doj.value=="")
-			{
-				alert("Please Enter Student Date of Joining");
-				document.forms[0].doj.focus();
-				return false;
-			}
-			else if(document.forms[0].gender.value=="")
-			{
-				alert("Please Choose gender for Student");
-				document.forms[0].gender.focus();
-				return false;
-			}
-			else if(document.forms[0].bloodGroupId.value=="0")
-			{
-				alert("Please Enter Blood Group for Student");
-				document.forms[0].bloodGroupId.focus();
-				return false;
-			}
-			else if(document.forms[0].aadharNo.value=="")
-			{
-				alert("Please Enter Student aadharNo");
-				document.forms[0].aadharNo.focus();
-				return false;
-			}
-			else
-			{
-				var studentForm = document.getElementById('studentForm');
-				studentForm.action = action;
-				studentForm.method = "post";
-				studentForm.submit();
-				//document.forms[0].submit();
-			}
+			var studentForm = document.getElementById('studentForm');
+			studentForm.action = action;
+			studentForm.method = "post";
+			studentForm.submit();
 		}
 
 		function deleteStudentData(actionType)
@@ -190,17 +97,24 @@
 			});
 		}
 	</script>
-
+	<style>
+		.error {
+			color: #ff0000;
+			font-style: italic;
+			font-weight: bold;
+			font-size: 10px;
+		}
+	</style>
 </head>
 <body>
 	<div class="container_form">
 		<div class="sub-main-w2">
 			<div class="bg-content-w2pvt">
 				<div class="top-content-style-pages">
-					<p class="title-heading">Add Student</p>
+					<p class="title-heading"><spring:message code="student.add"/></p>
 				</div>
 				<form:form action="/student/add" id="studentForm"
-						   modelAttribute="sudentData" enctype="multipart/form-data">
+						   modelAttribute="studentData" enctype="multipart/form-data">
 
 					<a style="color: green; text-decoration: underline;" href="/student/list">Back to Student Report</a>
 					<br>
@@ -211,7 +125,8 @@
 					<div id="wait"></div>
 
 						<div class="student-form-input ">
-							<label>Full name </label>
+							<label><spring:message code="student.fullName"/></label>
+
 							<div class="form-text">
 								<i class="fa fa-user" aria-hidden="true"></i>
 
@@ -220,32 +135,37 @@
 											cssClass="student-form-text"
 											onkeyup="charOnly(this)"
 											 />
+								<form:errors path="name" cssClass="error" />
+
 							</div>
 						</div>
 
 						<div class="student-form-input ">
-							<label>Father Name </label>
+							<label><spring:message code="student.fatherName"/></label>
 							<div class="form-text">
 								<i class="fa fa-user" aria-hidden="true"></i>
 
 								<form:input path="fatherName" name="fatherName" id="fatherName"
 											cssClass="student-form-text"
 											onkeyup="charOnly(this)" />
+								<form:errors path="fatherName" cssClass="error" />
 							</div>
 						</div>
 
 						<div class="student-form-input ">
-							<label>Mother Name </label>
+							<label><spring:message code="student.motherName"/></label>
 							<div class="form-text">
 								<i class="fa fa-user" aria-hidden="true"></i>
 
 								<form:input path="motherName" name="motherName" id="motherName"
 											cssClass="student-form-text" onkeyup="charOnly(this)" />
+
+								<form:errors path="motherName" cssClass="error" />
 							</div>
 						</div>
 
 						<div class="student-form-input ">
-							<label>Academic Year </label>
+							<label><spring:message code="student.academicYear"/></label>
 							<div class="form-text">
 								<form:select path="academicYearId" name="academicYearId" id="academicYearId"
 											 multiple="false"
@@ -254,11 +174,13 @@
 									<form:option value="0" label="Select" />
 									<form:options items="${academicYears}" />
 								</form:select>
+
+								<form:errors path="academicYearId" cssClass="error" />
 							</div>
 						</div>
 
 						<div class="student-form-input ">
-							<label>Branch </label>
+							<label><spring:message code="student.branch"/></label>
 							<div class="form-text">
 								<form:select path="branchId" name="branchId" id="branchId"
 											 multiple="false"
@@ -267,11 +189,13 @@
 									<form:options items="${branches}"
 												  />
 								</form:select>
+
+								<form:errors path="branchId" cssClass="error" />
 							</div>
 						</div>
 
 						<div class="student-form-input ">
-							<label>Blood Group</label>
+							<label><spring:message code="student.bloodGroup"/></label>
 							<div class="form-text">
 								<i class="fa fa-user" aria-hidden="true"></i>
 
@@ -282,63 +206,77 @@
 									<form:option value="0" label="Select" />
 									<form:options items="${bloodGroups}" />
 								</form:select>
+
+								<form:errors path="bloodGroupId" cssClass="error" />
 							</div>
 						</div>
 
 						<div class="student-form-input ">
-							<label>Parent Phone No.</label>
+							<label><spring:message code="student.parentPhoneNo"/></label>
 							<div class="form-text">
 								<i class="fa fa-user" aria-hidden="true"></i>
 
 								<form:input path="parentPhoneNo" name="parentPhoneNo" id="parentPhoneNo"
 											cssClass="student-form-text"
 											onkeyup="intOnly(this)"/>
+
+								<form:errors path="parentPhoneNo" cssClass="error" />
 							</div>
 						</div>
 
 						<div class="student-form-input ">
-							<label>Alternate Phone No. </label>
+							<label><spring:message code="student.alternativePhoneNo"/></label>
 							<div class="form-text">
 								<i class="fa fa-user" aria-hidden="true"></i>
 
 								<form:input path="alternativePhoneNo" name="alternativePhoneNo" id="alternativePhoneNo"
 											cssClass="student-form-text" onkeyup="intOnly(this)"/>
+								<form:errors path="alternativePhoneNo" cssClass="error" />
 							</div>
 						</div>
 
 						<div class="student-form-input ">
-							<label>Aadhar Card No.</label>
+							<label><spring:message code="student.aadharNo"/></label>
 							<div class="form-text">
 								<i class="fa fa-user" aria-hidden="true"></i>
 
 								<form:input path="aadharNo" name="aadharNo" id="aadharNo"
 											cssClass="student-form-text" onkeyup="intOnly(this)"/>
+
+								<form:errors path="aadharNo" cssClass="error" />
 							</div>
 						</div>
 
 						<div class="student-form-input ">
-							<label>DOB</label>
+							<label><spring:message code="student.dob"/></label>
 							<div class="form-text">
 								<i class="fa fa-user" aria-hidden="true"></i>
 
 								<form:input path="dob" name="dob" id="dob" maxlength="10"
-											cssClass="student-form-text"/> (DD/MM/YYYY)
+											cssClass="student-form-text"/>
+								<span class="date-format"><spring:message code="dateFormat"/></span>
+								<form:errors path="dob" cssClass="error" />
 							</div>
 						</div>
 
 						<div class="student-form-input ">
-							<label>DOJ</label>
+							<label><spring:message code="student.doj"/></label>
 							<div class="form-text">
 								<i class="fa fa-user" aria-hidden="true"></i>
 
 								<form:input path="doj" name="doj" id="doj"
 											maxlength="10"
-											cssClass="student-form-text"/> (DD/MM/YYYY)
+											cssClass="student-form-text"/>
+								<span
+										class="date-format"><spring:message
+										code="dateFormat"/></span>
+
+								<form:errors path="doj" cssClass="error" />
 							</div>
 						</div>
 
 						<div class="student-form-input ">
-							<label>Roll No. </label>
+							<label><spring:message code="student.rollNo"/></label>
 							<div class="form-text">
 								<i class="fa fa-user" aria-hidden="true"></i>
 
@@ -348,24 +286,25 @@
 								<form:input path="rollNo" name="rollNo" id="rollNo" cssClass="student-form-text"
 											onkeypress="javascript:return isAlphaNumeric(event,this.value);"
 											onblur="checkData('checkRollNo', this)" />
-
+								<form:errors path="rollNo" cssClass="error" />
 							</div>
 						</div>
 
 						<div class="student-form-input ">
-							<label>eMail</label>
+							<label><spring:message code="student.eMail"/></label>
 							<div class="form-text">
 								<i class="fa fa-user" aria-hidden="true"></i>
 
 								<form:input path="email" name="email" id="email"
 											cssClass="student-form-text" onblur="checkEmail(this);"/>
+								<form:errors path="email" cssClass="error" />
 							</div>
 						</div>
 
 
 
 						<div class="student-form-input " > <%--style="width: 64%"--%>
-							<label>Gender</label>
+							<label><spring:message code="student.gender"/></label>
 							<div class="form-text">
 								<i class="fa fa-user" aria-hidden="true"></i>
 
@@ -374,21 +313,24 @@
 								<form:radiobutton path="gender" value="F"
 												  id="gender"/> Female
 
+								<form:errors path="gender" cssClass="error" />
+
 							</div>
 						</div>
 
 						<div class="student-form-input ">
-							<label>Height</label>
+							<label><spring:message code="student.height"/></label>
 							<div class="form-text">
 								<i class="fa fa-user" aria-hidden="true"></i>
 
 								<form:input path="height" name="height" id="height"
 											cssClass="student-form-text" onkeyup="intOnly(this)"/>
+								<form:errors path="height" cssClass="error" />
 							</div>
 						</div>
 
 						<div class="student-form-input ">
-							<label>Joined in Year</label>
+							<label><spring:message code="student.joiningYearNo"/></label>
 							<div class="form-text">
 								<i class="fa fa-user" aria-hidden="true"></i>
 
@@ -398,22 +340,24 @@
 									<form:option value="0" label="Select" />
 									<form:options items="${batches}" />
 								</form:select>
+								<form:errors path="joiningYearNo" cssClass="error" />
 							</div>
 						</div>
 
 						<div class="student-form-input " >
-							<label>Address </label>
+							<label><spring:message code="student.address"/></label>
 							<div class="form-text">
 								<i class="fa fa-user" aria-hidden="true"></i>
 
 								<form:textarea path="address" name="address" id="address"
 											   cssClass="student-form-text"
 											   cssStyle="height: 100px"/>
+								<form:errors path="address" cssClass="error" />
 							</div>
 						</div>
 
 						<div class="student-form-input " >
-							<label>Photo</label>
+							<label><spring:message code="student.photo"/></label>
 							<div class="form-text">
 								<i class="fa fa-user" aria-hidden="true"></i>
 
@@ -424,8 +368,23 @@
 							</div>
 								<%--<img src="data:image/ext;base64,${student.photoData
 									 }" />--%>
+
+							<c:if test="${empty photoData}">
 							<img src="data:image;base64,${photoData }" id="photoData"
-								 style='border: 1px solid black' width='80px' height='80px'>
+								 style='border: 1px solid black; visibility: collapse'
+								 width='80px'
+								 height='80px'>
+							</c:if>
+							<c:if test="${not empty photoData}">
+							<img src="data:image;base64,${photoData }" id="photoData"
+								 style='border: 1px solid black; visibility: visible'
+								 width='80px'
+								 height='80px'>
+							</c:if>
+
+
+
+
 						</div>
 
 						<div align="center" style="width: 100%; float: left">

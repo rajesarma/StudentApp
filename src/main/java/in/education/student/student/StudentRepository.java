@@ -115,7 +115,7 @@ public class StudentRepository {
 		return result;
 	}
 
-	List getAllStudentsData(StudentForm studentData) {
+	List getSpecifiedStudentsData(StudentForm studentData) {
 
 		String sql;
 		ResultSet rs;
@@ -214,7 +214,7 @@ public class StudentRepository {
 				studentForm.setMotherName(rs.getString("mother_name"));
 				studentForm.setGender(rs.getString("gender"));
 				studentForm.setAddress(rs.getString("address"));
-				studentForm.setJoiningYearNo(rs.getString("joining_year_no"));
+				studentForm.setJoiningYearNo(rs.getInt("joining_year_no"));
 				studentForm.setBloodGroupId(rs.getInt("blood_group_id"));
 				studentForm.setHeight(rs.getInt("height"));
 				//studentForm.setPhotoName(rs.getString("photo_name").split("_")[2]);

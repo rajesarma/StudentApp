@@ -21,9 +21,9 @@ public class StudentService {
 		return studentRepository.addStudentData(studentForm);
 	}
 
-	public List getAllStudentsData(StudentForm studentData) {
+	public List getSpecifiedStudentsData(StudentForm studentData) {
 
-		return studentRepository.getAllStudentsData(studentData);
+		return studentRepository.getSpecifiedStudentsData(studentData);
 	}
 
 	public StudentForm getStudentData(int studentId) {

@@ -11,11 +11,17 @@
 	<meta charset="ISO-8859-1">
 	<title>Site</title>
 
-	<meta http-equiv="pragma" content="no-cache"/>
-	<meta http-equiv="cache-control" content="no-cache"/>
-	<meta http-equiv="expires" content="0"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="StudentApp">
+	<meta name="author" content="Lakshmi Rajeswara Sarma">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta http-equiv="cache-control" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<meta http-equiv="AUTOCOMPLETE" content="OFF" />
 	<meta http-equiv="keywords" content="Site"/>
-	<meta http-equiv="description" content="Site"/>
+	<META HTTP-EQUIV="Refresh" CONTENT="2699;URL=/expireSession">
+
 	<%--<meta http-equiv="Refresh" content="5"; url="/logout"/>--%>
 	<%--<META HTTP-EQUIV="Refresh" CONTENT="1800;URL=/expireSession">--%>
 
@@ -31,19 +37,100 @@
 	<link rel="stylesheet" type="text/css"  href="<c:url
 	value="${pageContext.request.contextPath}/css/menus.css" />"/>
 
-	<%--<script src="<c:url
-		value="${pageContext.request.contextPath}/js/jquery-1.12.4.min.js" />"></script>--%>
-
 	<script src="${pageContext.request.contextPath}/js/jquery-3.3.1.js"></script>
+
+	<%--<script
+			src="${pageContext.request.contextPath}/webjars/jquery/3.3.1-1/jquery.js"></script>
+	<script src="${pageContext.request.contextPath}/webjars/popper.js"></script>
+	<script
+			src="${pageContext.request.contextPath}/webjars/bootstrap/4.1.1/js/bootstrap.js"></script>
+	<link
+			href="${pageContext.request.contextPath}/webjars/bootstrap/4.1.1/scss/bootstrap.scss"
+		  rel="stylesheet" media="screen"/>--%>
 
 	<script
 			src="<c:url value="${pageContext.request.contextPath}/js/menus.js" />"></script>
 
 	<script>
-		if(window.history.length>0)
-		{
+		if(window.history.length>0) {
 			window.history.forward(4);
 		}
+
+		function clickIE4() {
+			if (event.button==2) {
+				return false;
+			}
+		}
+
+		function clickOpera() {
+			if (event.button==2) {
+				return false;
+			}
+		}
+
+		function clickNS4(e) {
+			if (document.layers||document.getElementById&&!document.all) {
+				if (e.which==2||e.which==3) {
+					return false;
+				}
+			}
+		}
+
+		if (document.layers) {
+			document.captureEvents(Event.MOUSEDOWN);
+			document.onmousedown=clickNS4;
+		} else if (document.all&&!document.getElementById) {
+			document.onmousedown=clickIE4;
+		} else if (navigator.appName=="Opera") {
+			document.captureEvents(Event.MOUSEDOWN);
+			document.onmousedown=clickOpera;
+		}
+
+		document.oncontextmenu=new Function("return false");
+
+
+		function disableKey(event) {
+			if (!event) event = window.event;
+			if (!event) return;
+
+			var keyCode = event.keyCode ? event.keyCode : event.charCode;
+
+			if (event.charCode==116) {
+				return true;
+			} else if (keyCode == 116) {
+				window.status = "F5 key detected! Attempting to disabling default response.";
+				window.setTimeout("window.status='';", 2000);
+
+				// Standard DOM (Mozilla):
+				if (event.preventDefault) event.preventDefault();
+
+				//IE (exclude Opera with !event.preventDefault):
+				if (document.all && window.event && !event.preventDefault) {
+					event.cancelBubble = true;
+					event.returnValue = false;
+					event.keyCode = 0;
+				}
+
+				return false;
+			}
+		}
+
+		function setEventListener(eventListener) {
+			if (document.addEventListener) document.addEventListener('keypress', eventListener, true);
+			else if (document.attachEvent) document.attachEvent('onkeydown', eventListener);
+			else document.onkeydown = eventListener;
+		}
+
+		function unsetEventListener(eventListener) {
+			if (document.removeEventListener) document.removeEventListener('keypress', eventListener, true);
+			else if (document.detachEvent) document.detachEvent('onkeydown', eventListener);
+			else document.onkeydown = null;
+		}
+
+		setEventListener(disableKey)
+		//unsetEventListener(disableKey)
+
+
 	</script>
 
 	<script type="text/javascript">

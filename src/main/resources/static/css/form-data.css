@@ -4,6 +4,11 @@
 	clear: both;
 }
 
+
+.date-format {
+	font-size: 10px;
+}
+
 .student-form-input {
 	width: 32%;
 	margin-bottom: 1.2em;
@@ -11,7 +16,7 @@
 }
 
 .student-form-input label {
-	font-size: 14px;
+	font-size: 12px;
 	color: #000;
 	letter-spacing: 1px;
 	font-weight: 400;
@@ -40,6 +45,17 @@
 	border: 1px solid #000;
 	padding: 1px 1px 5px 5px;
 	width: 58%;
+}
+
+
+.student-form-select-submit {
+	/*width: 100%;*/
+	background: #4b6367;
+	color: #fff;
+	font-size: 12px;
+	padding: 5px;
+	border: 0;
+	margin-top: 20px;
 }
 
 

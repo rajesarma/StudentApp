@@ -42,11 +42,11 @@
 					<div class="top-content-style-pages">
 						<p class="title-heading">List</p>
 					</div>
-					<form:form action="/student/list" modelAttribute="sudentData">
-						<%--<div class="err-message"> ${message} </div>--%>
 
+					<form:form action="/student/list" modelAttribute="studentData">
+						<%--<div class="err-message"> ${message} </div>--%>
 							<div class="student-form-input ">
-								<label>Academic Year </label>
+									<label><spring:message code="student.academicYear"/></label>
 								<div class="form-text">
 									<form:select path="academicYearId" name="academicYearId" id="academicYearId"
 												 multiple="false" cssClass="student-form-select">
@@ -57,7 +57,7 @@
 							</div>
 
 							<div class="student-form-input ">
-								<label>Branch </label>
+								<label><spring:message code="student.branch"/></label>
 								<div class="form-text">
 									<form:select path="branchId" name="branchId" id="branchId"
 												 multiple="false" cssClass="student-form-select">
@@ -68,13 +68,17 @@
 							</div>
 
 
-						<button type="submit" class="btn submit" onclick="checkValues()">
+						<button type="submit" class="student-form-select-submit" onclick="checkValues()">
 							Get Data
 						</button>
 					</form:form>
 				</div>
 			</div>
-<br>
+		<br>
+		<c:if test="${not empty message}">
+			<div class="err-message" style="text-align:center"> ${message}</div>
+		</c:if>
+
 		<c:if test="${not empty studentList}">
 		
 			<table class="table " id="studentList" >
@@ -110,12 +114,13 @@
 							<td>${student.dob }</td>
 							<td>${student.doj }</td>
 							<td>
-								<a style="color: green; text-decoration: underline;"
-								   href="/student/edit/${student.studentId}/update">Edit
+								<a style="color: green; text-decoration: underline;" href="/student/edit/${student.studentId}/update
+"> <spring:message code="edit"/>
 								</a>
 								<span style="padding: 10px"></span>
 								<a style="color: red; text-decoration: underline;"
-								   href="/student/edit/${student.studentId}/delete">Delete
+								   href="/student/edit/${student.studentId}/delete
+"><spring:message code="delete"/>
 								</a>
 								<span style="padding: 10px"></span>
 									<%--<spring:url value="/article/updateArticle/${article.id }" var="updateURL" />--%>

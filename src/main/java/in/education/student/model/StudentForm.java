@@ -1,5 +1,7 @@
 package in.education.student.model;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Column;
@@ -7,40 +9,61 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
-@Entity(name = "student_details")
+//@Entity(name = "student_details")
 public class StudentForm {
+
 	@Id
 	@Column(name = "student_id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private long studentId;
 
+	@NotEmpty(message = "Student Name can not be empty")
 	@Column(name = "student_name")
 	private String name=null;
 
+	@NotEmpty(message = "Father Name can not be empty")
 	@Column(name = "father_name")
 	private String fatherName=null;
 
+	@NotEmpty(message = "Mother Name can not be empty")
+	@Column(name = "mother_name")
+	private String motherName=null;
+
+	@DateTimeFormat(pattern="dd/mm/yyyy")
+	@NotEmpty(message = "DOB can not be empty")
 	@Column(name = "dob")
 	private String dob=null;
 
+	@DateTimeFormat(pattern="dd/mm/yyyy")
+	@NotEmpty(message = "DOJ can not be empty")
 	@Column(name = "doj")
 	private String doj=null;
 
 	@Column(name = "photo_name")
 	private String photoName=null;
 
+	@NotEmpty(message = "Aadhar No. can not be empty")
 	@Column(name = "aadhar")
 	private String aadharNo=null;
 
+	@NotEmpty(message = "Address can not be empty")
 	@Column(name = "address")
 	private String address=null;
 
+	@NotEmpty(message = "email can not be empty")
 	@Column(name = "email")
 	private String email=null;
 
 	@Column(name = "guardian_mobile")
+	@Size(min = 10, max = 10, message = "Phone No. must be 10 Digits")
 	private String parentPhoneNo=null;
+
+	@Column(name = "mobile_no")
+	@Size(min = 10, max = 10, message = "Phone No. must be 10 Digits")
+	private String alternativePhoneNo=null;
 
 	@Column(name = "blood_group_id")
 	private int bloodGroupId = 0;
@@ -51,14 +74,9 @@ public class StudentForm {
 	@Column(name = "branch_id")
 	private String branchId= null;
 
+	@NotEmpty(message = "Roll No. can not be empty")
 	@Column(name = "roll_no")
 	private String rollNo =null;
-
-	@Column(name = "mobile_no")
-	private String alternativePhoneNo=null;
-
-	@Column(name = "mother_name")
-	private String motherName=null;
 
 	@Column(name = "gender")
 	private String gender=null;
@@ -67,10 +85,10 @@ public class StudentForm {
 	private MultipartFile photo;
 
 	@Column(name = "height")
-	private int height= 0;
+	private int height;
 
 	@Column(name = "joining_year_no")
-	private String joiningYearNo= null;
+	private int joiningYearNo;
 
 	private int subjectId= 0;
 	private int batchId = 0;
@@ -293,14 +311,6 @@ public class StudentForm {
 		this.height = height;
 	}
 
-	public String getJoiningYearNo() {
-		return joiningYearNo;
-	}
-
-	public void setJoiningYearNo(String joiningYearNo) {
-		this.joiningYearNo = joiningYearNo;
-	}
-
 	public String getYear() {
 		return year;
 	}
@@ -315,6 +325,14 @@ public class StudentForm {
 
 	public void setPhotoData(String photoData) {
 		this.photoData = photoData;
+	}
+
+	public int getJoiningYearNo() {
+		return joiningYearNo;
+	}
+
+	public void setJoiningYearNo(int joiningYearNo) {
+		this.joiningYearNo = joiningYearNo;
 	}
 }
 

@@ -13,9 +13,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-@Repository
+@Repository("jdbc")
 public class AuthenticationRepository {
 
+
+
+//	@Autowired
 	private DBUtils dbUtils;
 
 	@Autowired
@@ -37,8 +40,8 @@ public class AuthenticationRepository {
 					User user = getUserData(GeneralQueries.getUserData(userName
 							, password));
 
-					statement.execute(GeneralQueries.updateUserLogin(user.getId()));	// Update User Last Login
-					statement.executeUpdate(GeneralQueries.resetUserFailureAttempt(user.getId()));	// Update User Last Login
+					statement.execute(GeneralQueries.updateUserLogin(user.getUserId()));	// Update User Last Login
+					statement.executeUpdate(GeneralQueries.resetUserFailureAttempt(user.getUserId()));	// Update User Last Login
 
 					return user;
 				} else {
@@ -56,6 +59,18 @@ public class AuthenticationRepository {
 		}
 	}
 
+	public User authenticateUser(String userName) throws AuthenticationException {
+
+		// If User Exists
+		if(dbUtils.recordExists(GeneralQueries.isUserExists(userName))) {
+			User user = getUserData(GeneralQueries.getUserData(userName));
+
+			return user;
+		}
+
+		return null;
+	}
+
 	private User getUserData(String sql) throws AuthenticationException {
 		ResultSet rs = null;
 		User user = null;
@@ -65,8 +80,10 @@ public class AuthenticationRepository {
 
 			if(rs.next()) {
 				user = new User(rs.getLong("id"), rs.getString("user_name"),
-						rs.getString("email"), rs.getLong("role_id"),
-						rs.getString("user_desc"));
+						rs.getString("real_password")
+//						, rs.getString("role_name")
+				);
+				// rs.getLong("role_id"), rs.getString("user_desc"),
 
 			}
 		} catch (SQLException e) {
@@ -94,7 +111,7 @@ public class AuthenticationRepository {
 		try
 		{
 			String sql = "select s.service_id, s.service_url, s.service_name,s" +
-					".parent_id, s.display_order, s.show_in_menu" +
+					".parent_id, s.display_order, s.menu_display" +
 					" from users u" +
 					" join role_services rs on(u.role_id = rs.role_id )" +
 					" join services s on (s.service_id = rs.service_id)" +
@@ -112,7 +129,46 @@ public class AuthenticationRepository {
 				serviceMap.put("service_name", rs.getString("service_name"));
 				serviceMap.put("parent_id", rs.getString("parent_id"));
 				serviceMap.put("display_order", rs.getString("display_order"));
-				serviceMap.put("show_in_menu", rs.getString("show_in_menu"));
+				serviceMap.put("menu_display", rs.getString("menu_display"));
+
+				services.add(serviceMap);
+			}
+		}
+		catch(SQLException sqle)
+		{
+			return null;
+		}
+
+		return services;
+	}
+
+	ArrayList getServices(String userName)
+	{
+		ResultSet rs;
+		ArrayList<HashMap<String, String>> services = new ArrayList<>();
+		HashMap<String, String> serviceMap;
+
+		try
+		{
+			String sql = "select s.service_id, s.service_url, s.service_name,s" +
+					".parent_id, s.display_order, s.menu_display" +
+					" from users u" +
+					" join role_services rs on(u.role_id = rs.role_id )" +
+					" join services s on (s.service_id = rs.service_id)" +
+					" where user_name = '"+userName+ "' " +
+					" order by parent_id, service_id";
+
+			rs = dbUtils.getDBStatement().executeQuery(sql);
+			while (rs.next())
+			{
+				serviceMap = new HashMap<>();
+
+				serviceMap.put("service_id", rs.getString("service_id"));
+				serviceMap.put("service_url", rs.getString("service_url"));
+				serviceMap.put("service_name", rs.getString("service_name"));
+				serviceMap.put("parent_id", rs.getString("parent_id"));
+				serviceMap.put("display_order", rs.getString("display_order"));
+				serviceMap.put("menu_display", rs.getString("menu_display"));
 
 				services.add(serviceMap);
 			}

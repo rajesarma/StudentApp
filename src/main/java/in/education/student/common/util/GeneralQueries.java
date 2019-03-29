@@ -3,15 +3,30 @@ package in.education.student.common.util;
 public class GeneralQueries {
 
 	public static String getUserData(String userName, String password) {
-		return "select id, user_name, user_desc, email, r.role_id, role_name " +
-				" from users u join roles r on r.role_id = u.role_id " +
+		return "select u.id, user_name, user_desc, email, r.role_id, GROUP_CONCAT(role_name) as role_name  " +
+				//" from users u join roles r on r.role_id = u.role_id " +
+				" from users u " +
+				" join user_roles ur on u.id = ur.user_id " +
+				" join roles r on r.role_id = ur.role_id" +
 				" where user_name = '"+userName+"'" +
 				" and password ='"+password+"'";
 	}
 
+	public static String getUserData(String userName) {
+		return "select u.id, real_password, user_name, email, r.role_id, GROUP_CONCAT" +
+				"(role_name) as role_name " +
+				" from users u " +
+				" join user_roles ur on u.id = ur.user_id" +
+				" join roles r on r.role_id = ur.role_id" +
+				" where user_name='"+userName+"'";
+	}
+
 	public static String getUserData(long userId) {
-		return "select id, user_name, email, r.role_id, role_name" +
-				" from users u join roles r on r.role_id = u.role_id" +
+		return "select u.id, user_name, email, r.role_id, GROUP_CONCAT(role_name) as role_name " +
+//				" from users u join roles r on r.role_id = u.role_id" +
+				" from users u " +
+				" join user_roles ur on u.id = ur.user_id" +
+				" join roles r on r.role_id = ur.role_id" +
 				" where id="+userId;
 	}
 
@@ -46,7 +61,12 @@ public class GeneralQueries {
 	}
 
 	public static String getUsersByRole(long roleId) {
-		return "select id, user_id, user_name, email, r.role_id, role_name from users u join roles r on r.role_id = u.role_id where r.role_id = "+roleId+ " order by id";
+		return "select u.id, user_id, user_name, email, r.role_id, GROUP_CONCAT(role_name) as role_name " +
+				" from users u " +
+				" join roles r on r.role_id = u.role_id " +
+				" join user_roles ur on u.id = ur.user_id" +
+				" where r.role_id = "+roleId+ " " +
+				"order by id";
 	}
 
 	public static String addUser()

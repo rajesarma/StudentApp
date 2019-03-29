@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-@Entity
+//@Entity
 @Table(name="blood_group")
 public class BloodGroup {
 

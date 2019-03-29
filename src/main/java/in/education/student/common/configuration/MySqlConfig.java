@@ -1,20 +1,63 @@
 package in.education.student.common.configuration;
 
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-
-import javax.sql.DataSource;
-import javax.transaction.Transactional;
-
-@Configuration
-@Transactional
+//@Configuration
+//@Transactional
+//@EnableJpaRepositories(basePackages = "in.education.student")
+//@EnableTransactionManagement
+//@EntityScan("in.education.student.user")
+//@PropertySource("classpath:application.properties")
 public class MySqlConfig {
 
+	/*@Autowired
+	DataSource dataSource;*/
+
+	/*@Bean
+	@Primary
+	@ConfigurationProperties("spring.datasource")
+	public DataSource dataSource() {
+		return DataSourceBuilder.create().type(DriverManagerDataSource.class).build();
+	}*/
+
+	/*@Bean(name = "sessionFactory")
+	public SessionFactory getSessionFactory() {
+		LocalSessionFactoryBuilder sessionBuilder =
+				new LocalSessionFactoryBuilder(dataSource);
+		sessionBuilder.scanPackages("in.education.student");
+		return sessionBuilder.buildSessionFactory();
+	}
+
+	@Bean(name = "transactionManager")
+	public HibernateTransactionManager getTransactionManager() {
+		HibernateTransactionManager transactionManager = new HibernateTransactionManager(getSessionFactory());
+		return transactionManager;
+	}*/
+
+	/*@Bean
+	public EntityManagerFactory entityManagerFactory() {
+
+		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+//		vendorAdapter.setGenerateDdl(true);
+		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+		factory.setJpaVendorAdapter(vendorAdapter);
+		factory.setPackagesToScan("in.education.student");
+		factory.setDataSource(dataSource);
+		factory.afterPropertiesSet();
+
+		return factory.getObject();
+	}
+
 	@Bean
+	public PlatformTransactionManager transactionManager() {
+
+		JpaTransactionManager txManager = new JpaTransactionManager();
+		txManager.setEntityManagerFactory(entityManagerFactory());
+		return txManager;
+	}*/
+
+
+	// Configuring two data bases, specified its properties in yml file
+
+	/*@Bean
 	@Primary
 	@ConfigurationProperties("app.datasource.first")
 	public DataSourceProperties dataSourceProperties() {
@@ -29,7 +72,7 @@ public class MySqlConfig {
 		// Hikari Datasource as default
 		// return dataSourceProperties.initializeDataSourceBuilder().build();
 		return dataSourceProperties.initializeDataSourceBuilder().type(DriverManagerDataSource.class).build();
-	}
+	}*/
 
 	// Configuring second Datasource
 	/*@Bean
@@ -44,7 +87,6 @@ public class MySqlConfig {
 		return secondDataSourceProperties().initializeDataSourceBuilder()
 				.type(BasicDataSource.class).build();
 	}*/
-
 
 
 	/*For Configuring Database manually*/
@@ -119,3 +161,12 @@ public class MySqlConfig {
 
 	/*For Configuring Hibernate*/
 }
+
+
+
+/*@Bean
+	public DataSourceInitializer dataSourceInitializer(final DataSource dataSource) {
+		final DataSourceInitializer initializer = new DataSourceInitializer();
+		initializer.setDataSource(dataSource);
+		return initializer;
+	}*/

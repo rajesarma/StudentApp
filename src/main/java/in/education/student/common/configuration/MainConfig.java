@@ -1,14 +1,63 @@
 package in.education.student.common.configuration;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.CacheControl;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-public class MainConfig implements WebMvcConfigurer {
+@PropertySource({"classpath:labels.properties","classpath:validation_messages" +
+		".properties"})
+public class MainConfig implements WebMvcConfigurer  {
+
+	//	The LocaleResolver comes from a very smart interface definitions which makes use of not one but four different techniques to determine current locale, this is:
+//	1. Current session has locale information, 2. Cookies being exchanged over the
+// browser, 3. The Accept-Language header being exchanged in request scope, 4. A fixed value
+
+	@Bean
+	public LocaleResolver localeResolver() {
+		SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
+		//CookieLocaleResolver resolver= new CookieLocaleResolver();
+		sessionLocaleResolver.setDefaultLocale(Locale.US);
+
+		return sessionLocaleResolver;
+	}
+
+//	LocaleChangeInterceptor
+	@Bean
+	public LocaleChangeInterceptor localeChangeInterceptor() {
+		LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+		localeChangeInterceptor.setParamName("lang");
+
+		return localeChangeInterceptor;
+	}
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		//registry.addInterceptor(localeChangeInterceptor()).addPathPatterns("/*");
+		registry.addInterceptor(localeChangeInterceptor());
+	}
+
+	// Configured in yml file
+	/*@Bean
+	public MessageSource messageSource() {
+		//Can load message sources if changed externally during runtime
+		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+//		messageSource.setBasename("classpath:validation_messages");	// Single Properties
+		messageSource.setBasenames("classpath:labels", "classpath:validation_messages"); // Multiple Properties files
+		messageSource.setDefaultEncoding("UTF-8");
+//		messageSource.setCacheSeconds(10); //reload messages every 10 seconds
+		return messageSource;
+	}*/
 
 	/* This can be used if not mentioned in properties file
 	@Bean
@@ -37,9 +86,15 @@ public class MainConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/images/**")
 				.addResourceLocations("classpath:/static/images/")
 				.setCacheControl(CacheControl.maxAge(2, TimeUnit.HOURS).cachePublic());
+
+		registry.addResourceHandler("/jquery/**") //
+				.addResourceLocations("classpath:/META-INF/resources/webjars/jquery/3.3.1-1/");
+		registry.addResourceHandler("/popper/**") //
+				.addResourceLocations("classpath:/META-INF/resources/webjars/popper.js/1.14.1/umd/");
+		registry.addResourceHandler("/bootstrap/**") //
+				.addResourceLocations("classpath:/META-INF/resources/webjars/bootstrap/4.1.1/");
+
 	}
-
-
 
 	/*@Bean
 	public FilterRegistrationBean<RequestResponseLoggingFilter> loggingFilter(){
@@ -51,5 +106,14 @@ public class MainConfig implements WebMvcConfigurer {
 
 		return registrationBean;
 	}*/
+
+
+	/*@Bean
+	public MessageSource messageSource() {
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBasenames("validation_messages");
+		return messageSource;
+	}*/
+
 
 }

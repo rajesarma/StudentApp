@@ -10,13 +10,16 @@
 	<meta charset="ISO-8859-1">
 	<title>Site</title>
 
-	<meta http-equiv="pragma" content="no-cache"/>
-	<meta http-equiv="cache-control" content="no-cache"/>
-	<meta http-equiv="expires" content="0"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="StudentApp">
+	<meta name="author" content="Lakshmi Rajeswara Sarma">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta http-equiv="cache-control" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<meta http-equiv="AUTOCOMPLETE" content="OFF" />
 	<meta http-equiv="keywords" content="Site"/>
-	<meta http-equiv="description" content="Site"/>
-	<%--<meta http-equiv="Refresh" content="1800"; url="/logout"/>--%>
-
+	<META HTTP-EQUIV="Refresh" CONTENT="2699;URL=/expireSession">
 
 	<link rel="stylesheet" type="text/css"  href="<c:url
 	value="${pageContext.request.contextPath}/css/index.css" />" />

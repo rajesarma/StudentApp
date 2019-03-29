@@ -1,17 +1,30 @@
 server:
   port: 4040
   servlet:
+    context-path: /
   #  session:
   #    cookie:
   #      http-only: true # Also configured in configuration file
   #      secure: true # Also configured in configuration file
-    context-path: /
+
 
 spring:
 
   # IDENTITY ===============================================================================
   application:
     name: StudentApp
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 15MB
+      file-size-threshold: 2KB
+
+  #locale
+  mvc:
+    locale: en_US
+    locale-resolver: accept_header #fixed
 
   # MVC ====================================================================================
 
@@ -24,24 +37,17 @@ spring:
   resources:
     static-locations: classpath:/static/
 
-# Mysql Configuraion ====================================
+  messages:
+    basename: labels,validation_messages
 
-  #Set the SQL Dialect to “default” in your application.properties to let Spring autodetect the different SQL Dialects of each datasource
-  jpa:
-    database: default #mysql
-  #  hibernate:
-  #    ddl-auto: update
-  #  show-sql: true
-  #  properties:
-   #   dialect: org.hibernate.dialect.PostgreSQLDialect
+  # Mysql Configuraion ====================================
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/student?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: mytrah
 
-  #datasource:
-  #  url: jdbc:mysql://localhost:3306/student?useSSL=false&allowPublicKeyRetrieval=true
-  #  username: root
-  #  password: mytrah
-  #  driver-class-name: com.mysql.cj.jdbc.Driver
-
-  #  type: com.zaxxer.hikari.HikariDataSource
+  # type: com.zaxxer.hikari.HikariDataSource
   #  hikari:
   #    connection-init-sql: "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;"
   #    idle-timeout: 45000
@@ -53,18 +59,25 @@ spring:
   #    jdbc-url: jdbc:mysql://localhost:3306/student?useSSL=false
   #               &allowPublicKeyRetrieval=true
 
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration,org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+  #Set the SQL Dialect to “default” in your labels.properties to let Spring autodetect the different SQL Dialects of each datasource
+  jpa:
+  #  show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+    #database: mysql #default
 
-# Data Source Information ================================================================
+    # Two Data Source Information================================================================
 
-app:
-  datasource:
-    first:
-      url: jdbc:mysql://localhost:3306/student?useSSL=false&allowPublicKeyRetrieval=true
-      username: root
-      password: mytrah
-      pool-size: 30
+#app:
+#  datasource:
+#    first:
+#      url: jdbc:mysql://localhost:3306/student?useSSL=false&allowPublicKeyRetrieval=true
+#      username: root
+#      password: mytrah
+#      pool-size: 30
 
 #app:
 #  datasource:
@@ -73,6 +86,18 @@ app:
 #      username: root
 #      password: mytrah
 #      pool-size: 30
+
+  #autoconfigure:
+  #  exclude: org.springframework.boot.autoconfigure.orm.jpa
+  #.HibernateJpaAutoConfiguration,org.springframework.boot.autoconfigure.jdbc
+  #.DataSourceTransactionManagerAutoConfiguration
+
+   #, org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+  #autoconfigure:
+    #exclude: org.springframework.boot
+    #.autoconfigure.security.servlet.SecurityAutoConfiguration
+    #org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration,
 
 # LOGGING ================================================================================
 logging:
@@ -107,4 +132,4 @@ logging:
 #  url: jdbc:mysql://localhost:3306/student?useSSL=false&allowPublicKeyRetrieval=true
 #  username: root
 #  password: mytrah
-
+#debug: true

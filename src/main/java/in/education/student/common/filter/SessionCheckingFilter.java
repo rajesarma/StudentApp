@@ -1,5 +1,6 @@
 package in.education.student.common.filter;
 
+import in.education.student.common.util.Constants.Urls;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.Filter;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-@Component
+//@Component
 public class SessionCheckingFilter implements Filter {
 
 	@Override
@@ -29,8 +30,9 @@ public class SessionCheckingFilter implements Filter {
 		String path = httpRequest.getRequestURI();
 
 		// Allow css, js, images
-		if (path.equals("/") || path.contains("/css") || path.contains("/js") || path.contains("/images")
-				|| path.contains("/favicon.ico")
+		if (path.equals(Urls.APPLICATION_ROOT) || path.contains(Urls.CSS) || path.contains(
+				Urls.JS) || path.contains(Urls.IMAGES)
+				|| path.contains(Urls.FAVICON)
 		) {
 			filterChain.doFilter(request, response);
 

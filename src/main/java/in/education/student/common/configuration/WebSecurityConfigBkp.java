@@ -1,6 +1,6 @@
 package in.education.student.common.configuration;
 
-public class WebSecurityConfig  { //extends WebSecurityConfigurerAdapter
+public class WebSecurityConfigBkp { //extends WebSecurityConfigurerAdapter
 
 	/*@Override
 	protected void configure(HttpSecurity http) throws Exception {

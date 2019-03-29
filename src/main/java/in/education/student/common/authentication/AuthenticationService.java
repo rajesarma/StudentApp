@@ -8,10 +8,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,9 +27,24 @@ public class AuthenticationService {
 
 		User user = authenticationRepository.authenticateUser(userName, password);
 
+		getServices(request, user);
+
+
+
+		if (user != null) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public List getServices(HttpServletRequest request, User user) {
+
 		HttpSession session = request.getSession(true);
 
-		List<HashMap<String, String>> servicesList = authenticationRepository.getServices(userName, password);
+		List<HashMap<String, String>> servicesList =
+				authenticationRepository.getServices(user.getUserName());
 
 		session.setAttribute("services", servicesList);
 		session.setAttribute("user", user);
@@ -44,17 +57,14 @@ public class AuthenticationService {
 		session.setAttribute("serviceUrls", serviceUrls);
 
 		List<HashMap<String, String>> servicesShowList = servicesList.stream()
-				.filter(serviceMap -> "Y".equalsIgnoreCase(serviceMap.get("show_in_menu")))
+				.filter(serviceMap -> "1".equalsIgnoreCase(serviceMap.get("menu_display")))
 				.collect(Collectors.toList());
 
+//		System.out.println(servicesShowList);
 		session.setAttribute("servicesMenu", new JSONArray(servicesShowList)); // Show
 		// in menu only services which are allowed to show in menu
 
-		if (user != null) {
-
-			return true;
-		}
-
-		return false;
+		return servicesList;
 	}
+
 }

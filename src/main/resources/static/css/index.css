@@ -77,8 +77,9 @@ video {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-size: 100%;
-	font: inherit;
+	/*font-size: 100%;*/
+	font-size: 12px;
+	/*font: inherit;*/
 	vertical-align: baseline;
 }
 
@@ -313,9 +314,10 @@ h1 {
 
 p.title-heading {
 	color: #FFFFFF;
-	font-size: 24px;
+	font-size: 18px;
 	text-align: center;
 	margin-bottom: 1.2em;
+	padding: 3px;
 }
 
 p.title-heading span {
