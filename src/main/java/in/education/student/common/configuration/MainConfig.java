@@ -47,6 +47,7 @@ public class MainConfig implements WebMvcConfigurer  {
 		registry.addInterceptor(localeChangeInterceptor());
 	}
 
+
 	// Configured in yml file
 	/*@Bean
 	public MessageSource messageSource() {
@@ -82,17 +83,23 @@ public class MainConfig implements WebMvcConfigurer  {
 				.addResourceLocations("classpath:/static/")
 				.setCacheControl(CacheControl.maxAge(2, TimeUnit.HOURS).cachePublic());
 
+		registry.addResourceHandler("/resources/**")
+				.addResourceLocations("/resources/");
+
+		/*registry.addInterceptor(localeChangeInterceptor())
+				.excludePathPatterns("/js/**", "/css/**", "/images/**", "/webjars/**");*/
+
 		// Register resource handler for images
 		registry.addResourceHandler("/images/**")
 				.addResourceLocations("classpath:/static/images/")
 				.setCacheControl(CacheControl.maxAge(2, TimeUnit.HOURS).cachePublic());
 
-		registry.addResourceHandler("/jquery/**") //
+		/*registry.addResourceHandler("/jquery/**") //
 				.addResourceLocations("classpath:/META-INF/resources/webjars/jquery/3.3.1-1/");
 		registry.addResourceHandler("/popper/**") //
 				.addResourceLocations("classpath:/META-INF/resources/webjars/popper.js/1.14.1/umd/");
 		registry.addResourceHandler("/bootstrap/**") //
-				.addResourceLocations("classpath:/META-INF/resources/webjars/bootstrap/4.1.1/");
+				.addResourceLocations("classpath:/META-INF/resources/webjars/bootstrap/4.1.1/");*/
 
 	}
 

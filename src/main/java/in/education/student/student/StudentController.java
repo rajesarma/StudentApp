@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
@@ -23,7 +24,7 @@ import javax.validation.Valid;
 import java.sql.SQLException;
 
 @Controller
-@RequestMapping(value="/student")
+@RequestMapping(value="/super")
 public class StudentController {
 
 	private DBDataUtils dbDataUtils;
@@ -37,6 +38,8 @@ public class StudentController {
 
 	@Value("${save}")
 	String save;
+
+	static String Role = "/super";
 
 	@Autowired
 	StudentController(StudentService studentService, DBDataUtils dbDataUtils) {
@@ -54,9 +57,13 @@ public class StudentController {
 		}catch (SQLException e) {
 			mav.addObject("message", "Problem in Fetching Data");
 		}
+
+		mav.addObject("Role", Role);
+
 	}
 
-	@GetMapping(value = "/add")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERVIZOR')")
+	@GetMapping(value = "/student/add")
 	public ModelAndView addStudent()  {
 
 		StudentForm studentForm = new StudentForm();
@@ -67,12 +74,69 @@ public class StudentController {
 		loadDbData(dbDataUtils, mav);
 
 		mav.addObject("buttonValue", save );
-		mav.addObject("action","/student/add");
+		mav.addObject("action",Role + "/student/add");
+
+		mav.addObject("Role", Role);
 
 		return mav;
 	}
 
-	@PostMapping(value = "/add/{type}/{rollNo}")
+	@PostMapping("/student/add")
+	public ModelAndView createStudent( @Valid @ModelAttribute("studentData") StudentForm studentData,
+			BindingResult bindingResult) {
+
+		// If we are using InitBinder and specify custom validator, then validation is
+		// not done in the Form itself. Else validation is done in the form for the
+		// specified constraints
+		// We can also create new instance of the custom validator and bind it like below
+
+		//new StudentValidator().validate(studentData, bindingResult);
+
+		if(bindingResult.hasErrors()) {
+
+			ModelAndView mav = new ModelAndView("studentAdd", "studentData",
+					studentData);
+
+			mav.addObject("Role", Role);
+
+			return mav;
+		}
+
+
+		StudentForm studentForm = new StudentForm();
+		studentForm.setGender("M");
+		ModelAndView mav = new ModelAndView("studentAdd", "studentData",
+				studentForm);
+
+		loadDbData(dbDataUtils, mav);
+		mav.addObject("buttonValue","Save");
+		mav.addObject("action",Role + "/student/add");
+
+		int result = studentService.addStudentData(studentData);
+
+		if(result > 0) {
+			mav.addObject("message", "Student Information inserted successfully");
+		} else {
+
+			mav.addObject("studentData", studentData);
+			mav.addObject("message", "Students Information is not inserted");
+		}
+
+		mav.addObject("Role", Role);
+		return mav;
+	}
+
+	@Autowired
+	@Qualifier("studentValidator")
+	private Validator studentValidator;
+
+	@InitBinder
+	private void dataBinding(WebDataBinder binder) {
+		binder.setValidator(studentValidator);
+		//binder.addValidators(studentValidator, emailValidator); // Multiple Validators
+	}
+
+	@PostMapping(value = "/student/add/{type}/{rollNo}")
 	public ResponseEntity<?> checkData(@PathVariable("type") String type,
 			@PathVariable("rollNo") String rollNo)  {
 
@@ -90,79 +154,32 @@ public class StudentController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-
-	@Autowired
-	@Qualifier("studentValidator")
-	private Validator studentValidator;
-
-	@InitBinder
-	private void dataBinding(WebDataBinder binder) {
-		binder.setValidator(studentValidator);
-		//binder.addValidators(studentValidator, emailValidator); // Multiple Validators
-	}
-
-	@PostMapping("/add")
-	public ModelAndView createStudent( @Valid @ModelAttribute("studentData") StudentForm studentData,
-			BindingResult bindingResult) {
-
-		// If we are using InitBinder and specify custom validator, then validation is
-		// not done in the Form itself. Else validation is done in the form for the
-		// specified constraints
-		// We can also create new instance of the custom validator and bind it like below
-
-		//new StudentValidator().validate(studentData, bindingResult);
-
-		if(bindingResult.hasErrors()) {
-			return new ModelAndView("studentAdd", "studentData",
-					studentData);
-		}
-
-
-		StudentForm studentForm = new StudentForm();
-		studentForm.setGender("M");
-		ModelAndView mav = new ModelAndView("studentAdd", "studentData",
-				studentForm);
-
-		loadDbData(dbDataUtils, mav);
-		mav.addObject("buttonValue","Save");
-		mav.addObject("action","/student/add");
-
-		int result = studentService.addStudentData(studentData);
-
-		if(result > 0) {
-			mav.addObject("message", "Student Information inserted successfully");
-		} else {
-
-			mav.addObject("studentData", studentData);
-			mav.addObject("message", "Students Information is not inserted");
-		}
-
-		return mav;
-	}
-
-
 	// list //
-	@GetMapping("/list")
+	@GetMapping("/student/list")
 	public ModelAndView studentList() {
 
 		ModelAndView mav = new ModelAndView("studentList", "studentData",
 				new StudentForm());
 		loadDbData(dbDataUtils, mav);
+
+		mav.addObject("Role", Role);
 		return mav;
 	}
 
-	@PostMapping("/list")
+	@PostMapping("/student/list")
 	public ModelAndView getStudentList(@ModelAttribute("studentData") StudentForm studentData) {
 
 		ModelAndView mav = new ModelAndView("studentList");
 		loadDbData(dbDataUtils, mav);
 		mav.addObject("studentList", studentService.getSpecifiedStudentsData(studentData));
+
+		mav.addObject("Role", Role);
 		return mav;
 	}
 	// list //
 
 	// Get //
-	@GetMapping("/edit/{studentId}/{operation}")
+	@GetMapping("/student/edit/{studentId}/{operation}")
 	public ModelAndView getStudentData(@PathVariable("studentId") int studentId,
 			@PathVariable("operation") String operation) {
 
@@ -177,16 +194,18 @@ public class StudentController {
 		mav.addObject("studentData", studentData);
 
 		mav.addObject("buttonValue", operation.toUpperCase());
-		mav.addObject("action","/student/" + operation); // operation as Update / Delete
+		mav.addObject("action",Role + "/student/" + operation); // operation as Update / Delete
 
 		loadDbData(dbDataUtils, mav);
 
+
+		mav.addObject("Role", Role);
 		return mav;
 	}
 	// Get //
 
 	// Update //
-	@PostMapping("/update")
+	@PostMapping("/student/update")
 	public ModelAndView updateStudentData(@ModelAttribute("studentData") StudentForm studentData)  {
 
 		ModelAndView mav = new ModelAndView("studentList", "studentData", studentData);
@@ -205,11 +224,12 @@ public class StudentController {
 			mav.addObject("message", "Students Information is not updated");
 		}
 
+		mav.addObject("Role", Role);
 		return mav;
 	}
 
 	// Delete //
-	@PostMapping("/delete")
+	@PostMapping("/student/delete")
 	public ModelAndView deleteStudentData(@ModelAttribute("studentData") StudentForm studentData)  {
 
 		ModelAndView mav = new ModelAndView("studentAdd", "studentData",
@@ -222,7 +242,7 @@ public class StudentController {
 			mav.addObject("message", "Student Information deleted successfully");
 
 			mav.addObject("buttonValue","Save");
-			mav.addObject("action","/student/add");
+			mav.addObject("action",Role + "/student/add");
 
 		} else {
 
@@ -231,11 +251,12 @@ public class StudentController {
 			mav.addObject("message", "Students Information is not deleted");
 
 			mav.addObject("buttonValue","Delete");
-			mav.addObject("action","/student/delete");
+			mav.addObject("action",Role + "/student/delete");
 		}
 
 		loadDbData(dbDataUtils, mav);
 
+		mav.addObject("Role", Role);
 		return mav;
 	}
 

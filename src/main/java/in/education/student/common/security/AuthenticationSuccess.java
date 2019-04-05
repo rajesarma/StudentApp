@@ -1,14 +1,12 @@
 package in.education.student.common.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import in.education.student.common.authentication.AuthenticationService;
 import in.education.student.model.Service;
 import in.education.student.model.User;
 import in.education.student.model.repository.ServiceRepository;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
@@ -25,21 +23,22 @@ import java.util.stream.StreamSupport;
 
 public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler {
 
-	/*@Autowired
-	AuthenticationService authenticationService;*/
-
 	@Autowired
 	private ServiceRepository serviceRepository;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-//		 authenticationService.getServices(request, user);
 		HttpSession session = request.getSession(true);
 		HashMap<String, String> serviceMap;
 		ObjectMapper oMapper = new ObjectMapper();
 
 		// Get the Principal User object
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = (User) authentication.getPrincipal();
+
+		/*Set<String> roles = authentication.getAuthorities().stream()
+				.map(r -> r.getAuthority())
+				.collect(Collectors.toSet());*/
 
 //		 serviceRepository.findAll().forEach(System.out::print);
 
@@ -51,9 +50,10 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
 
 //		Iterable<Service> services = serviceRepository.findAll();
 
-		Iterable<Service> services =
-				serviceRepository.findByServiceName(user.getUserName());
+//		user.getRoles().stream().forEach(role -> System.out.print(role.getRoleName()));
 
+		Iterable<Service> services =
+				serviceRepository.findByServiceName(user.getUsername());
 
 		List serviceUrls =
 				StreamSupport.stream(services.spliterator(), false)

@@ -20,36 +20,26 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
 	private UserRepository userRepository;
 
-//	JDBC Code
-	/*@Autowired
-	AuthenticationRepository authenticationRepository;*/
+//	public static ArrayList<String> serviceUrls;
 
 	@Override
-	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		//	JDBC Code
-		/*User user = null;
-		try {
-			user = authenticationRepository.authenticateUser(userName);
-		} catch (AuthenticationException e) {
-			e.printStackTrace();
-		}
+		Optional<User> userOptional = userRepository.findByUsername(username);
 
-		if (user != null) {
-			user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword())) ;
-			return new CustomUserDetails(user);
-		} else {
-			throw new UsernameNotFoundException("User not found.");
-		}*/
-
-
-		Optional<User> userOptional = userRepository.findByUserName(userName);
 		if(userOptional.isPresent()){
 			User user = userOptional.get();
+			// Actual Password should be stored as BCrypt
+//			System.out.println(user.getRoles());
 			user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword())) ;
-			return new CustomUserDetails(user);
+			CustomUserDetails customUserDetails = new CustomUserDetails(user);
+
+//			serviceUrls = customUserDetails.getServiceUrls();
+
+			return customUserDetails;
+
 		} else {
-			throw new UsernameNotFoundException("user not found" + userName);
+			throw new UsernameNotFoundException("user not found" + username);
 		}
 	}
 
@@ -59,22 +49,36 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		private static final int MAX_FAILED_LOGIN_ATTEMPTS = 20;
 		private static final long serialVersionUID = 6020417971232843532L;
 
-		public CustomUserDetails(User user) {
+		CustomUserDetails(User user) {
 			super(user);
 		}
+
+//		private ArrayList<String> serviceUrls = new ArrayList<>();
 
 		@Override
 		public Collection<? extends GrantedAuthority> getAuthorities() {
 
 			String[] roles = {};
 
+//			this.getRoles().stream().forEach( role -> System.out.println(role.getRoleName()));
+
+			/*ArrayList<in.education.student.model.Service> services = new ArrayList<>();
+
+			this.getRoles().stream().forEach( role -> {
+				role.getServices().stream().forEach(service -> services.add(service) );
+			});
+
+			services.stream().forEach( service -> serviceUrls.add(service.getServiceUrl()));*/
+
 			if(this.getRoles() != null){
 
 				// Prepend ROLE_ to every role in DB
 				roles = this.getRoles()
 						.stream()
-						.map(m -> "ROLE_" + m).toArray(String[]::new);
+						.map(role -> "ROLE_" + role.getRoleName().toUpperCase()).toArray(String[]::new);
 			}
+
+//			this.getRoles().stream().forEach( role -> System.out.print(role.getRoleName()));
 
 			/*return getRoles()
 				.stream()
@@ -82,11 +86,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 				.collect(Collectors.toList());*/
 
 			return AuthorityUtils.createAuthorityList(roles);
-		}
-
-		@Override
-		public String getUsername() {
-			return null;
 		}
 
 		@Override
@@ -110,8 +109,39 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		public boolean isEnabled() {
 			return this.getDisabled() == null || !this.getDisabled();
 		}
+
+//		ArrayList<String> getServiceUrls() {
+//			return serviceUrls;
+//		}
+
+		/*void setServiceUrls(ArrayList<String> serviceUrls) {
+			this.serviceUrls = serviceUrls;
+		}*/
 	}
 }
+
+
+//	JDBC Code
+	/*@Autowired
+	AuthenticationRepository authenticationRepository;*/
+
+//	JDBC Code
+		/*User user = null;
+		try {
+			user = authenticationRepository.authenticateUser(userName);
+		} catch (AuthenticationException e) {
+			e.printStackTrace();
+		}
+
+		if (user != null) {
+			user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword())) ;
+			return new CustomUserDetails(user);
+		} else {
+			throw new UsernameNotFoundException("User not found.");
+		}*/
+
+/*userOptional.orElseThrow(() ->  new UsernameNotFoundException("user not " +
+				"found" + userName));*/
 
 /*Optional<User> optionalUser = usersRepository.findByFirstName(userName);
 		return Optional.ofNullable(optionalUser).orElseThrow(()->new UsernameNotFoundException("Username Not Found"))

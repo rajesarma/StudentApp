@@ -1,5 +1,8 @@
 server:
   port: 4040
+  error:
+    whitelabel:
+      enabled: false
   servlet:
     context-path: /
   #  session:

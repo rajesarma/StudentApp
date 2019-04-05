@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -28,7 +28,7 @@ public class User implements Serializable {
 
 	@Column(name="user_name")
 	@NotNull
-	private String userName;
+	private String username;
 
 	@Column(name="password")
 	@NotNull
@@ -59,13 +59,21 @@ public class User implements Serializable {
 	@Column(name="failed_login_attempts")
 	private Long failedLoginAttempts;
 
-	@ManyToMany(cascade= CascadeType.ALL,fetch= FetchType.EAGER)
+	@OneToMany(cascade= CascadeType.ALL,fetch= FetchType.EAGER)
 	@JoinTable(name="user_roles",
 			joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")},
 			inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName=
 					"role_id")}
 	)
 	private List<Role> roles;
+
+	/*@ManyToMany(cascade= CascadeType.ALL,fetch= FetchType.EAGER)
+	@JoinTable(name="user_roles",
+			joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")},
+			inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName=
+					"role_id")}
+	)
+	private List<Role> roles;*/
 
 
 	/*@ManyToMany
@@ -91,12 +99,12 @@ public class User implements Serializable {
 		this.userId = userId;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
@@ -195,7 +203,7 @@ public class User implements Serializable {
 			String userDesc) {
 		super();
 		this.userId = userId;
-		this.userName = userName;
+		this.username = userName;
 		this.email = email;
 		this.disabled = disabled;
 		this.userDesc = userDesc;
@@ -203,7 +211,7 @@ public class User implements Serializable {
 
 	public User (User user) {
 		this.userId = user.userId;
-		this.userName = user.userName;
+		this.username = user.username;
 		this.password = user.password;
 		this.email = user.email;
 		this.disabled = user.disabled;
@@ -217,7 +225,7 @@ public class User implements Serializable {
 //		, String roles
 		super();
 		this.userId = userId;
-		this.userName = userName;
+		this.username = userName;
 		this.password = password;
 		//this.roles = Arrays.asList(roles.split(","));
 	}

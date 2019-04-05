@@ -1,4 +1,4 @@
-function buildMenu(divid,menulist1)
+			function buildMenu(divid,menulist1)
 			{
 				var source = builddata(menulist1);
 				var ul = $("<ul class='sm sm-blue pull-left' id='main-menu'></ul>");

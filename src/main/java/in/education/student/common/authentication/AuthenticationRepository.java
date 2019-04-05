@@ -110,14 +110,26 @@ public class AuthenticationRepository {
 
 		try
 		{
-			String sql = "select s.service_id, s.service_url, s.service_name,s" +
+			/*String sql = "select s.service_id, s.service_url, s.service_name,s" +
 					".parent_id, s.display_order, s.menu_display" +
 					" from users u" +
 					" join role_services rs on(u.role_id = rs.role_id )" +
 					" join services s on (s.service_id = rs.service_id)" +
 					" where user_name = '"+userName+ "' " +
 					" and password = '"+password+"'" +
+					" order by parent_id, service_id";*/
+
+			String sql = "select s.service_id, s.service_url, s.service_name, " +
+					" s.parent_id, s.display_order, s.menu_display" +
+					" from users u" +
+					" join user_roles ur on (u.id = ur.user_id)" +
+					" join roles r on (r.role_id = ur.role_id)" +
+					" join role_services rs on (r.role_id = rs.role_id )" +
+					" join services s on (s.service_id = rs.service_id)" +
+					" where user_name = '"+userName+ "' " +
+					" and password = '"+password+"'" +
 					" order by parent_id, service_id";
+
 
 			rs = dbUtils.getDBStatement().executeQuery(sql);
 			while (rs.next())
@@ -150,13 +162,24 @@ public class AuthenticationRepository {
 
 		try
 		{
-			String sql = "select s.service_id, s.service_url, s.service_name,s" +
+			/*String sql = "select s.service_id, s.service_url, s.service_name,s" +
 					".parent_id, s.display_order, s.menu_display" +
 					" from users u" +
 					" join role_services rs on(u.role_id = rs.role_id )" +
 					" join services s on (s.service_id = rs.service_id)" +
 					" where user_name = '"+userName+ "' " +
+					" order by parent_id, service_id";*/
+
+			String sql = "select s.service_id, s.service_url, s.service_name, " +
+					" s.parent_id, s.display_order, s.menu_display" +
+					" from users u" +
+					" join user_roles ur on (u.id = ur.user_id)" +
+					" join roles r on (r.role_id = ur.role_id)" +
+					" join role_services rs on (r.role_id = rs.role_id )" +
+					" join services s on (s.service_id = rs.service_id)" +
+					" where user_name = '"+userName+ "' " +
 					" order by parent_id, service_id";
+
 
 			rs = dbUtils.getDBStatement().executeQuery(sql);
 			while (rs.next())

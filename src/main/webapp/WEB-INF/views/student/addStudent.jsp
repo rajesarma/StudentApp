@@ -11,10 +11,11 @@
 	<meta charset="ISO-8859-1">
 	<title>Student Add</title>
 
-	<link rel="stylesheet" type="text/css"  href="<c:url
-		value="${pageContext.request.contextPath}/css/form-data.css" />" />
+	<%--<link rel="stylesheet" type="text/css"  href="<c:url
+		value="${pageContext.request.contextPath}/css/form-data.css" />" />--%>
 
-	<script src="${pageContext.request.contextPath}/js/form_validations.js"></script>
+	<script
+			src="${pageContext.request.contextPath}/js/custom/form_validations.js"></script>
 
 	<script>
 
@@ -67,7 +68,7 @@
 
 		function checkData(type,obj)
 		{
-			var url = '/student/add/' + type + '/' + obj.value;
+			var url = '${Role}/student/add/' + type + '/' + obj.value;
 			var message;
 			$.ajax( {
 				type: "POST",
@@ -104,296 +105,375 @@
 			font-weight: bold;
 			font-size: 10px;
 		}
+
+		.align-left {
+			text-align: left !important;
+		}
 	</style>
 </head>
 <body>
-	<div class="container_form">
-		<div class="sub-main-w2">
-			<div class="bg-content-w2pvt">
-				<div class="top-content-style-pages">
-					<p class="title-heading"><spring:message code="student.add"/></p>
+
+	<section id="subintro">
+		<div class="jumbotron subhead" id="overview">
+			<div class="container">
+				<div class="row">
+					<div class="span12">
+						<div class="centered">
+							<h3>
+								<spring:message code="student.add"/>
+							</h3>
+						</div>
+					</div>
 				</div>
-				<form:form action="/student/add" id="studentForm"
-						   modelAttribute="studentData" enctype="multipart/form-data">
-
-					<a style="color: green; text-decoration: underline;" href="/student/list">Back to Student Report</a>
-					<br>
-					<br>
-
-					<div class="err-message" style="text-align:center"> ${message}</div>
-
-					<div id="wait"></div>
-
-						<div class="student-form-input ">
-							<label><spring:message code="student.fullName"/></label>
-
-							<div class="form-text">
-								<i class="fa fa-user" aria-hidden="true"></i>
-
-								<form:hidden path="studentId" name="studentId" id="studentId" />
-								<form:input path="name" name="name" id="name"
-											cssClass="student-form-text"
-											onkeyup="charOnly(this)"
-											 />
-								<form:errors path="name" cssClass="error" />
-
-							</div>
-						</div>
-
-						<div class="student-form-input ">
-							<label><spring:message code="student.fatherName"/></label>
-							<div class="form-text">
-								<i class="fa fa-user" aria-hidden="true"></i>
-
-								<form:input path="fatherName" name="fatherName" id="fatherName"
-											cssClass="student-form-text"
-											onkeyup="charOnly(this)" />
-								<form:errors path="fatherName" cssClass="error" />
-							</div>
-						</div>
-
-						<div class="student-form-input ">
-							<label><spring:message code="student.motherName"/></label>
-							<div class="form-text">
-								<i class="fa fa-user" aria-hidden="true"></i>
-
-								<form:input path="motherName" name="motherName" id="motherName"
-											cssClass="student-form-text" onkeyup="charOnly(this)" />
-
-								<form:errors path="motherName" cssClass="error" />
-							</div>
-						</div>
-
-						<div class="student-form-input ">
-							<label><spring:message code="student.academicYear"/></label>
-							<div class="form-text">
-								<form:select path="academicYearId" name="academicYearId" id="academicYearId"
-											 multiple="false"
-											 cssClass="student-form-select"
-											 onchange="checkSelection(this, 'Academic Year')">
-									<form:option value="0" label="Select" />
-									<form:options items="${academicYears}" />
-								</form:select>
-
-								<form:errors path="academicYearId" cssClass="error" />
-							</div>
-						</div>
-
-						<div class="student-form-input ">
-							<label><spring:message code="student.branch"/></label>
-							<div class="form-text">
-								<form:select path="branchId" name="branchId" id="branchId"
-											 multiple="false"
-											 cssClass="student-form-select" onchange="checkSelection(this, 'Branch')">
-									<form:option value="0" label="Select" />
-									<form:options items="${branches}"
-												  />
-								</form:select>
-
-								<form:errors path="branchId" cssClass="error" />
-							</div>
-						</div>
-
-						<div class="student-form-input ">
-							<label><spring:message code="student.bloodGroup"/></label>
-							<div class="form-text">
-								<i class="fa fa-user" aria-hidden="true"></i>
-
-								<form:select path="bloodGroupId" name="bloodGroupId" id="bloodGroupId"
-											 multiple="false"
-											 cssClass="student-form-select"
-											 onchange="checkSelection(this, 'Blood Group')">
-									<form:option value="0" label="Select" />
-									<form:options items="${bloodGroups}" />
-								</form:select>
-
-								<form:errors path="bloodGroupId" cssClass="error" />
-							</div>
-						</div>
-
-						<div class="student-form-input ">
-							<label><spring:message code="student.parentPhoneNo"/></label>
-							<div class="form-text">
-								<i class="fa fa-user" aria-hidden="true"></i>
-
-								<form:input path="parentPhoneNo" name="parentPhoneNo" id="parentPhoneNo"
-											cssClass="student-form-text"
-											onkeyup="intOnly(this)"/>
-
-								<form:errors path="parentPhoneNo" cssClass="error" />
-							</div>
-						</div>
-
-						<div class="student-form-input ">
-							<label><spring:message code="student.alternativePhoneNo"/></label>
-							<div class="form-text">
-								<i class="fa fa-user" aria-hidden="true"></i>
-
-								<form:input path="alternativePhoneNo" name="alternativePhoneNo" id="alternativePhoneNo"
-											cssClass="student-form-text" onkeyup="intOnly(this)"/>
-								<form:errors path="alternativePhoneNo" cssClass="error" />
-							</div>
-						</div>
-
-						<div class="student-form-input ">
-							<label><spring:message code="student.aadharNo"/></label>
-							<div class="form-text">
-								<i class="fa fa-user" aria-hidden="true"></i>
-
-								<form:input path="aadharNo" name="aadharNo" id="aadharNo"
-											cssClass="student-form-text" onkeyup="intOnly(this)"/>
-
-								<form:errors path="aadharNo" cssClass="error" />
-							</div>
-						</div>
-
-						<div class="student-form-input ">
-							<label><spring:message code="student.dob"/></label>
-							<div class="form-text">
-								<i class="fa fa-user" aria-hidden="true"></i>
-
-								<form:input path="dob" name="dob" id="dob" maxlength="10"
-											cssClass="student-form-text"/>
-								<span class="date-format"><spring:message code="dateFormat"/></span>
-								<form:errors path="dob" cssClass="error" />
-							</div>
-						</div>
-
-						<div class="student-form-input ">
-							<label><spring:message code="student.doj"/></label>
-							<div class="form-text">
-								<i class="fa fa-user" aria-hidden="true"></i>
-
-								<form:input path="doj" name="doj" id="doj"
-											maxlength="10"
-											cssClass="student-form-text"/>
-								<span
-										class="date-format"><spring:message
-										code="dateFormat"/></span>
-
-								<form:errors path="doj" cssClass="error" />
-							</div>
-						</div>
-
-						<div class="student-form-input ">
-							<label><spring:message code="student.rollNo"/></label>
-							<div class="form-text">
-								<i class="fa fa-user" aria-hidden="true"></i>
-
-								<%--<form:input path="rollNo" name="rollNo" id="rollNo"
-											cssClass="student-form-text" />--%>
-
-								<form:input path="rollNo" name="rollNo" id="rollNo" cssClass="student-form-text"
-											onkeypress="javascript:return isAlphaNumeric(event,this.value);"
-											onblur="checkData('checkRollNo', this)" />
-								<form:errors path="rollNo" cssClass="error" />
-							</div>
-						</div>
-
-						<div class="student-form-input ">
-							<label><spring:message code="student.eMail"/></label>
-							<div class="form-text">
-								<i class="fa fa-user" aria-hidden="true"></i>
-
-								<form:input path="email" name="email" id="email"
-											cssClass="student-form-text" onblur="checkEmail(this);"/>
-								<form:errors path="email" cssClass="error" />
-							</div>
-						</div>
-
-
-
-						<div class="student-form-input " > <%--style="width: 64%"--%>
-							<label><spring:message code="student.gender"/></label>
-							<div class="form-text">
-								<i class="fa fa-user" aria-hidden="true"></i>
-
-								<form:radiobutton path="gender" value="M"
-												  id="gender"/> Male
-								<form:radiobutton path="gender" value="F"
-												  id="gender"/> Female
-
-								<form:errors path="gender" cssClass="error" />
-
-							</div>
-						</div>
-
-						<div class="student-form-input ">
-							<label><spring:message code="student.height"/></label>
-							<div class="form-text">
-								<i class="fa fa-user" aria-hidden="true"></i>
-
-								<form:input path="height" name="height" id="height"
-											cssClass="student-form-text" onkeyup="intOnly(this)"/>
-								<form:errors path="height" cssClass="error" />
-							</div>
-						</div>
-
-						<div class="student-form-input ">
-							<label><spring:message code="student.joiningYearNo"/></label>
-							<div class="form-text">
-								<i class="fa fa-user" aria-hidden="true"></i>
-
-								<form:select path="joiningYearNo" name="joiningYearNo" id="joiningYearNo"
-											 multiple="false"
-											 cssClass="student-form-select" onchange="checkSelection(this, 'Joined in Year')">
-									<form:option value="0" label="Select" />
-									<form:options items="${batches}" />
-								</form:select>
-								<form:errors path="joiningYearNo" cssClass="error" />
-							</div>
-						</div>
-
-						<div class="student-form-input " >
-							<label><spring:message code="student.address"/></label>
-							<div class="form-text">
-								<i class="fa fa-user" aria-hidden="true"></i>
-
-								<form:textarea path="address" name="address" id="address"
-											   cssClass="student-form-text"
-											   cssStyle="height: 100px"/>
-								<form:errors path="address" cssClass="error" />
-							</div>
-						</div>
-
-						<div class="student-form-input " >
-							<label><spring:message code="student.photo"/></label>
-							<div class="form-text">
-								<i class="fa fa-user" aria-hidden="true"></i>
-
-								<input type="file" name="photo" id="photo"
-									   cssClass="student-form-text" onchange="openFile(event)" />
-								<div id="applicantPhotoName" ></div>
-
-							</div>
-								<%--<img src="data:image/ext;base64,${student.photoData
-									 }" />--%>
-
-							<c:if test="${empty photoData}">
-							<img src="data:image;base64,${photoData }" id="photoData"
-								 style='border: 1px solid black; visibility: collapse'
-								 width='80px'
-								 height='80px'>
-							</c:if>
-							<c:if test="${not empty photoData}">
-							<img src="data:image;base64,${photoData }" id="photoData"
-								 style='border: 1px solid black; visibility: visible'
-								 width='80px'
-								 height='80px'>
-							</c:if>
-
-
-
-
-						</div>
-
-						<div align="center" style="width: 100%; float: left">
-							<input type="button" class="btn" value="${buttonValue }"
-								   onclick="submitData('${action}')" />
-						</div>
-				</form:form>
 			</div>
 		</div>
-	</div>
+	</section>
+
+	<section id="maincontent">
+		<div class="container">
+
+
+			<form:form action="${Role}/student/add" id="studentForm"
+					   modelAttribute="studentData" enctype="multipart/form-data"
+					   cssClass="form-horizontal">
+			<form:hidden path="studentId" name="studentId" id="studentId" />
+
+			<%--<aside>--%>
+			<div class="row ">
+				<div class="span6">
+					<div class="centered">
+								<%--<a style="color: green; text-decoration: underline;" href="${Role}/student/list">Back to Student Report</a>--%>
+
+					<div id="wait"></div>
+					<div class="err-message" style="text-align:center"> ${message}</div>
+
+
+
+						<div class="control-group">
+							<label class="control-label align-left" for="name">
+								<spring:message code="student.fullName"/>
+							</label>
+
+							<div class="controls">
+								<form:input path="name" name="name" id="name"
+											cssClass="span3"
+											onkeyup="charOnly(this)"
+								/>
+								<span class="help-block">
+									<form:errors path="name" cssClass="error" />
+								</span>
+							</div>
+						</div>
+
+						<div class="control-group">
+
+							<label class="control-label align-left" for="fatherName">
+								<spring:message code="student.fatherName"/>
+							</label>
+							<div class="controls">
+								<form:input path="fatherName" name="fatherName" id="fatherName"
+											cssClass="span3"
+											onkeyup="charOnly(this)" />
+								<span class="help-block">
+									<form:errors path="fatherName" cssClass="error" />
+								</span>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label align-left" for="motherName">
+								<spring:message code="student.motherName"/>
+							</label>
+							<div class="controls">
+								<form:input path="motherName" name="motherName" id="motherName"
+											cssClass="span3" onkeyup="charOnly(this)" />
+								<span class="help-block">
+									<form:errors path="motherName" cssClass="error" />
+								</span>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label align-left" for="parentPhoneNo">
+								<spring:message code="student.parentPhoneNo"/>
+							</label>
+							<div class="controls">
+								<form:input path="parentPhoneNo" name="parentPhoneNo" id="parentPhoneNo"
+											cssClass="span3"
+											onkeyup="intOnly(this)"/>
+								<span class="help-block">
+									<form:errors path="parentPhoneNo" cssClass="error" />
+								</span>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label align-left" for="alternativePhoneNo">
+								<spring:message code="student.alternativePhoneNo"/>
+							</label>
+							<div class="controls">
+								<form:input path="alternativePhoneNo" name="alternativePhoneNo" id="alternativePhoneNo"
+											cssClass="span3" onkeyup="intOnly(this)"/>
+								<span class="help-block">
+									<form:errors path="alternativePhoneNo" cssClass="error" />
+								</span>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label align-left" for="aadharNo">
+								<spring:message code="student.aadharNo"/>
+							</label>
+							<div class="controls">
+								<form:input path="aadharNo" name="aadharNo" id="aadharNo"
+											cssClass="span3" onkeyup="intOnly(this)"/>
+								<span class="help-block">
+									<form:errors path="aadharNo" cssClass="error" />
+								</span>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label align-left" for="rollNo">
+								<spring:message code="student.rollNo"/>
+							</label>
+							<div class="controls">
+								<form:input path="rollNo" name="rollNo" id="rollNo" cssClass="span3"
+											onkeypress="javascript:return isAlphaNumeric(event,this.value);"
+											onblur="checkData('checkRollNo', this)" />
+								<span class="help-block">
+									<form:errors path="rollNo" cssClass="error" />
+								</span>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label align-left" for="email">
+								<spring:message code="student.eMail"/>
+							</label>
+							<div class="controls">
+								<form:input path="email" name="email" id="email"
+											cssClass="span3" onblur="checkEmail(this);"/>
+								<span class="help-block">
+									<form:errors path="email" cssClass="error" />
+								</span>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label align-left" for="email">
+								<spring:message code="student.photo"/>
+							</label>
+							<div class="controls">
+								<input type="file" name="photo" id="photo"
+									   cssClass="span3" onchange="openFile(event)" />
+								<div id="applicantPhotoName" ></div>
+
+								<span class="help-block">
+									<c:if test="${empty photoData}">
+											<img src="data:image;base64,${photoData }" id="photoData"
+												 style='border: 1px solid black; visibility: collapse'
+												 width='80px' class="img-polaroid"
+												 height='80px'>
+									</c:if>
+									<c:if test="${not empty photoData}">
+										<img src="data:image;base64,${photoData }" id="photoData"
+											 style='border: 1px solid black; visibility: visible'
+											 width='80px' class="img-polaroid"
+											 height='80px'>
+									</c:if>
+								</span>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+				<%--First Box--%>
+
+
+
+				<%--Second Box--%>
+				<div class="span6">
+					<div class="centered">
+						<%--<a style="color: green; text-decoration: underline;" href="${Role}/student/list">Back to Student Report</a>--%>
+
+						<div id="wait"></div>
+						<div class="err-message" style="text-align:center"> ${message}</div>
+
+
+							<div class="control-group">
+								<label class="control-label align-left" for="academicYearId">
+									<spring:message code="student.academicYear"/>
+								</label>
+
+								<div class="controls">
+									<form:select path="academicYearId" name="academicYearId" id="academicYearId"
+												 multiple="false"
+												 cssClass="span3"
+												 onchange="checkSelection(this, 'Academic Year')">
+										<form:option value="0" label="Select" />
+										<form:options items="${academicYears}" />
+									</form:select>
+									<span class="help-block">
+									<form:errors path="academicYearId" cssClass="error" />
+								</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+
+								<label class="control-label align-left" for="branchId">
+									<spring:message code="student.branch"/>
+								</label>
+								<div class="controls">
+									<form:select path="branchId" name="branchId" id="branchId"
+												 multiple="false"
+												 cssClass="span3" onchange="checkSelection(this, 'Branch')">
+										<form:option value="0" label="Select" />
+										<form:options items="${branches}"
+										/>
+									</form:select>
+									<span class="help-block">
+									<form:errors path="branchId" cssClass="error" />
+								</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+
+								<label class="control-label align-left" for="joiningYearNo">
+									<spring:message code="student.joiningYearNo"/>
+								</label>
+								<div class="controls">
+									<form:select path="joiningYearNo" name="joiningYearNo" id="joiningYearNo"
+												 multiple="false"
+												 cssClass="span3" onchange="checkSelection(this, 'Joined in Year')">
+										<form:option value="0" label="Select" />
+										<form:options items="${batches}" />
+									</form:select>
+									<span class="help-block">
+									<form:errors path="joiningYearNo" cssClass="error" />
+								</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label align-left" for="bloodGroupId">
+									<spring:message code="student.bloodGroup"/>
+								</label>
+								<div class="controls">
+									<form:select path="bloodGroupId" name="bloodGroupId" id="bloodGroupId"
+												 multiple="false"
+												 cssClass="span3"
+												 onchange="checkSelection(this, 'Blood Group')">
+										<form:option value="0" label="Select" />
+										<form:options items="${bloodGroups}" />
+									</form:select>
+									<span class="help-block">
+									<form:errors path="bloodGroupId" cssClass="error" />
+								</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label align-left" for="height">
+									<spring:message code="student.height"/>
+								</label>
+								<div class="controls">
+									<form:input path="height" name="height" id="height"
+												cssClass="span3" onkeyup="intOnly(this)"/>
+									<span class="help-block">
+									<form:errors path="height" cssClass="error" />
+								</span>
+								</div>
+							</div>
+
+
+
+							<div class="control-group">
+								<label class="control-label align-left" for="dob">
+									<spring:message code="student.dob"/>
+								</label>
+								<div class="controls">
+									<form:input path="dob" name="dob" id="dob" maxlength="10"
+												cssClass="span2"/>
+									<span class="help-inline date-format">
+										<spring:message code="dateFormat"/>
+									</span>
+									<span class="help-block">
+									<form:errors path="dob" cssClass="error" />
+								</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label align-left" for="doj">
+									<spring:message code="student.doj"/>
+								</label>
+								<div class="controls">
+									<form:input path="doj" name="doj" id="doj" maxlength="10"
+												cssClass="span2"/>
+									<span class="help-inline date-format">
+										<spring:message code="dateFormat"/>
+									</span>
+									<span class="help-block">
+									<form:errors path="doj" cssClass="error" />
+								</span>
+								</div>
+							</div>
+
+
+							<div class="control-group">
+								<label class="control-label align-left" >
+									<spring:message code="student.gender"/>
+								</label>
+								<div class="controls pull-left">
+
+									<label class="radio inline" for="gender">
+										<form:radiobutton path="gender" value="M"
+													  id="gender"/> Male
+									</label>
+									<label class="radio inline" for="gender">
+										<form:radiobutton path="gender" value="F"
+													  id="gender"/> Female
+									</label>
+									<span class="help-block">
+									<form:errors path="gender" cssClass="error" />
+								</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label align-left" >
+									<spring:message code="student.address"/>
+								</label>
+								<div class="controls pull-left">
+
+									<form:textarea path="address" name="address" id="address"
+												   cssClass="span3" rows="3"
+												   cssStyle="height: 100px"/>
+									<span class="help-block">
+									<form:errors path="address" cssClass="error" />
+								</span>
+								</div>
+							</div>
+					</div>
+				</div>
+
+				<div class="span12">
+					<div align="center" style="width: 100%;">
+						<input type="button" class="btn btn-primary" value="${buttonValue }"
+							   onclick="submitData('${action}')" />
+					</div>
+				</div>
+
+			</div>
+			</form:form>
+			<%--</aside>--%>
+		</div>
+
+	</section>
+
 </body>
 </html>

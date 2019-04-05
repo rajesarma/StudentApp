@@ -20,36 +20,53 @@
 	<meta http-equiv="expires" content="0" />
 	<meta http-equiv="AUTOCOMPLETE" content="OFF" />
 	<meta http-equiv="keywords" content="Site"/>
-	<META HTTP-EQUIV="Refresh" CONTENT="2699;URL=/expireSession">
+	<META HTTP-EQUIV="Refresh" CONTENT="2699;URL=/logout">
 
 	<%--<meta http-equiv="Refresh" content="5"; url="/logout"/>--%>
 	<%--<META HTTP-EQUIV="Refresh" CONTENT="1800;URL=/expireSession">--%>
 
 	<link rel="icon" href="<c:url value="${pageContext.request.contextPath}/images/my_logo.jpg" />" type="image/x-icon" />
 	<link rel="stylesheet" href="<c:url
-		value="${pageContext.request.contextPath}/css/loading.css" />" type="text/css" />
+		value="${pageContext.request.contextPath}/css/custom/loading.css" />" type="text/css" />
 	<link rel="shortcut icon" href="<c:url value="${pageContext.request.contextPath}/images/my_logo.jpg" />"
 		  type="image/x-icon" />
-	<link rel="stylesheet" type="text/css"  href="<c:url
-	value="${pageContext.request.contextPath}/css/index.css" />" />
-	<link rel="stylesheet" type="text/css"  href="<c:url
-	value="${pageContext.request.contextPath}/css/styles.css" />" />
-	<link rel="stylesheet" type="text/css"  href="<c:url
-	value="${pageContext.request.contextPath}/css/menus.css" />"/>
 
-	<script src="${pageContext.request.contextPath}/js/jquery-3.3.1.js"></script>
 
-	<%--<script
-			src="${pageContext.request.contextPath}/webjars/jquery/3.3.1-1/jquery.js"></script>
-	<script src="${pageContext.request.contextPath}/webjars/popper.js"></script>
-	<script
-			src="${pageContext.request.contextPath}/webjars/bootstrap/4.1.1/js/bootstrap.js"></script>
+
+	<%--<link rel="stylesheet" type="text/css"  href="<c:url
+	value="${pageContext.request.contextPath}/css/custom/index.css" />" />--%>
+
+	<%--<link rel="stylesheet" type="text/css"  href="<c:url
+	value="${pageContext.request.contextPath}/css/custom/styles.css" />" />--%>
+
+	<link rel="stylesheet" type="text/css"  href="<c:url
+	value="${pageContext.request.contextPath}/css/menu.css" />"/>
+
+	<%--<script src="${pageContext.request.contextPath}/js/custom/jquery-3.3.1.js"></script>--%>
+
+	<%--
 	<link
 			href="${pageContext.request.contextPath}/webjars/bootstrap/4.1.1/scss/bootstrap.scss"
 		  rel="stylesheet" media="screen"/>--%>
 
+	<%--<link rel="stylesheet" href="<c:url value="${pageContext.request.contextPath}/webjars/bootstrap/4.1.1/css/bootstrap.css" />">--%>
+
+	<link rel="stylesheet" href="<c:url value="${pageContext.request.contextPath}/css/bootstrap.css" />">
+	<link href="<c:url value="${pageContext.request.contextPath}/css/bootstrap-responsive.css" />" rel="stylesheet">
+	<link href="<c:url value="${pageContext.request.contextPath}/css/docs.css" />" rel="stylesheet">
+	<link href="<c:url value="${pageContext.request.contextPath}/js/google-code-prettify/prettify.css" />" rel="stylesheet">
+	<link href="<c:url value="${pageContext.request.contextPath}/css/style.css" />" rel="stylesheet">
+
+	<link href="<c:url value="${pageContext.request.contextPath}/color/default.css" />" rel="stylesheet">
+
+	<%--<script src="<c:url value="${pageContext.request.contextPath}/webjars/jquery/3.3.1-1/jquery.min.js" />"></script>
+	<script src="<c:url value="${pageContext.request.contextPath}/webjars/bootstrap/4.1.1/js/bootstrap.min.js" />"></script>--%>
+
 	<script
-			src="<c:url value="${pageContext.request.contextPath}/js/menus.js" />"></script>
+			src="<c:url value="${pageContext.request.contextPath}/js/jquery.min.js" />"></script>
+	<script src="<c:url value="${pageContext.request.contextPath}/js/bootstrap.js" />"></script>
+
+	<script src="<c:url value="${pageContext.request.contextPath}/js/menu.js"/>"></script>
 
 	<script>
 		if(window.history.length>0) {
@@ -87,7 +104,6 @@
 		}
 
 		document.oncontextmenu=new Function("return false");
-
 
 		function disableKey(event) {
 			if (!event) event = window.event;
@@ -129,8 +145,6 @@
 
 		setEventListener(disableKey)
 		//unsetEventListener(disableKey)
-
-
 	</script>
 
 	<script type="text/javascript">
@@ -166,33 +180,49 @@
 	</style>
 
 </head>
-<body style="overflow-x:hidden;" >
-	<div class="main-bg">
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
 
-		<%--<div id="loading" class="loading">
-			<div class="loading-div">
-				<div id="cssload-loader" >
-					<ul>
-						<li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-					</ul>
-				</div>
-				<div style="padding-top: 10px">
-					<b>Loading... </b>
-				</div>
-			</div>
-		</div>--%>
 
-		<div class="page mt-minus-20">
+	<%--<div class="main-bg">--%>
 
-				<div class="min-ht-50" style="background: #084B8A">  <%--#1cc7d0--%>
+
+
+		<%--<div class="page mt-minus-20">
+
+				<div class="min-ht-50" style="background: #084B8A">  &lt;%&ndash;#1cc7d0&ndash;%&gt;
 					<tiles:insertAttribute name="menu" />
 				</div>
-				<div class="min-ht-500 bg-white" > <%--style="background: #cacaca"--%>
+				<div class="min-ht-500 bg-white" > &lt;%&ndash;style="background: #cacaca"&ndash;%&gt;
 					<br />
 					<tiles:insertAttribute name="body" />
 					<tiles:insertAttribute name="footer" />
 				</div>
-		</div>
-	</div>
+		</div>--%>
+
+
+			<tiles:insertAttribute name="menu" />
+		<%--<div class="min-ht-500 bg-white" > --%><%--style="background: #cacaca"--%>
+
+			<tiles:insertAttribute name="body" />
+
+
+			<tiles:insertAttribute name="footer" />
+		<%--</div>--%>
+
+	<%--</div>--%>
+
+	<script src="<c:url value="${pageContext.request.contextPath}/js/jquery.easing.js" />"></script>
+	<script src="<c:url value="${pageContext.request.contextPath}/js/google-code-prettify/prettify.js" />"></script>
+	<script src="<c:url value="${pageContext.request.contextPath}/js/modernizr.js" />"></script>
+	<script src="<c:url value="${pageContext.request.contextPath}/js/jquery.elastislide.js" />"></script>
+	<script src="<c:url value="${pageContext.request.contextPath}/js/sequence/sequence.jquery-min.js" />"></script>
+	<script src="<c:url value="${pageContext.request.contextPath}/js/sequence/setting.js" />"></script>
+	<script src="<c:url value="${pageContext.request.contextPath}/js/jquery.prettyPhoto.js" />"></script>
+	<script src="<c:url value="${pageContext.request.contextPath}/js/application.js" />"></script>
+	<script src="<c:url value="${pageContext.request.contextPath}/js/jquery.flexslider.js" />"></script>
+	<script src="<c:url value="${pageContext.request.contextPath}/js/hover/jquery-hover-effect.js" />"></script>
+	<script src="<c:url value="${pageContext.request.contextPath}/js/hover/setting.js" />"></script>
+	<script src="<c:url value="${pageContext.request.contextPath}/js/custom.js" />"></script>
+
 </body>
 </html>

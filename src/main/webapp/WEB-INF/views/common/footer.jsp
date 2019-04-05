@@ -10,6 +10,23 @@
 </head>
 <body bgcolor="white">
 
+	<div id="loading" class="loading">
+		<div class="loading-div">
+			<div id="cssload-loader" >
+				<ul>
+					<li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+				</ul>
+			</div>
+			<div style="padding-top: 10px">
+				<b>Loading... </b>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		buildMenu('menu', eval('${servicesMenu}'));
+	</script>
+
 	<script type="text/javascript">
 		$(function()
 		{

@@ -44,7 +44,7 @@ public class AuthenticationService {
 		HttpSession session = request.getSession(true);
 
 		List<HashMap<String, String>> servicesList =
-				authenticationRepository.getServices(user.getUserName());
+				authenticationRepository.getServices(user.getUsername());
 
 		session.setAttribute("services", servicesList);
 		session.setAttribute("user", user);

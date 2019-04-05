@@ -12,6 +12,35 @@
 	<title>Home Page</title>
 </head>
 <body>
-		<a href="/test">Test</a>
+		<section id="subintro">
+			<div class="jumbotron subhead" id="overview">
+				<div class="container">
+					<div class="row">
+						<div class="span12">
+							<div class="centered">
+								<h3 >Test</h3>
+
+								<p>
+									<a href="/test">Test</a>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section id="maincontent">
+			<div class="container">
+				<div class="row">
+					<div class="span12">
+						<div class="centered">
+							<a href="/test">Test</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
 </body>
 </html>

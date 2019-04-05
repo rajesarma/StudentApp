@@ -73,4 +73,8 @@ public class Role implements Serializable {
 	public void setServices(List<Service> services) {
 		this.services = services;
 	}
+
+	public String getRole() {
+		return "ROLE_" + this.getRoleName();
+	}
 }
