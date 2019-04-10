@@ -264,6 +264,8 @@
     background:#94c045;
     color: black;
 
+    border-top: 5px solid #337e0a;
+
     font-family: sans-serif;
     font-size: 12px
   }
@@ -271,6 +273,7 @@
   {
     /*background: #003366;*/
     background: #337e0a;
+    border-top: 5px solid #94c045;
     color: white;
   }
   .sm-blue a.current {
@@ -485,7 +488,7 @@
 .sm, .sm ul, .sm li {
   display: block;
   list-style: none;
-  /*margin: 0;*/
+  margin: 0;
   padding: 0;
   /*line-height: normal;*/
   /*margin-top: 7px;*/

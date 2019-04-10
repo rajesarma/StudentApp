@@ -50,6 +50,7 @@ spring:
     username: root
     password: mytrah
 
+  # type: com.mysql.cj.jdbc.MysqlConnectionPoolDataSource
   # type: com.zaxxer.hikari.HikariDataSource
   #  hikari:
   #    connection-init-sql: "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;"

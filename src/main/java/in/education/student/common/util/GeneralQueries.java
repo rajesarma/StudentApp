@@ -79,7 +79,8 @@ public class GeneralQueries {
 	public static String getRoles = "select role_id, role_name from roles";
 
 	public static String getAcademicYears = "select year_id, year from academic_year";
-	public static String getBloodGroups = "select bg_id, bg_name from blood_group";
+	public static String getBloodGroups = "select blood_group_id, blood_group from " +
+			"blood_group";
 	public static String getBranches = "select branch_id, branch_name from branch";
 	public static String getExamTypes = "select exam_type_id, exam_type from exam_type";
 	public static String getQualifications = "select qly_id, qly_name from " +
@@ -106,7 +107,7 @@ public class GeneralQueries {
 		return "select subject_id, subject_name from subjects where semester_id = "+semesterId+" and branch_id = '"+branchId+ "' order by subject_id";
 	}
 
-	public static String getBatches = "select year_no, year_name from batch";
+	public static String getYears = "select year_no, year_name from year";
 
 	public static String getMaxMarks(long examTypeId) {
 		return "select max_marks from exam_type where exam_type_id = "+examTypeId;

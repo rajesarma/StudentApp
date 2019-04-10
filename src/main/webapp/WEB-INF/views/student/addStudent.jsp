@@ -68,34 +68,36 @@
 
 		function checkData(type,obj)
 		{
-			var url = '${Role}/student/add/' + type + '/' + obj.value;
-			var message;
-			$.ajax( {
-				type: "POST",
-				url:url,
-				cache: false,
-				success: function(response) {
-					$("#wait").html("");
-					var response = jQuery.parseJSON(response);
+			if(obj.value.length > 0) {
+				var url = '${Role}/student/' + type + '/' + obj.value;
+				var message;
+				$.ajax( {
+					type: "POST",
+					url:url,
+					cache: false,
+					success: function(response) {
+						$("#wait").html("");
+						var response = jQuery.parseJSON(response);
 
-					if(type == "checkRollNo")
-					{
-						var rollNoExists = response.rollNoExists;
-						var message = response.message;
-						if(rollNoExists == "true")
+						if(type == "checkRollNo")
 						{
-							$("#wait").html("<center style='font-size: 14px' ><span id='loading' style='font-size: 14px; color:red'><i class='fa fa-spinner fa-spin' style='font-size:24px'></i> <b>" + message + "</b></span></center>");
-							document.forms[0].rollNo.value = "";
+							var rollNoExists = response.rollNoExists;
+							var message = response.message;
+							if(rollNoExists == "true")
+							{
+								$("#wait").html("<center style='font-size: 14px' ><span id='loading' style='font-size: 14px; color:red'><i class='fa fa-spinner fa-spin' style='font-size:24px'></i> <b>" + message + "</b></span></center>");
+								document.forms[0].rollNo.value = "";
+							}
 						}
+					}, error: function(response) {
+						//alert("No data");
+						$("#wait").html("<center style='font-size: 14px' ><span id='loading' style='font-size: 14px; color:red'><i class='fa fa-spinner fa-spin' style='font-size:24px'></i> <b>" + response.error + "</b></span></center>");
+					},
+					beforeSend: function( event, ui ) {
+						$("#wait").html("<center style='font-size: 14px' ><span id='loading' style='font-size: 14px; color:red'><i class='fa fa-spinner fa-spin' style='font-size:24px'></i> <b>Loading... </b></span></center>");
 					}
-				}, error: function(response) {
-					//alert("No data");
-					$("#wait").html("<center style='font-size: 14px' ><span id='loading' style='font-size: 14px; color:red'><i class='fa fa-spinner fa-spin' style='font-size:24px'></i> <b>" + response.error + "</b></span></center>");
-				},
-				beforeSend: function( event, ui ) {
-					$("#wait").html("<center style='font-size: 14px' ><span id='loading' style='font-size: 14px; color:red'><i class='fa fa-spinner fa-spin' style='font-size:24px'></i> <b>Loading... </b></span></center>");
-				}
-			});
+				});
+			}
 		}
 	</script>
 	<style>
@@ -129,9 +131,9 @@
 		</div>
 	</section>
 
+	<br>
 	<section id="maincontent">
 		<div class="container">
-
 
 			<form:form action="${Role}/student/add" id="studentForm"
 					   modelAttribute="studentData" enctype="multipart/form-data"
@@ -140,14 +142,15 @@
 
 			<%--<aside>--%>
 			<div class="row ">
+				<div class="span12">
+					<div class="err-message" style="text-align:center"> ${message}</div>
+					<div id="wait" class="err-message"></div>
+				</div>
+
+
 				<div class="span6">
 					<div class="centered">
 								<%--<a style="color: green; text-decoration: underline;" href="${Role}/student/list">Back to Student Report</a>--%>
-
-					<div id="wait"></div>
-					<div class="err-message" style="text-align:center"> ${message}</div>
-
-
 
 						<div class="control-group">
 							<label class="control-label align-left" for="name">
@@ -199,7 +202,7 @@
 							</label>
 							<div class="controls">
 								<form:input path="parentPhoneNo" name="parentPhoneNo" id="parentPhoneNo"
-											cssClass="span3"
+											cssClass="span3" maxlength="10"
 											onkeyup="intOnly(this)"/>
 								<span class="help-block">
 									<form:errors path="parentPhoneNo" cssClass="error" />
@@ -212,7 +215,8 @@
 								<spring:message code="student.alternativePhoneNo"/>
 							</label>
 							<div class="controls">
-								<form:input path="alternativePhoneNo" name="alternativePhoneNo" id="alternativePhoneNo"
+								<form:input path="alternativePhoneNo" name="alternativePhoneNo"
+											id="alternativePhoneNo" maxlength="10"
 											cssClass="span3" onkeyup="intOnly(this)"/>
 								<span class="help-block">
 									<form:errors path="alternativePhoneNo" cssClass="error" />
@@ -240,7 +244,7 @@
 							<div class="controls">
 								<form:input path="rollNo" name="rollNo" id="rollNo" cssClass="span3"
 											onkeypress="javascript:return isAlphaNumeric(event,this.value);"
-											onblur="checkData('checkRollNo', this)" />
+											onChange="checkData('checkRollNo', this)" />
 								<span class="help-block">
 									<form:errors path="rollNo" cssClass="error" />
 								</span>
@@ -265,10 +269,12 @@
 								<spring:message code="student.photo"/>
 							</label>
 							<div class="controls">
-								<input type="file" name="photo" id="photo"
+								<input type="file" name="image" id="image"
 									   cssClass="span3" onchange="openFile(event)" />
 								<div id="applicantPhotoName" ></div>
-
+								<span class="help-block">
+									<form:errors path="photo" cssClass="error" />
+								</span>
 								<span class="help-block">
 									<c:if test="${empty photoData}">
 											<img src="data:image;base64,${photoData }" id="photoData"
@@ -297,10 +303,6 @@
 				<div class="span6">
 					<div class="centered">
 						<%--<a style="color: green; text-decoration: underline;" href="${Role}/student/list">Back to Student Report</a>--%>
-
-						<div id="wait"></div>
-						<div class="err-message" style="text-align:center"> ${message}</div>
-
 
 							<div class="control-group">
 								<label class="control-label align-left" for="academicYearId">
@@ -350,7 +352,7 @@
 												 multiple="false"
 												 cssClass="span3" onchange="checkSelection(this, 'Joined in Year')">
 										<form:option value="0" label="Select" />
-										<form:options items="${batches}" />
+										<form:options items="${years}" />
 									</form:select>
 									<span class="help-block">
 									<form:errors path="joiningYearNo" cssClass="error" />
@@ -388,8 +390,6 @@
 								</span>
 								</div>
 							</div>
-
-
 
 							<div class="control-group">
 								<label class="control-label align-left" for="dob">
@@ -431,11 +431,11 @@
 								<div class="controls pull-left">
 
 									<label class="radio inline" for="gender">
-										<form:radiobutton path="gender" value="M"
+										<form:radiobutton path="gender" value="MALE"
 													  id="gender"/> Male
 									</label>
 									<label class="radio inline" for="gender">
-										<form:radiobutton path="gender" value="F"
+										<form:radiobutton path="gender" value="FEMALE"
 													  id="gender"/> Female
 									</label>
 									<span class="help-block">

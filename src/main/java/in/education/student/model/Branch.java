@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-//@Entity
+@Entity
 @Table(name = "branch")
 public class Branch {
 
@@ -17,4 +17,20 @@ public class Branch {
 
 	@Column(name = "branch_name")
 	private String branchName;
+
+	public String getBranchId() {
+		return branchId;
+	}
+
+	public void setBranchId(String branchId) {
+		this.branchId = branchId;
+	}
+
+	public String getBranchName() {
+		return branchName;
+	}
+
+	public void setBranchName(String branchName) {
+		this.branchName = branchName;
+	}
 }

@@ -28,8 +28,8 @@ public class DBDataUtils {
 		return dbUtils.getSelectMap(GeneralQueries.getBranches);
 	}
 
-	public Map getBatches() throws SQLException {
-		return dbUtils.getSelectMap(GeneralQueries.getBatches);
+	public Map getYears() throws SQLException {
+		return dbUtils.getSelectMap(GeneralQueries.getYears);
 	}
 
 	public String isRollNoExists(String rollNo) throws SQLException {

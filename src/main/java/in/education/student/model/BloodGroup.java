@@ -8,18 +8,34 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-//@Entity
+@Entity
 @Table(name="blood_group")
 public class BloodGroup {
 
 	@Id
 	@NotNull
-	@Column(name="bg_id")
+	@Column(name="blood_group_id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private long bloodGroupId;
 
-	@Column(name="bg_name")
+	@Column(name="blood_group")
 	private String bloodGroup;
+
+	public long getBloodGroupId() {
+		return bloodGroupId;
+	}
+
+	public void setBloodGroupId(long bloodGroupId) {
+		this.bloodGroupId = bloodGroupId;
+	}
+
+	public String getBloodGroup() {
+		return bloodGroup;
+	}
+
+	public void setBloodGroup(String bloodGroup) {
+		this.bloodGroup = bloodGroup;
+	}
 }
 
 

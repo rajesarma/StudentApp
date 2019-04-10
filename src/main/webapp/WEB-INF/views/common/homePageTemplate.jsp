@@ -24,6 +24,10 @@
 	<link rel="stylesheet" type="text/css"  href="<c:url
 	value="${pageContext.request.contextPath}/css/custom/index.css" />" />
 	<%--rel="stylesheet"--%> <%--type="text/html"--%>
+
+	<link rel="stylesheet" type="text/css"  href="<c:url
+	value="${pageContext.request.contextPath}/css/menu.css" />"/>
+
 	<link rel="icon" href="<c:url value="${pageContext.request.contextPath}/images/my_logo.jpg" />" type="image/x-icon" />
 	<link rel="shortcut icon" href="<c:url value="${pageContext.request.contextPath}/images/my_logo.jpg" />"
 		  type="image/x-icon" />

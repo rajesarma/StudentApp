@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "services")
-public class Service implements Serializable {
+public class Service implements Serializable { // , Comparable<Service>
 
 	@Id
 	@Column(name = "service_id")
@@ -31,15 +31,6 @@ public class Service implements Serializable {
 
 	@Column(name = "menu_display")
 	private Long menuDisplay;
-
-
-	/*@ManyToMany(cascade= CascadeType.ALL,fetch= FetchType.EAGER)
-	@JoinTable(name="role_services",
-			joinColumns = {@JoinColumn(name="service_id", referencedColumnName=
-					"service_id")},
-			inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="role_id")}
-	)
-	private List<Role> services; */
 
 	public Long getServiceId() {
 		return serviceId;
@@ -97,12 +88,9 @@ public class Service implements Serializable {
 		this.menuDisplay = menuDisplay;
 	}
 
-	/*public List<Role> getServices() {
-		return services;
-	}
-
-	public void setServices(List<Role> services) {
-		this.services = services;
+	/*@Override
+	public int compareTo(Service s) {
+		return getParentId().compareTo(s.getParentId());
 	}*/
 
 	/*@Override

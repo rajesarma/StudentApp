@@ -25,15 +25,19 @@
 
     <!--Common-->
     <definition name="home" extends="tilesTemplate">
-        <put-attribute name="body" value="/WEB-INF/views/home.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/common/home.jsp" />
     </definition>
 
     <definition name="test" extends="tilesTemplate">
-        <put-attribute name="body" value="/WEB-INF/views/test.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/common/test.jsp" />
     </definition>
 
     <definition name="accessDenied" extends="homePageTemplate">
-        <put-attribute name="body" value="/WEB-INF/views/accessDenied.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/common/accessDenied.jsp" />
+    </definition>
+
+    <definition name="sessionTimeout" extends="homePageTemplate">
+        <put-attribute name="body" value="/WEB-INF/views/common/sessionTimeout.jsp" />
     </definition>
 
     <definition name="error" extends="homePageTemplate">

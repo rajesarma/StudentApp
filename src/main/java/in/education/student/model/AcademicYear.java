@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-//@Entity
+@Entity
 @Table(name = "academic_year")
 public class AcademicYear {
 
@@ -20,4 +20,20 @@ public class AcademicYear {
 
 	@Column(name="year")
 	private String year;
+
+	public long getYearId() {
+		return yearId;
+	}
+
+	public void setYearId(long yearId) {
+		this.yearId = yearId;
+	}
+
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
 }

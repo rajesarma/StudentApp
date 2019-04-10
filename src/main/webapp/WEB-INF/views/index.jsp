@@ -11,27 +11,6 @@
 	<meta charset="ISO-8859-1">
 	<title>Site</title>
 
-	<script>
-		function checkValues()
-		{
-			if (document.forms[0].username.value=="")
-			{
-				alert("Enter Username");
-				document.forms[0].username.value="";
-				return false;
-			} else if (document.forms[0].password.value=="")
-			{
-				alert("Enter Password");
-				document.forms[0].password.value="";
-				return false;
-			} else
-			{
-				// document.forms[0].password.value = md5(document.forms[0].password.value);
-				document.forms[0].submit();
-			}
-		}
-	</script>
-
 	<style>
 		body {
 			display: -ms-flexbox;
@@ -76,6 +55,8 @@
 		.err-message {
 			font-size: 14px;
 			color: red;
+			text-align: center;
+			margin-bottom: 10px;
 		}
 
 	</style>
@@ -141,9 +122,7 @@
 										<label>
 											<input type="checkbox" value="remember-me"> Remember me
 										</label>
-										<button type="submit"
-												class="btn btn-primary"
-												onclick="checkValues()">
+										<button type="submit" class="btn btn-primary">
 											Sign in
 										</button>
 										<br>

@@ -41,6 +41,12 @@ public class HomeController {
 		return "accessDenied";
 	}
 
+	@RequestMapping(value = "/sessionTimeout", method = RequestMethod.GET)
+	public String sessionTimeout(ModelMap model) {
+		model.addAttribute("user", getPrincipal());
+		return "sessionTimeout";
+	}
+
 
 	private String getPrincipal(){
 		String userName = null;

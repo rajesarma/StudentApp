@@ -81,7 +81,7 @@ insert into role_services(role_id, service_id) values(1,25), (1,26), (1,27);
 select student_id, student_name, father_name,   
  dob, doj, coalesce(joining_year_no,1) as joining_year_no, blood_group_id, height
  aadhar, address, email,  photo,photo_name,
- guardian_mobile, (select bg_name from blood_group where bg_id = sd.blood_group_id) as blood_group, academic_year_id,  
+ guardian_mobile, (select blood_group from blood_group where bg_id = sd.blood_group_id) as blood_group, academic_year_id,
  branch_id, is_active, roll_no,  
  mobile_no, mother_name,  
  gender, mentor_name, address, height  

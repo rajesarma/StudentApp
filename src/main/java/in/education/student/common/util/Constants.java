@@ -15,6 +15,7 @@ public class Constants {
 		public static final String LOGIN = "/login";
 		public static final String LOGOUT = "/logout";
 		public static final String ACCESS_DENIED = "/login";
+		public static final String SESSION_TIMEOUT = "/sessionTimeout";
 
 		public static final String ADMIN = "/admin/";
 		public static final String FACULTY = "/faculty/";

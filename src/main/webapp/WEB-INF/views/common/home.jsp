@@ -19,10 +19,6 @@
 						<div class="span12">
 							<div class="centered">
 								<h3 >Test</h3>
-
-								<p>
-									<a href="/test">Test</a>
-								</p>
 							</div>
 						</div>
 					</div>

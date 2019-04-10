@@ -3,7 +3,7 @@ package in.education.student.common.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import in.education.student.model.Service;
 import in.education.student.model.User;
-import in.education.student.model.repository.ServiceRepository;
+import in.education.student.model.repository.RoleRepository;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ import java.util.stream.StreamSupport;
 public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler {
 
 	@Autowired
-	private ServiceRepository serviceRepository;
+	private RoleRepository roleRepository;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -36,6 +37,7 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
 //		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = (User) authentication.getPrincipal();
 
+		// To get Role Names
 		/*Set<String> roles = authentication.getAuthorities().stream()
 				.map(r -> r.getAuthority())
 				.collect(Collectors.toSet());*/
@@ -52,18 +54,31 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
 
 //		user.getRoles().stream().forEach(role -> System.out.print(role.getRoleName()));
 
-		Iterable<Service> services =
-				serviceRepository.findByServiceName(user.getUsername());
+		/// Services
+		/*Iterable<Service> servicesActual =
+				serviceRepository.findByServiceName(user.getUsername());*/
+
+		String[] roleNames =
+				user.getRoles().stream().map(role -> role.getRoleName()).collect(Collectors.toList())
+						.stream().toArray(String[] :: new);
+
+		List<Service> services = new ArrayList<>();
+
+		StreamSupport.stream(roleRepository.findByRoleNameIn(roleNames).spliterator(), false)
+				.forEach(role -> services.addAll(role.getServices()));
+
+		services.sort(Comparator.comparing(Service :: getParentId)
+				.thenComparing(Comparator.comparing(Service :: getServiceId)));
 
 		List serviceUrls =
 				StreamSupport.stream(services.spliterator(), false)
 						.filter(service -> service.getMenuDisplay() == 1 )
 						.collect(Collectors.toList())
-				.stream()
-				.map(service -> oMapper.convertValue(service, Map.class))
-				.collect(Collectors.toList());
+						.stream()
+						.map(service -> oMapper.convertValue(service, Map.class))
+						.collect(Collectors.toList());
 
-		List<HashMap<String, String>> servicesShowList = new ArrayList<>();
+		List<HashMap<String, String>> servicesMenuList = new ArrayList<>();
 
 		for(Object service: serviceUrls) {
 
@@ -76,11 +91,16 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
 			serviceMap.put("parent_id", sMap.get("parentId"));
 			serviceMap.put("display_order", sMap.get("displayOrder"));
 			serviceMap.put("menu_display", sMap.get("menuDisplay"));
-			servicesShowList.add(serviceMap);
+
+			servicesMenuList.add(serviceMap);
 		}
-		session.setAttribute("servicesMenu", new JSONArray(servicesShowList));
+		session.setAttribute("servicesMenu", new JSONArray(servicesMenuList));
 
 		response.sendRedirect("/home");
 //		super.onAuthenticationSuccess(request, response, authentication);
 	}
 }
+
+
+/*StreamSupport.stream(roleRepository.findByRoleName("admin").spliterator(), false)
+				.forEach(role -> services1.addAll(role.getServices()));*/

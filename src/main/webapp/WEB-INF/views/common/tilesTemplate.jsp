@@ -25,13 +25,15 @@
 	<%--<meta http-equiv="Refresh" content="5"; url="/logout"/>--%>
 	<%--<META HTTP-EQUIV="Refresh" CONTENT="1800;URL=/expireSession">--%>
 
+	<%-- For CSRF Tokens--%>
+	<meta name="_csrf" content="${_csrf.token}"/>
+	<meta name="_csrf_header" content="${_csrf.headerName}"/>
+
 	<link rel="icon" href="<c:url value="${pageContext.request.contextPath}/images/my_logo.jpg" />" type="image/x-icon" />
 	<link rel="stylesheet" href="<c:url
 		value="${pageContext.request.contextPath}/css/custom/loading.css" />" type="text/css" />
 	<link rel="shortcut icon" href="<c:url value="${pageContext.request.contextPath}/images/my_logo.jpg" />"
 		  type="image/x-icon" />
-
-
 
 	<%--<link rel="stylesheet" type="text/css"  href="<c:url
 	value="${pageContext.request.contextPath}/css/custom/index.css" />" />--%>
@@ -69,6 +71,17 @@
 	<script src="<c:url value="${pageContext.request.contextPath}/js/menu.js"/>"></script>
 
 	<script>
+
+		// For CSRF Tokens
+		$(function () {
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function (e, xhr, options) {
+				xhr.setRequestHeader(header, token);
+			});
+		});
+
+
 		if(window.history.length>0) {
 			window.history.forward(4);
 		}

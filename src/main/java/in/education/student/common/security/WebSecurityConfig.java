@@ -43,10 +43,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	// selection match.  restricts the URLs
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		//		http.csrf().disable();
+//		http.csrf().disable();
+
 		http
 			.authorizeRequests()
-				.antMatchers(Urls.ROOT, Urls.LOGIN, Urls.LOGOUT).permitAll()
+				.antMatchers(Urls.ROOT, Urls.LOGIN, Urls.LOGOUT, Urls.SESSION_TIMEOUT).permitAll()
 
 				.antMatchers("/color/**").permitAll()
 				.antMatchers("/css/*.css").permitAll()
@@ -75,7 +76,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.exceptionHandling()
 				.authenticationEntryPoint(new EntryPointUnauthorizedHandler())
 				.accessDeniedPage(Urls.ACCESS_DENIED)
+//				.and().sessionManagement().invalidSessionUrl(Urls.SESSION_TIMEOUT)
 				.and()
+
 			.logout()
 //				.logoutUrl("/logout")
 				.addLogoutHandler(customLogoutHandler())

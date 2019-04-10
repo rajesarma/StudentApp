@@ -1,18 +1,25 @@
 package in.education.student.model;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
-//@Entity(name = "student_details")
+@Entity
+@Table(name = "student_details")
 public class StudentForm {
 
 	@Id
@@ -32,15 +39,19 @@ public class StudentForm {
 	@Column(name = "mother_name")
 	private String motherName=null;
 
-	@DateTimeFormat(pattern="dd/mm/yyyy")
-	@NotEmpty(message = "DOB can not be empty")
+//	@DateTimeFormat(pattern="dd/mm/yyyy")
+//	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	@Temporal(TemporalType.DATE)
+//	@NotEmpty(message = "DOB can not be empty")
 	@Column(name = "dob")
-	private String dob=null;
+	private Date dob=null;
 
-	@DateTimeFormat(pattern="dd/mm/yyyy")
-	@NotEmpty(message = "DOJ can not be empty")
+//	@DateTimeFormat(pattern="dd/mm/yyyy")
+//	@NotEmpty(message = "DOJ can not be empty")
+//	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	@Temporal(TemporalType.DATE)
 	@Column(name = "doj")
-	private String doj=null;
+	private Date doj=null;
 
 	@Column(name = "photo_name")
 	private String photoName=null;
@@ -78,11 +89,20 @@ public class StudentForm {
 	@Column(name = "roll_no")
 	private String rollNo =null;
 
-	@Column(name = "gender")
-	private String gender=null;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "gender", length = 10)
+	private Gender gender = Gender.MALE;
+
+	/*
+	@Lob
+	private Blob photo;*/
+
+	@Transient
+	private MultipartFile image;
 
 	@Column(name = "photo")
-	private MultipartFile photo;
+	@Lob
+	private byte[] photo;
 
 	@Column(name = "height")
 	private int height;
@@ -90,17 +110,11 @@ public class StudentForm {
 	@Column(name = "joining_year_no")
 	private int joiningYearNo;
 
-	private int subjectId= 0;
-	private int batchId = 0;
-	private int examTypeId = 0;
-	private int semesterId = 0;
-
 	private String branch = null;
-	private String batch = null;
 	private String bloodGroup = null;
-
 	private String year = null;
 
+	@Transient
 	private String photoData;
 
 	public long getStudentId() {
@@ -127,19 +141,19 @@ public class StudentForm {
 		this.fatherName = fatherName;
 	}
 
-	public String getDob() {
+	public Date getDob() {
 		return dob;
 	}
 
-	public void setDob(String dob) {
+	public void setDob(Date dob) {
 		this.dob = dob;
 	}
 
-	public String getDoj() {
+	public Date getDoj() {
 		return doj;
 	}
 
-	public void setDoj(String doj) {
+	public void setDoj(Date doj) {
 		this.doj = doj;
 	}
 
@@ -231,52 +245,28 @@ public class StudentForm {
 		this.motherName = motherName;
 	}
 
-	public String getGender() {
+	public Gender getGender() {
 		return gender;
 	}
 
-	public void setGender(String gender) {
+	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
 
-	public MultipartFile getPhoto() {
+	public MultipartFile getImage() {
+		return image;
+	}
+
+	public void setImage(MultipartFile image) {
+		this.image = image;
+	}
+
+	public byte[] getPhoto() {
 		return photo;
 	}
 
-	public void setPhoto(MultipartFile photo) {
+	public void setPhoto(byte[] photo) {
 		this.photo = photo;
-	}
-
-	public int getSubjectId() {
-		return subjectId;
-	}
-
-	public void setSubjectId(int subjectId) {
-		this.subjectId = subjectId;
-	}
-
-	public int getBatchId() {
-		return batchId;
-	}
-
-	public void setBatchId(int batchId) {
-		this.batchId = batchId;
-	}
-
-	public int getExamTypeId() {
-		return examTypeId;
-	}
-
-	public void setExamTypeId(int examTypeId) {
-		this.examTypeId = examTypeId;
-	}
-
-	public int getSemesterId() {
-		return semesterId;
-	}
-
-	public void setSemesterId(int semesterId) {
-		this.semesterId = semesterId;
 	}
 
 	public String getBranch() {
@@ -285,14 +275,6 @@ public class StudentForm {
 
 	public void setBranch(String branch) {
 		this.branch = branch;
-	}
-
-	public String getBatch() {
-		return batch;
-	}
-
-	public void setBatch(String batch) {
-		this.batch = batch;
 	}
 
 	public String getBloodGroup() {
@@ -320,7 +302,11 @@ public class StudentForm {
 	}
 
 	public String getPhotoData() {
-		return photoData;
+
+		if (getPhoto() != null && getPhoto().length > 0) {
+			return new String(java.util.Base64.getEncoder().encode(getPhoto()));
+		}
+		return null;
 	}
 
 	public void setPhotoData(String photoData) {

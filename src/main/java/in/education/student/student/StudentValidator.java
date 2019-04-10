@@ -51,10 +51,10 @@ public class StudentValidator implements Validator {
 					"Branch Id"}, "Please select this");
 		}
 
-		if(studentForm.getBloodGroupId() == 0 ) {
+		/*if(studentForm.getBloodGroupId() == 0 ) {
 			errors.rejectValue("bloodGroupId", "zeroValue.student.bloodGroupId", new Object[]{
 					"Blood Group"}, "Please select this");
-		}
+		}*/
 
 		if(studentForm.getJoiningYearNo() == 0) {
 			errors.rejectValue("joiningYearNo", "zeroValue.student.joiningYearNo", new Object[]{

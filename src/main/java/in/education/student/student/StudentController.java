@@ -1,13 +1,18 @@
 package in.education.student.student;
 
-import in.education.student.common.util.DBDataUtils;
+import in.education.student.model.AcademicYear;
+import in.education.student.model.BloodGroup;
+import in.education.student.model.Branch;
 import in.education.student.model.StudentForm;
+import in.education.student.model.Year;
+import in.education.student.model.repository.AcademicYearRepository;
+import in.education.student.model.repository.BloodGroupRepository;
+import in.education.student.model.repository.BranchRepository;
+import in.education.student.model.repository.SemesterRepository;
+import in.education.student.model.repository.YearRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
@@ -15,26 +20,26 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.sql.SQLException;
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Controller
 @RequestMapping(value="/super")
 public class StudentController {
 
-	private DBDataUtils dbDataUtils;
-	private StudentService studentService;
-
-	/*@Autowired
-	private MessageSource messageSource;
-	*/
-//	Configure this and get values by using the following
-//	messageSource.getMessage("save", null, Locale.US);
+	private StudentRepository studentRepository;
+	private BloodGroupRepository bloodGroupRepository;
+	private AcademicYearRepository academicYearRepository;
+	private BranchRepository branchRepository;
+	private YearRepository yearRepository;
+	private SemesterRepository semesterReposiorty;
 
 	@Value("${save}")
 	String save;
@@ -42,84 +47,105 @@ public class StudentController {
 	static String Role = "/super";
 
 	@Autowired
-	StudentController(StudentService studentService, DBDataUtils dbDataUtils) {
-		this.studentService = studentService;
-		this.dbDataUtils = dbDataUtils;
+	StudentController(final StudentRepository studentRepository,
+			BloodGroupRepository bloodGroupRepository,
+			AcademicYearRepository academicYearRepository,
+			BranchRepository branchRepository,
+			YearRepository yearRepository,
+
+			SemesterRepository semesterReposiorty
+			) {
+		this.studentRepository = studentRepository;
+		this.bloodGroupRepository = bloodGroupRepository;
+		this.academicYearRepository = academicYearRepository;
+		this.branchRepository = branchRepository;
+		this.yearRepository = yearRepository;
+		this.semesterReposiorty = semesterReposiorty;
 	}
 
-	private static void loadDbData(DBDataUtils dbDataUtils, ModelAndView mav) {
+	private void loadDbData(ModelAndView mav) {
 
-		try {
-			mav.addObject("academicYears", dbDataUtils.getAcademicYears());
-			mav.addObject("bloodGroups", dbDataUtils.getBloodGroups());
-			mav.addObject("branches", dbDataUtils.getBranches());
-			mav.addObject("batches", dbDataUtils.getBatches());
-		}catch (SQLException e) {
-			mav.addObject("message", "Problem in Fetching Data");
-		}
+		mav.addObject("academicYears", StreamSupport.stream(academicYearRepository.findAll().spliterator(), false)
+				.collect(Collectors.toMap(AcademicYear::getYearId, AcademicYear::getYear)));
+
+		mav.addObject("bloodGroups",
+				StreamSupport.stream(bloodGroupRepository.findAll().spliterator(), false)
+						.collect(Collectors.toMap(BloodGroup::getBloodGroupId,
+								BloodGroup::getBloodGroup)));
+
+		mav.addObject("branches",
+				StreamSupport.stream(branchRepository.findAll().spliterator(), false)
+						.collect(Collectors.toMap(Branch::getBranchId,
+								Branch::getBranchName)));
+
+		mav.addObject("years",
+				StreamSupport.stream(yearRepository.findAll().spliterator(), false)
+						.collect(Collectors.toMap(Year::getYearId,
+								Year::getYear)));
 
 		mav.addObject("Role", Role);
-
 	}
 
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERVIZOR')")
+
+//	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERVIZOR')")
 	@GetMapping(value = "/student/add")
-	public ModelAndView addStudent()  {
+	public ModelAndView save()  {
 
-		StudentForm studentForm = new StudentForm();
-		studentForm.setGender("M");
+//		System.out.println(yearRepository.findAll());
 
-		ModelAndView mav = new ModelAndView("studentAdd", "studentData", studentForm);
-
-		loadDbData(dbDataUtils, mav);
+		ModelAndView mav = new ModelAndView("studentAdd", "studentData", new StudentForm());
 
 		mav.addObject("buttonValue", save );
 		mav.addObject("action",Role + "/student/add");
 
 		mav.addObject("Role", Role);
 
+		loadDbData(mav);
+
 		return mav;
 	}
 
+	/*@GetMapping(value = "/student/add")
+	public ResponseEntity<?> save()  {
+
+		List<Semester> semesters = new ArrayList<>();
+
+		StreamSupport.stream(yearRepository.findByYearId(1).spliterator(), false)
+				.forEach(year -> semesters.addAll(year.getSemseters()));
+
+		return new ResponseEntity<>(semesters, HttpStatus.OK);
+	}*/
+
+
 	@PostMapping("/student/add")
-	public ModelAndView createStudent( @Valid @ModelAttribute("studentData") StudentForm studentData,
-			BindingResult bindingResult) {
+	public ModelAndView save( @Valid @ModelAttribute("studentData") StudentForm studentData
+			,BindingResult bindingResult
+			) {
 
-		// If we are using InitBinder and specify custom validator, then validation is
-		// not done in the Form itself. Else validation is done in the form for the
-		// specified constraints
-		// We can also create new instance of the custom validator and bind it like below
-
-		//new StudentValidator().validate(studentData, bindingResult);
-
-		if(bindingResult.hasErrors()) {
-
-			ModelAndView mav = new ModelAndView("studentAdd", "studentData",
-					studentData);
-
-			mav.addObject("Role", Role);
-
-			return mav;
+		try {
+			studentData.setPhotoName(studentData.getImage().getOriginalFilename());
+			studentData.setPhoto(studentData.getImage().getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
+		StudentForm studentForm = studentRepository.save(studentData);
 
-		StudentForm studentForm = new StudentForm();
-		studentForm.setGender("M");
 		ModelAndView mav = new ModelAndView("studentAdd", "studentData",
 				studentForm);
 
-		loadDbData(dbDataUtils, mav);
+		loadDbData(mav);
 		mav.addObject("buttonValue","Save");
 		mav.addObject("action",Role + "/student/add");
 
-		int result = studentService.addStudentData(studentData);
-
-		if(result > 0) {
-			mav.addObject("message", "Student Information inserted successfully");
-		} else {
+		if( !(studentForm.getStudentId() > 0) ) {
 
 			mav.addObject("studentData", studentData);
 			mav.addObject("message", "Students Information is not inserted");
+
+		} else {
+
+			mav.addObject("message", "Student Information inserted successfully");
 		}
 
 		mav.addObject("Role", Role);
@@ -133,128 +159,30 @@ public class StudentController {
 	@InitBinder
 	private void dataBinding(WebDataBinder binder) {
 		binder.setValidator(studentValidator);
-		//binder.addValidators(studentValidator, emailValidator); // Multiple Validators
 	}
 
-	@PostMapping(value = "/student/add/{type}/{rollNo}")
-	public ResponseEntity<?> checkData(@PathVariable("type") String type,
-			@PathVariable("rollNo") String rollNo)  {
-
-		String result = null;
-
-		try {
-			if(type.equalsIgnoreCase("checkRollNo")) {
-				result = dbDataUtils.isRollNoExists(rollNo);
-			}
-
-		} catch (SQLException e) {
-			return new ResponseEntity<>("Problem in Fetching Data", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
-		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
-
-	// list //
 	@GetMapping("/student/list")
-	public ModelAndView studentList() {
+	public ModelAndView list() {
 
 		ModelAndView mav = new ModelAndView("studentList", "studentData",
 				new StudentForm());
-		loadDbData(dbDataUtils, mav);
+		loadDbData(mav);
 
 		mav.addObject("Role", Role);
 		return mav;
 	}
 
 	@PostMapping("/student/list")
-	public ModelAndView getStudentList(@ModelAttribute("studentData") StudentForm studentData) {
+	public ModelAndView list(@ModelAttribute("studentData") StudentForm studentData) {
 
 		ModelAndView mav = new ModelAndView("studentList");
-		loadDbData(dbDataUtils, mav);
-		mav.addObject("studentList", studentService.getSpecifiedStudentsData(studentData));
+		loadDbData(mav);
 
-		mav.addObject("Role", Role);
-		return mav;
-	}
-	// list //
+		List<StudentForm> studentsList =
+				studentRepository.findByBranchIdAndJoiningYearNo(studentData.getBranchId(),
+				studentData.getAcademicYearId());
 
-	// Get //
-	@GetMapping("/student/edit/{studentId}/{operation}")
-	public ModelAndView getStudentData(@PathVariable("studentId") int studentId,
-			@PathVariable("operation") String operation) {
-
-		ModelAndView mav = new ModelAndView("studentAdd");
-		StudentForm studentData = studentService.getStudentData(studentId);
-
-		if(studentData.getPhotoData() != null) {
-			mav.addObject("photoExt", studentData.getPhotoName().substring(studentData.getPhotoName().indexOf('.') + 1));
-			mav.addObject("photoData", studentData.getPhotoData());
-		}
-
-		mav.addObject("studentData", studentData);
-
-		mav.addObject("buttonValue", operation.toUpperCase());
-		mav.addObject("action",Role + "/student/" + operation); // operation as Update / Delete
-
-		loadDbData(dbDataUtils, mav);
-
-
-		mav.addObject("Role", Role);
-		return mav;
-	}
-	// Get //
-
-	// Update //
-	@PostMapping("/student/update")
-	public ModelAndView updateStudentData(@ModelAttribute("studentData") StudentForm studentData)  {
-
-		ModelAndView mav = new ModelAndView("studentList", "studentData", studentData);
-
-		loadDbData(dbDataUtils, mav);
-
-		int result = studentService.updateStudentData(studentData);
-
-		if(result > 0) {
-
-			mav.addObject("message", "Student Information updated successfully");
-			mav.addObject("studentList", studentService.getSpecifiedStudentsData(studentData));
-
-		} else {
-			mav.setViewName("studentAdd");
-			mav.addObject("message", "Students Information is not updated");
-		}
-
-		mav.addObject("Role", Role);
-		return mav;
-	}
-
-	// Delete //
-	@PostMapping("/student/delete")
-	public ModelAndView deleteStudentData(@ModelAttribute("studentData") StudentForm studentData)  {
-
-		ModelAndView mav = new ModelAndView("studentAdd", "studentData",
-				new StudentForm());
-
-		int result = studentService.deleteStudentData(studentData);
-
-		if(result > 0) {
-
-			mav.addObject("message", "Student Information deleted successfully");
-
-			mav.addObject("buttonValue","Save");
-			mav.addObject("action",Role + "/student/add");
-
-		} else {
-
-			mav = new ModelAndView("studentAdd", "studentData",
-					studentData);
-			mav.addObject("message", "Students Information is not deleted");
-
-			mav.addObject("buttonValue","Delete");
-			mav.addObject("action",Role + "/student/delete");
-		}
-
-		loadDbData(dbDataUtils, mav);
+		mav.addObject("studentList", studentsList);
 
 		mav.addObject("Role", Role);
 		return mav;
