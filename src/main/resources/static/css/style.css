@@ -1985,3 +1985,10 @@ img.alignright {
     margin-top: 20px;
   }
 }
+
+
+.err-message {
+  font-size: 12px;
+  color: red;
+  margin-bottom: 10px;
+}

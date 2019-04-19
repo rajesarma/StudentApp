@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
@@ -44,11 +45,17 @@ public class User implements Serializable {
 	@Column(name="user_desc")
 	private String userDesc;
 
-	@Column(name="student_id")
+	/*@Transient
+	private String newPassword;
+
+	@Transient
+	private String confirmPassword;*/
+
+	/*@Column(name="student_id")
 	private Long studentId;
 
 	@Column(name="faculty_id")
-	private Long facultyId;
+	private Long facultyId;*/
 
 	@Column(name="email")
 	private String email;
@@ -62,10 +69,12 @@ public class User implements Serializable {
 	@OneToMany(cascade= CascadeType.ALL,fetch= FetchType.EAGER)
 	@JoinTable(name="user_roles",
 			joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")},
-			inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName=
-					"role_id")}
+			inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="role_id")}
 	)
 	private List<Role> roles;
+
+	@Column(name="last_password_change")
+	private Date lastPasswordChange;
 
 	/*@ManyToMany(cascade= CascadeType.ALL,fetch= FetchType.EAGER)
 	@JoinTable(name="user_roles",
@@ -131,7 +140,7 @@ public class User implements Serializable {
 		this.userDesc = userDesc;
 	}
 
-	public long getStudentId() {
+	/*public long getStudentId() {
 		return studentId;
 	}
 
@@ -145,7 +154,7 @@ public class User implements Serializable {
 
 	public void setFacultyId(long facultyId) {
 		this.facultyId = facultyId;
-	}
+	}*/
 
 	public String getEmail() {
 		return email;
@@ -193,6 +202,30 @@ public class User implements Serializable {
 
 	public Boolean getDisabled() {
 		return disabled;
+	}
+
+	/*public String getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
+	}*/
+
+	public Date getLastPasswordChange() {
+		return lastPasswordChange;
+	}
+
+	public void setLastPasswordChange(Date lastPasswordChange) {
+		this.lastPasswordChange = lastPasswordChange;
 	}
 
 	public User() {

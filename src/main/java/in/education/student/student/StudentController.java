@@ -122,21 +122,22 @@ public class StudentController {
 			,BindingResult bindingResult
 			) {
 
-		try {
-			studentData.setPhotoName(studentData.getImage().getOriginalFilename());
-			studentData.setPhoto(studentData.getImage().getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
 		StudentForm studentForm = studentRepository.save(studentData);
 
 		ModelAndView mav = new ModelAndView("studentAdd", "studentData",
 				studentForm);
 
-		loadDbData(mav);
-		mav.addObject("buttonValue","Save");
-		mav.addObject("action",Role + "/student/add");
+		try {
+			studentData.setPhotoName(studentData.getImage().getOriginalFilename());
+			studentData.setPhoto(studentData.getImage().getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+
+			loadDbData(mav);
+			mav.addObject("buttonValue","Save");
+			mav.addObject("action",Role + "/student/add");
+		}
 
 		if( !(studentForm.getStudentId() > 0) ) {
 

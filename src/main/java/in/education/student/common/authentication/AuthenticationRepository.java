@@ -13,10 +13,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-@Repository("jdbc")
+//@Repository("jdbc")
 public class AuthenticationRepository {
-
-
 
 //	@Autowired
 	private DBUtils dbUtils;

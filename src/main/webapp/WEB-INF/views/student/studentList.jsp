@@ -9,7 +9,7 @@
 <html>
 <head>
 	<meta charset="ISO-8859-1">
-	<title>Student Add</title>
+	<title>Students List</title>
 
 	<link rel="stylesheet" type="text/css"  href="<c:url
 	value="${pageContext.request.contextPath}/css/custom/form-data.css" />" />

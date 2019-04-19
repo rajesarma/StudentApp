@@ -119,13 +119,14 @@
 
 								<div class="control-group">
 									<div class="controls">
-										<label>
-											<input type="checkbox" value="remember-me"> Remember me
-										</label>
 										<button type="submit" class="btn btn-primary">
 											Sign in
 										</button>
 										<br>
+										<br>
+										<label>
+											<input type="checkbox" value="remember-me"> Remember me
+										</label>
 
 									</div>
 								</div>

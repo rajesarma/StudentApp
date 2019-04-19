@@ -47,7 +47,7 @@
 			<div class="row">
 				<div class="span12">
 					<div class="centered">
-						<h3 >404</h3>
+						<h3 >Something Went Wrong</h3>
 					</div>
 				</div>
 			</div>
@@ -59,12 +59,8 @@
 		<div class="row">
 			<div class="span12">
 				<div class="centered">
-					<h2 class="error">404</h2>
-					<h3>${message}</h3>
-					message
-					<p>
-						The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
-					</p>
+					<h3 class="error">400</h3>
+					<h4>${message}</h4>
 				</div>
 			</div>
 		</div>

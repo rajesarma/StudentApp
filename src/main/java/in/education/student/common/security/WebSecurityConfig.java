@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.Arrays;
@@ -52,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/color/**").permitAll()
 				.antMatchers("/css/*.css").permitAll()
 				.antMatchers("/css/**/*.css").permitAll()
-				.antMatchers("/font/*.js").permitAll()
+				.antMatchers("/font/**").permitAll()
 				.antMatchers("/ico/**").permitAll()
 				.antMatchers("/img/**").permitAll()
 				.antMatchers("/images/**").permitAll()
@@ -74,7 +75,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll()
 				.and()
 			.exceptionHandling()
-				.authenticationEntryPoint(new EntryPointUnauthorizedHandler())
+//				.authenticationEntryPoint(new EntryPointUnauthorizedHandler())
+				.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))
 				.accessDeniedPage(Urls.ACCESS_DENIED)
 //				.and().sessionManagement().invalidSessionUrl(Urls.SESSION_TIMEOUT)
 				.and()

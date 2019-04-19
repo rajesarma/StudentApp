@@ -25,7 +25,8 @@ public class EntryPointUnauthorizedHandler implements AuthenticationEntryPoint {
 			throws IOException, ServletException {
 		
 		if(e instanceof InsufficientAuthenticationException){
-			res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not Authenticated");	//401
+//			res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not Authenticated");	//401
+			res.sendRedirect("/");
 		} else {
 			e.printStackTrace();
 			res.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");	//403

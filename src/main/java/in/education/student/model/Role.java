@@ -44,7 +44,6 @@ public class Role implements Serializable {
 		this.roleName = roleName;
 	}
 
-
 	/*@ManyToMany(cascade= CascadeType.ALL,fetch= FetchType.EAGER)
 	@JoinTable(name="role_services",
 			joinColumns = {@JoinColumn(name="role_id", referencedColumnName="role_id")},
@@ -53,14 +52,13 @@ public class Role implements Serializable {
 	)
 	private List<Service> services;*/
 
+	//	@Column(insertable=false, updatable=false)
 	@OneToMany(cascade= CascadeType.ALL,fetch= FetchType.EAGER)
 	@JoinTable(name="role_services",
-			joinColumns = {@JoinColumn(name="role_id", referencedColumnName="role_id")},
-			inverseJoinColumns = {@JoinColumn(name="service_id", referencedColumnName=
-					"service_id")}
-	)
+			   joinColumns = {@JoinColumn(name="role_id", referencedColumnName="role_id")}, // ,insertable = false, updatable = false
+			   inverseJoinColumns = {@JoinColumn(name="service_id",referencedColumnName="service_id")}//,insertable = false, updatable = false
+			  )
 	private List<Service> services;
-
 
 	public static long getSerialVersionUID() {
 		return serialVersionUID;

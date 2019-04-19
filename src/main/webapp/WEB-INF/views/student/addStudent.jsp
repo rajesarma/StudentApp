@@ -428,7 +428,7 @@
 								<label class="control-label align-left" >
 									<spring:message code="student.gender"/>
 								</label>
-								<div class="controls pull-left">
+								<div class="controls">
 
 									<label class="radio inline" for="gender">
 										<form:radiobutton path="gender" value="MALE"
@@ -448,7 +448,7 @@
 								<label class="control-label align-left" >
 									<spring:message code="student.address"/>
 								</label>
-								<div class="controls pull-left">
+								<div class="controls">
 
 									<form:textarea path="address" name="address" id="address"
 												   cssClass="span3" rows="3"

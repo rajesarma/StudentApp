@@ -1,5 +1,7 @@
 package in.education.student.common.configuration;
 
+import in.education.student.common.interceptor.RequestHeaderInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -8,8 +10,10 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.handler.WebRequestHandlerInterceptorAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +21,10 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 @PropertySource({"classpath:labels.properties","classpath:validation_messages" +
 		".properties"})
-public class MainConfig implements WebMvcConfigurer  {
+public class WebConfig implements WebMvcConfigurer  {
+
+//	@Autowired
+//	RequestHeaderInterceptor requestHeaderInterceptor;
 
 	//	The LocaleResolver comes from a very smart interface definitions which makes use of not one but four different techniques to determine current locale, this is:
 //	1. Current session has locale information, 2. Cookies being exchanged over the
@@ -44,6 +51,8 @@ public class MainConfig implements WebMvcConfigurer  {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		//registry.addInterceptor(localeChangeInterceptor()).addPathPatterns("/*");
+
+//		registry.addInterceptor(requestHeaderInterceptor);
 		registry.addInterceptor(localeChangeInterceptor());
 	}
 

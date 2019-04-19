@@ -1,6 +1,7 @@
 package in.education.student.common.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import in.education.student.model.Role;
 import in.education.student.model.Service;
 import in.education.student.model.User;
 import in.education.student.model.repository.RoleRepository;
@@ -20,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler {
 
@@ -58,20 +58,22 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
 		/*Iterable<Service> servicesActual =
 				serviceRepository.findByServiceName(user.getUsername());*/
 
-		String[] roleNames =
-				user.getRoles().stream().map(role -> role.getRoleName()).collect(Collectors.toList())
-						.stream().toArray(String[] :: new);
+		String[] roleNames = user.getRoles()
+								.stream()
+								.map(Role::getRoleName)
+								.collect(Collectors.toList())
+								.stream()
+								.toArray(String[] :: new);
 
 		List<Service> services = new ArrayList<>();
 
-		StreamSupport.stream(roleRepository.findByRoleNameIn(roleNames).spliterator(), false)
-				.forEach(role -> services.addAll(role.getServices()));
+		roleRepository.findByRoleNameIn(roleNames)
+						.forEach(role -> services.addAll(role.getServices()));
 
 		services.sort(Comparator.comparing(Service :: getParentId)
-				.thenComparing(Comparator.comparing(Service :: getServiceId)));
+								.thenComparing(Service :: getServiceId));
 
-		List serviceUrls =
-				StreamSupport.stream(services.spliterator(), false)
+		List serviceUrls = services.stream()
 						.filter(service -> service.getMenuDisplay() == 1 )
 						.collect(Collectors.toList())
 						.stream()
@@ -82,7 +84,7 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
 
 		for(Object service: serviceUrls) {
 
-			HashMap<String, String> sMap= (HashMap<String, String>)service;
+			HashMap<String, String> sMap = (HashMap) service;
 
 			serviceMap = new HashMap<>();
 			serviceMap.put("service_id", sMap.get("serviceId"));

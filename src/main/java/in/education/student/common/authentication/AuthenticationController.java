@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Collection;
 
-@Controller
+//@Controller
 public class AuthenticationController {
 
 	@Autowired
