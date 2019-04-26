@@ -10,12 +10,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name="roles")
+//@SecondaryTable(name="roles")
 public class Role implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -53,7 +55,7 @@ public class Role implements Serializable {
 	private List<Service> services;*/
 
 	//	@Column(insertable=false, updatable=false)
-	@OneToMany(cascade= CascadeType.ALL,fetch= FetchType.EAGER)
+	@OneToMany(fetch= FetchType.EAGER) //cascade= CascadeType.ALL ,
 	@JoinTable(name="role_services",
 			   joinColumns = {@JoinColumn(name="role_id", referencedColumnName="role_id")}, // ,insertable = false, updatable = false
 			   inverseJoinColumns = {@JoinColumn(name="service_id",referencedColumnName="service_id")}//,insertable = false, updatable = false

@@ -46,29 +46,42 @@
 
 	<%--<script src="${pageContext.request.contextPath}/js/custom/jquery-3.3.1.js"></script>--%>
 
-	<%--
-	<link
+	<%--<link
 			href="${pageContext.request.contextPath}/webjars/bootstrap/4.1.1/scss/bootstrap.scss"
 		  rel="stylesheet" media="screen"/>--%>
 
 	<%--<link rel="stylesheet" href="<c:url value="${pageContext.request.contextPath}/webjars/bootstrap/4.1.1/css/bootstrap.css" />">--%>
 
-	<link rel="stylesheet" href="<c:url value="${pageContext.request.contextPath}/css/bootstrap.css" />">
+	<%--<link rel="stylesheet" href="<c:url value="${pageContext.request.contextPath}/css/bootstrap.css" />">--%>
+
+	<link rel="stylesheet" href="<c:url
+	value="${pageContext.request.contextPath}/webjars/bootstrap/2.3.0/css/bootstrap.css" />">
+
 	<link href="<c:url value="${pageContext.request.contextPath}/css/bootstrap-responsive.css" />" rel="stylesheet">
 	<link href="<c:url value="${pageContext.request.contextPath}/css/docs.css" />" rel="stylesheet">
 	<link href="<c:url value="${pageContext.request.contextPath}/js/google-code-prettify/prettify.css" />" rel="stylesheet">
 	<link href="<c:url value="${pageContext.request.contextPath}/css/style.css" />" rel="stylesheet">
-
 	<link href="<c:url value="${pageContext.request.contextPath}/color/default.css" />" rel="stylesheet">
 
-	<%--<script src="<c:url value="${pageContext.request.contextPath}/webjars/jquery/3.3.1-1/jquery.min.js" />"></script>
-	<script src="<c:url value="${pageContext.request.contextPath}/webjars/bootstrap/4.1.1/js/bootstrap.min.js" />"></script>--%>
+	<script src="<c:url
+	value="${pageContext.request.contextPath}/webjars/jquery/1.8.2/jquery.min.js" />"></script>
+	<script src="<c:url
+	value="${pageContext.request.contextPath}/webjars/bootstrap/2.3.0/js/bootstrap.min.js" />"></script>
 
-	<script
+	<%--<script
 			src="<c:url value="${pageContext.request.contextPath}/js/jquery.min.js" />"></script>
-	<script src="<c:url value="${pageContext.request.contextPath}/js/bootstrap.js" />"></script>
+	<script src="<c:url value="${pageContext.request.contextPath}/js/bootstrap.js" />"></script>--%>
 
 	<script src="<c:url value="${pageContext.request.contextPath}/js/menu.js"/>"></script>
+
+	<script
+			src="<c:url value="${pageContext.request.contextPath}/js/form_validations.js" />"></script>
+
+	<link rel="stylesheet" type="text/css"  href="<c:url
+	value="${pageContext.request.contextPath}/css/custom/dataTables.jqueryui.min.css" />" />
+
+	<script
+			src="<c:url value="${pageContext.request.contextPath}/js/custom/jquery.dataTables.min.js" />"></script>
 
 	<script>
 

@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-		 pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -10,9 +9,6 @@
 <head>
 	<meta charset="ISO-8859-1">
 	<title>User</title>
-
-	<script
-			src="${pageContext.request.contextPath}/js/custom/form_validations.js"></script>
 
 	<script>
 		function submitData(action, method)
@@ -45,7 +41,9 @@
 					<div class="span12">
 						<div class="centered">
 							<h3>
-								<spring:message code="user.operations"/>
+								<%!
+									private Object selectedRole;
+								%><spring:message code="user.operations"/>
 							</h3>
 						</div>
 					</div>
@@ -107,27 +105,34 @@
 								<spring:message code="user.roles"/>
 							</label>
 
-							<div class="controls">
-								<form:select path="roles" name="roles" id="roles"
-											 multiple="true"
+						<div class="controls">
+
+							<%--${selectedRoles}--%>
+
+								<%--<form:select path="roles" name="roles" id="roles" multiple="true"
 											 cssClass="span3" cssStyle="height: 100px">
-									<%--<form:options items="${roles}" />--%>
+									<form:options items="${roles}" selected="false" />
+								</form:select>--%>
 
-									<c:forEach items="${roles}" var="role">
-										<option <c:if test="${role.key eq
-										selectedRoles.roleId}"> selected="selected"</c:if>  value="${role.key}">${role.value} </option>
-									</c:forEach>
+						<form:select path="roles" name="roles" id="roles" multiple="true"
+									 cssClass="span3" cssStyle="height: 100px">
+								<c:forEach items="${roles}" var="role">
+									<option value="${role.key}"
+										<c:forEach items="${selectedRoleIds}" var="selectedRoleId">
+											<c:if test="${role.key eq selectedRoleId}">selected="true"</c:if>
+										</c:forEach>
+										> ${role.value}
+									</option>
+								</c:forEach>
+						</form:select>
 
-								</form:select>
+							<%--
+								<% System.out.println(pageContext.findAttribute("role")); %>--%>
 
-								<%--<form:select path="roles" id="roles"
-											 items="${user.selectedRoles}"
-											 itemValue="companyName" itemLabel="companyName" />--%>
-
-								<span class="help-block">
-								<form:errors path="roles" cssClass="error" />
-							</span>
-							</div>
+							<span class="help-block">
+							<form:errors path="roles" cssClass="error" />
+						</span>
+						</div>
 						</div>
 
 						<div class="control-group">
@@ -139,9 +144,7 @@
 
 								<%--<div class="input-prepend"> <span class="add-on"><i class="icon-envelope"></i></span>--%>
 								<form:input path="email" name="email" id="email"
-											maxlength="50"
-											cssClass="span3"
-								/>
+											maxlength="50" cssClass="span3" />
 								<span class="help-block">
 									<form:errors path="email" cssClass="error" />
 								</span>

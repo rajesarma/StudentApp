@@ -11,11 +11,11 @@
 	<meta charset="ISO-8859-1">
 	<title>Users List</title>
 
-	<link rel="stylesheet" type="text/css"  href="<c:url
+	<%--<link rel="stylesheet" type="text/css"  href="<c:url
 	value="${pageContext.request.contextPath}/css/custom/dataTables.jqueryui.min.css" />" />
 
 	<script
-			src="${pageContext.request.contextPath}/js/custom/jquery.dataTables.min.js"></script>
+			src="${pageContext.request.contextPath}/js/custom/jquery.dataTables.min.js"></script>--%>
 
 	<script>
 		$(document).ready(function() {
@@ -66,9 +66,6 @@
 							Get Data
 						</button>
 					</form:form>
-
-
-
 					</div>
 				</div>
 			</div>

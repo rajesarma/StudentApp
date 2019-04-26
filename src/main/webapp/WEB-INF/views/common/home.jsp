@@ -18,7 +18,7 @@
 					<div class="row">
 						<div class="span12">
 							<div class="centered">
-								<h3 >Test</h3>
+								<h3 >Home</h3>
 							</div>
 						</div>
 					</div>
@@ -31,7 +31,7 @@
 				<div class="row">
 					<div class="span12">
 						<div class="centered">
-							<a href="/test">Test</a>
+
 						</div>
 					</div>
 				</div>

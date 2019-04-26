@@ -1,6 +1,8 @@
 package in.education.student.model;
 
-import javax.persistence.CascadeType;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -66,7 +68,8 @@ public class User implements Serializable {
 	@Column(name="failed_login_attempts")
 	private Long failedLoginAttempts;
 
-	@OneToMany(cascade= CascadeType.ALL,fetch= FetchType.EAGER)
+	@OneToMany(fetch= FetchType.EAGER) //cascade= CascadeType.ALL,
+	@Cascade({CascadeType.SAVE_UPDATE})
 	@JoinTable(name="user_roles",
 			joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")},
 			inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="role_id")}

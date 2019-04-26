@@ -58,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/img/**").permitAll()
 				.antMatchers("/images/**").permitAll()
 				.antMatchers("/js/*.js").permitAll()
-				.antMatchers("/js/**/*.js").permitAll()
+				.antMatchers("/js/**/**").permitAll()
 				.antMatchers("/webjars/**").permitAll()
 
 				.antMatchers(getUrlPattern(Urls.ADMIN)).access(hasRole(Urls.ADMIN_ROLE))

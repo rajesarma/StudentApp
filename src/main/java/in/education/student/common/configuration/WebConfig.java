@@ -103,6 +103,10 @@ public class WebConfig implements WebMvcConfigurer  {
 				.addResourceLocations("classpath:/static/images/")
 				.setCacheControl(CacheControl.maxAge(2, TimeUnit.HOURS).cachePublic());
 
+		registry
+				.addResourceHandler("/webjars/**")
+				.addResourceLocations("/webjars/");
+
 		/*registry.addResourceHandler("/jquery/**") //
 				.addResourceLocations("classpath:/META-INF/resources/webjars/jquery/3.3.1-1/");
 		registry.addResourceHandler("/popper/**") //

@@ -15,14 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -150,7 +146,7 @@ public class UserController {
 	}
 
 	@PostMapping("/admin/usersList")
-	public ModelAndView list(@ModelAttribute("userData") User userData) {
+	public ModelAndView list(@ModelAttribute("user") User userData) {
 
 		ModelAndView mav = new ModelAndView("usersList", "user", new User());
 		mav.addObject("buttonValue", "Get" );
@@ -158,11 +154,6 @@ public class UserController {
 		mav.addObject("method","Post");
 		loadDbData(mav);
 		mav.addObject("Role", "/admin");
-
-		/*userData.getRoles()
-				.stream()
-				.map(Role :: getRoleId)
-				.forEach(role -> System.out.println(role+ ", "));*/
 
 		List<User> usersList =
 				userRepository.findAllByRoles(userData.getRoles());
@@ -174,36 +165,27 @@ public class UserController {
 
 
 	@GetMapping("/admin/user/edit/{userId}/{operation}")
-	public ModelAndView findById(@PathVariable("userId") long userId,
+	public ModelAndView findByUserId(@PathVariable("userId") long userId,
 			@PathVariable("operation") String operation) {
 
 		ModelAndView mav = new ModelAndView("user", "user", new User());
-
-		System.out.println(userId);
 
 		Optional<User> userData = userRepository.findById(userId);
 
 		if(userData.isPresent()) {
 			User user = userData.get();
 
-			System.out.println(user.getUsername()+", "+ user.getUserDesc());
-
 			mav.addObject("user", user);
 
-			/*user.getRoles()
+			List<Long> selectedRoleIds = user.getRoles()
 					.stream()
-					.collect(Collectors.toMap(Role::getRoleId, Role::getRoleName))
-					.forEach((k,v) -> System.out.println(k+" : "+v));
+					.map(Role::getRoleId)
+					.distinct()
+					.collect(Collectors.toList());
+			mav.addObject("selectedRoleIds", selectedRoleIds);
 
-			Map<Long, String> selectedRoles = user.getRoles()
-										.stream()
-										.collect(Collectors.toMap(Role::getRoleId, Role::getRoleName));
-
-			mav.addObject("selectedRoles", selectedRoles);*/
+//			System.out.println(selectedRoles);
 		}
-
-
-
 
 		mav.addObject("buttonValue", operation.toUpperCase());
 		mav.addObject("action","/admin/user/" + operation); // operation as Update /
@@ -212,15 +194,45 @@ public class UserController {
 		mav.addObject("Role", "/admin");
 
 		loadDbData(mav);
+		return mav;
+	}
+
+	@PostMapping("/admin/user/delete")
+	public ModelAndView delete(@ModelAttribute("user") User user)  {
+
+		Optional<User> userOptional = userRepository.findById(user.getUserId());
 
 
 
-		/*mav.addObject("roles",
-				StreamSupport.stream(roleRepository.findAll().spliterator(), false)
-						.collect(Collectors.toMap(Role::getRoleId, Role::getRoleName)));*/
+//		userRepository.delete(user);
+
+		/*if(result > 0) {
+
+			mav.addObject("message", "User Information deleted successfully");
+
+			mav.addObject("buttonValue","Save");
+			mav.addObject("action","/admin/user/add");
+
+		} else {
+
+			mav = new ModelAndView("user", "user", user);
+			mav.addObject("message", "User Information is not deleted");
+
+			mav.addObject("buttonValue","Delete");
+			mav.addObject("action","/admin/user/delete");
+		}*/
+
+		ModelAndView mav = new ModelAndView("usersList", "user", user);
+
+		mav.addObject("buttonValue", "Get" );
+		mav.addObject("action","/admin/usersList");
+		mav.addObject("method","Post");
+		mav.addObject("Role", "/admin");
+		loadDbData(mav);
 
 		return mav;
 	}
+
 	// Get //
 
 	/*// Update //
@@ -245,38 +257,35 @@ public class UserController {
 
 		mav.addObject("Role", Role);
 		return mav;
-	}
-
-	// Delete //
-	@PostMapping("/student/delete")
-	public ModelAndView delete(@ModelAttribute("studentData") StudentForm studentData)  {
-
-		ModelAndView mav = new ModelAndView("studentAdd", "studentData",
-				new StudentForm());
-
-		int result = studentJdbcService.deleteStudentData(studentData);
-
-		if(result > 0) {
-
-			mav.addObject("message", "Student Information deleted successfully");
-
-			mav.addObject("buttonValue","Save");
-			mav.addObject("action",Role + "/student/add");
-
-		} else {
-
-			mav = new ModelAndView("studentAdd", "studentData",
-					studentData);
-			mav.addObject("message", "Students Information is not deleted");
-
-			mav.addObject("buttonValue","Delete");
-			mav.addObject("action",Role + "/student/delete");
-		}
-
-		loadDbData(dbDataUtils, mav);
-
-		mav.addObject("Role", Role);
-		return mav;
 	}*/
 
+	// Delete //
+
+
 }
+
+
+
+/*Map<Long, String> selectedRoles = user.getRoles()
+					.stream()
+					.collect(Collectors.toMap(Role::getRoleId, Role::getRoleName, (a1,
+							a2) -> a1, LinkedHashMap::new));
+			mav.addObject("selectedRoles", selectedRoles);*/
+
+/*mav.addObject("roles",
+				StreamSupport.stream(roleRepository.findAll().spliterator(), false)
+						.collect(Collectors.toMap(Role::getRoleId, Role::getRoleName)));*/
+
+/*user.getRoles()
+					.stream()
+					.collect(Collectors.toMap(Role::getRoleId, Role::getRoleName))
+					.forEach((k,v) -> System.out.println(k+" : "+v));
+
+			Map<Long, String> selectedRoles = user.getRoles()
+										.stream()
+										.collect(Collectors.toMap(Role::getRoleId, Role::getRoleName));*/
+
+/*userData.getRoles()
+				.stream()
+				.map(Role :: getRoleId)
+				.forEach(role -> System.out.println(role+ ", "));*/
