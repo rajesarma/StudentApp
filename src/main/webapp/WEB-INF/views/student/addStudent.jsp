@@ -11,16 +11,8 @@
 	<meta charset="ISO-8859-1">
 	<title>Student Add</title>
 
-	<%--<link rel="stylesheet" type="text/css"  href="<c:url
-		value="${pageContext.request.contextPath}/css/form-data.css" />" />--%>
-
-	<script
-			src="${pageContext.request.contextPath}/js/custom/form_validations.js"></script>
-
 	<script>
-
-		var openFile = function(event)
-		{
+		var openFile = function(event) {
 			var input = event.target;
 			var output = document.getElementById('photoData');
 
@@ -31,12 +23,9 @@
 				output.height = 90;
 			};
 			reader.readAsDataURL(input.files[0]);
-
-
 		};
 
-		function checkSelection(obj, message)
-		{
+		function checkSelection(obj, message) {
 			//alert(obj.value)
 			var id = obj.id;
 			var e = document.getElementById(obj.id);
@@ -52,27 +41,19 @@
 			}
 		}
 
-		function submitData(action)
-		{
-			var studentForm = document.getElementById('studentForm');
-			studentForm.action = action;
-			studentForm.method = "post";
-			studentForm.submit();
+		function submitData(action) {
+			var student = document.getElementById('student');
+			student.action = action;
+			student.method = "post";
+			student.submit();
 		}
 
-		function deleteStudentData(actionType)
-		{
-			document.forms[0].mode.value= actionType;
-			document.forms[0].submit();
-		}
-
-		function checkData(type,obj)
-		{
+		function checkData(type,obj) {
 			if(obj.value.length > 0) {
 				var url = '${Role}/student/' + type + '/' + obj.value;
 				var message;
 				$.ajax( {
-					type: "POST",
+					type: "GET",
 					url:url,
 					cache: false,
 					success: function(response) {
@@ -131,12 +112,11 @@
 		</div>
 	</section>
 
-	<br>
 	<section id="maincontent">
 		<div class="container">
 
-			<form:form action="${Role}/student/add" id="studentForm"
-					   modelAttribute="studentData" enctype="multipart/form-data"
+			<form:form action="${Role}/student/add" id="student"
+					   modelAttribute="studentDto" enctype="multipart/form-data"
 					   cssClass="form-horizontal">
 			<form:hidden path="studentId" name="studentId" id="studentId" />
 
@@ -146,7 +126,6 @@
 					<div class="err-message" style="text-align:center"> ${message}</div>
 					<div id="wait" class="err-message"></div>
 				</div>
-
 
 				<div class="span6">
 					<div class="centered">
@@ -273,7 +252,7 @@
 									   cssClass="span3" onchange="openFile(event)" />
 								<div id="applicantPhotoName" ></div>
 								<span class="help-block">
-									<form:errors path="photo" cssClass="error" />
+									<form:errors path="image" cssClass="error" />
 								</span>
 								<span class="help-block">
 									<c:if test="${empty photoData}">
@@ -294,10 +273,7 @@
 
 					</div>
 				</div>
-
 				<%--First Box--%>
-
-
 
 				<%--Second Box--%>
 				<div class="span6">
@@ -423,7 +399,6 @@
 								</div>
 							</div>
 
-
 							<div class="control-group">
 								<label class="control-label align-left" >
 									<spring:message code="student.gender"/>
@@ -467,13 +442,9 @@
 							   onclick="submitData('${action}')" />
 					</div>
 				</div>
-
 			</div>
 			</form:form>
-			<%--</aside>--%>
 		</div>
-
 	</section>
-
 </body>
 </html>

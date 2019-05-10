@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -28,9 +29,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private UserDetailsService userDetailsService;
 
+	private AuthenticationFailure authenticationFailure;
+
 	@Autowired()
-	public WebSecurityConfig(@Qualifier("userDetailsService") UserDetailsService userDetailsService) {
+	public WebSecurityConfig(@Qualifier("userDetailsService") UserDetailsService userDetailsService, AuthenticationFailure authenticationFailure) {
 		this.userDetailsService = userDetailsService;
+		this.authenticationFailure = authenticationFailure;
 	}
 
 	// used to establish an authentication mechanism by allowing AuthenticationProviders to be added easily
@@ -71,6 +75,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.formLogin()
 				.loginPage("/")
 				.loginProcessingUrl(Urls.LOGIN)
+				.failureHandler(authenticationFailure)
 				.successHandler(successHandler())
 				.permitAll()
 				.and()

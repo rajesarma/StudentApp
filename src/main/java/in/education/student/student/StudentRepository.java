@@ -1,12 +1,15 @@
 package in.education.student.student;
 
-import in.education.student.model.StudentForm;
+import in.education.student.model.Student;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface StudentRepository extends CrudRepository<StudentForm, Long> {
+public interface StudentRepository extends CrudRepository<Student, Long> {
 
-	List<StudentForm> findByBranchIdAndJoiningYearNo(String branchId, long joiningYearNo);
+	List<Student> findByBranchIdAndJoiningYearNo(String branchId, int joiningYearNo);
+
+	Optional<Student> findByRollNo(String rollNo);
 
 }

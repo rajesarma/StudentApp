@@ -1,7 +1,5 @@
 package in.education.student.model;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,29 +11,27 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
 @Table(name = "student_details")
-public class StudentForm {
+public class Student {
 
 	@Id
 	@Column(name = "student_id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private long studentId;
 
-	@NotEmpty(message = "Student Name can not be empty")
+//	@NotEmpty(message = "Student Name can not be empty")
 	@Column(name = "student_name")
 	private String name=null;
 
-	@NotEmpty(message = "Father Name can not be empty")
+//	@NotEmpty(message = "Father Name can not be empty")
 	@Column(name = "father_name")
 	private String fatherName=null;
 
-	@NotEmpty(message = "Mother Name can not be empty")
+//	@NotEmpty(message = "Mother Name can not be empty")
 	@Column(name = "mother_name")
 	private String motherName=null;
 
@@ -56,15 +52,15 @@ public class StudentForm {
 	@Column(name = "photo_name")
 	private String photoName=null;
 
-	@NotEmpty(message = "Aadhar No. can not be empty")
+//	@NotEmpty(message = "Aadhar No. can not be empty")
 	@Column(name = "aadhar")
 	private String aadharNo=null;
 
-	@NotEmpty(message = "Address can not be empty")
+//	@NotEmpty(message = "Address can not be empty")
 	@Column(name = "address")
 	private String address=null;
 
-	@NotEmpty(message = "email can not be empty")
+//	@NotEmpty(message = "email can not be empty")
 	@Column(name = "email")
 	private String email=null;
 
@@ -77,15 +73,15 @@ public class StudentForm {
 	private String alternativePhoneNo=null;
 
 	@Column(name = "blood_group_id")
-	private int bloodGroupId = 0;
+	private long bloodGroupId = 0;
 
 	@Column(name = "academic_year_id")
-	private int academicYearId = 0;
+	private long academicYearId = 0;
 
 	@Column(name = "branch_id")
 	private String branchId= null;
 
-	@NotEmpty(message = "Roll No. can not be empty")
+//	@NotEmpty(message = "Roll No. can not be empty")
 	@Column(name = "roll_no")
 	private String rollNo =null;
 
@@ -97,8 +93,8 @@ public class StudentForm {
 	@Lob
 	private Blob photo;*/
 
-	@Transient
-	private MultipartFile image;
+	/*@Transient
+	private MultipartFile image;*/
 
 	@Column(name = "photo")
 	@Lob
@@ -110,12 +106,12 @@ public class StudentForm {
 	@Column(name = "joining_year_no")
 	private int joiningYearNo;
 
-	private String branch = null;
-	private String bloodGroup = null;
-	private String year = null;
+//	private String branch = null;
+//	private String bloodGroup = null;
+//	private String year = null;
 
-	@Transient
-	private String photoData;
+	/*@Transient
+	private String photoData;*/
 
 	public long getStudentId() {
 		return studentId;
@@ -197,19 +193,19 @@ public class StudentForm {
 		this.parentPhoneNo = parentPhoneNo;
 	}
 
-	public int getBloodGroupId() {
+	public long getBloodGroupId() {
 		return bloodGroupId;
 	}
 
-	public void setBloodGroupId(int bloodGroupId) {
+	public void setBloodGroupId(long bloodGroupId) {
 		this.bloodGroupId = bloodGroupId;
 	}
 
-	public int getAcademicYearId() {
+	public long getAcademicYearId() {
 		return academicYearId;
 	}
 
-	public void setAcademicYearId(int academicYearId) {
+	public void setAcademicYearId(long academicYearId) {
 		this.academicYearId = academicYearId;
 	}
 
@@ -253,14 +249,6 @@ public class StudentForm {
 		this.gender = gender;
 	}
 
-	public MultipartFile getImage() {
-		return image;
-	}
-
-	public void setImage(MultipartFile image) {
-		this.image = image;
-	}
-
 	public byte[] getPhoto() {
 		return photo;
 	}
@@ -269,7 +257,31 @@ public class StudentForm {
 		this.photo = photo;
 	}
 
-	public String getBranch() {
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public int getJoiningYearNo() {
+		return joiningYearNo;
+	}
+
+	public void setJoiningYearNo(int joiningYearNo) {
+		this.joiningYearNo = joiningYearNo;
+	}
+
+	/*public MultipartFile getImage() {
+		return image;
+	}
+
+	public void setImage(MultipartFile image) {
+		this.image = image;
+	}*/
+
+	/*public String getBranch() {
 		return branch;
 	}
 
@@ -283,43 +295,29 @@ public class StudentForm {
 
 	public void setBloodGroup(String bloodGroup) {
 		this.bloodGroup = bloodGroup;
-	}
+	}*/
 
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
-	public String getYear() {
+	/*public String getYear() {
 		return year;
 	}
 
 	public void setYear(String year) {
 		this.year = year;
-	}
+	}*/
 
-	public String getPhotoData() {
+	/*public String getPhotoData() {
 
 		if (getPhoto() != null && getPhoto().length > 0) {
 			return new String(java.util.Base64.getEncoder().encode(getPhoto()));
 		}
 		return null;
-	}
+	}*/
 
-	public void setPhotoData(String photoData) {
-		this.photoData = photoData;
-	}
+//	public void setPhotoData(String photoData) {
+//		this.photoData = photoData;
+//	}
 
-	public int getJoiningYearNo() {
-		return joiningYearNo;
-	}
 
-	public void setJoiningYearNo(int joiningYearNo) {
-		this.joiningYearNo = joiningYearNo;
-	}
 }
 
 

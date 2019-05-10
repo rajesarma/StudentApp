@@ -14,4 +14,9 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	Optional<User> findByUsername(String username);
 
 	List<User> findAllByRoles(List<Role> role);
+
+	@Override
+	void deleteById(Long userId);
+
+
 }

@@ -30,13 +30,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		if(userOptional.isPresent()){
 			User user = userOptional.get();
 			// Actual Password should be stored as BCrypt
-//			System.out.println(user.getRoles());
 //			user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword())) ;
-			CustomUserDetails customUserDetails = new CustomUserDetails(user);
-
+//			CustomUserDetails customUserDetails = new CustomUserDetails(user);
 //			serviceUrls = customUserDetails.getServiceUrls();
 
-			return customUserDetails;
+			return new CustomUserDetails(user);
 
 		} else {
 			throw new UsernameNotFoundException("user not found" + username);

@@ -175,7 +175,7 @@
 
 	<script type="text/javascript">
 		$(function() {
-			$("#loading").show().delay(400).fadeOut(1000);
+			$("#loading").show().delay(400).fadeOut(600);
 		});
 
 		function loading() {

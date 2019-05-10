@@ -1,16 +1,16 @@
 package in.education.student.user;
 
-
+import in.education.student.converter.UserConverter;
+import in.education.student.dto.UserDto;
 import in.education.student.model.Role;
 import in.education.student.model.User;
-import in.education.student.model.repository.RoleRepository;
-import in.education.student.model.repository.UserRepository;
+import in.education.student.validator.UserValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,75 +21,76 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Controller
 public class UserController {
 
 	private UserService userService;
-	private UserRepository userRepository;
-	private RoleRepository roleRepository;
 
 	@Autowired
-	UserController(UserService userService, UserRepository userRepository,
-			RoleRepository roleRepository) {
+	UserController(UserService userService) {
 		this.userService = userService;
-		this.userRepository = userRepository;
-		this.roleRepository = roleRepository;
 	}
 
 	@Value("${save}")
-	String save;
+	private String save;
 
 	@Value("${change}")
-	String change;
+	private String change;
 
-	private void loadDbData(ModelAndView mav) {
+	@Value("${update}")
+	private String update;
 
-		mav.addObject("roles",
-				StreamSupport.stream(roleRepository.findAll().spliterator(), false)
-						.collect(Collectors.toMap(Role::getRoleId, Role::getRoleName)));
-	}
+	private String userDataDto = "userDto";
+	private String usersList = "usersList";
+	private String buttonValue = "buttonValue";
+	private String action = "action";
+	private String method = "method";
+	private String roles = "roles";
+	private String message;
+	private String msg = "message";
+	private String selectedRoleIds = "selectedRoleIds";
 
 	@GetMapping("/admin/user/add")
-	public ModelAndView add() {
+	public ModelAndView save() {
 
-		ModelAndView mav = new ModelAndView("user", "user", new User());
-		mav.addObject("buttonValue", save );
-		mav.addObject("action","/admin/user/add");
-		mav.addObject("method","Post");
-		loadDbData(mav);
-
+		ModelAndView mav = new ModelAndView("user", userDataDto, new UserDto());
+		mav.addObject(buttonValue, save );
+		mav.addObject(action,"/admin/user/add");
+		mav.addObject(method,"Post");
+		mav.addObject(roles, userService.getRoles());
 		return mav;
 	}
 
 	@PostMapping("/admin/user/add")
-	public ModelAndView add(@ModelAttribute User user) {
+	public ModelAndView save(@ModelAttribute UserDto userDto,
+			BindingResult bindingResult) { // @Valid
 
-		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+		new UserValidator().validate(userDto, bindingResult);
+		ModelAndView mav = new ModelAndView("user", userDataDto, userDto);
 
-		User savedUser = userRepository.save(user);
-		ModelAndView mav = new ModelAndView("user", "user", savedUser);
+		if(!bindingResult.hasErrors()) {
+			Optional<UserDto> savedUserDto = userService.save(userDto);
 
-		// Check for Roles or not
-		/*if(user.getRoles() == null){
-			user.setRoles(Collections.emptyList());
-		}*/
-
-		if( !(savedUser.getUserId() > 0) ) {
-
-			mav.addObject("message", "User Information is not inserted");
+			if (!savedUserDto.isPresent()) {
+				message = "User already existed";
+			} else {
+				userDto.setUsername("");
+				userDto.setPassword("");
+				userDto.setEmail("");
+				userDto.setUserDesc("");
+				message = "User Information inserted successfully";
+			}
 		} else {
-			user.setPassword("");
-			mav.addObject("user", user);
-			mav.addObject("message", "User Information inserted successfully");
+			message = "User Information is not inserted";
+			mav.addObject(selectedRoleIds, getSelectedRoles(userDto.getRoles()));
 		}
 
-		mav.addObject("buttonValue", save );
-		mav.addObject("action","/admin/user/add");
-		mav.addObject("method","Get");
-		loadDbData(mav);
-
+		mav.addObject(msg, message);
+		mav.addObject(buttonValue, save );
+		mav.addObject(action,"/admin/user/add");
+		mav.addObject(method,"Post");
+		mav.addObject(roles, userService.getRoles());
 		return mav;
 	}
 
@@ -98,35 +99,34 @@ public class UserController {
 
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		ModelAndView mav = new ModelAndView("changePassword", "user", user);
-		mav.addObject("buttonValue", change );
-		mav.addObject("action","/changePassword");
-		mav.addObject("method","Post");
+		ModelAndView mav = new ModelAndView("changePassword", userDataDto, UserConverter.convert(user));
+		mav.addObject(buttonValue, change );
+		mav.addObject(action,"/changePassword");
+		mav.addObject(method,"Post");
 
 		return mav;
 	}
 
 	@PostMapping("/changePassword")
-	public ModelAndView change(@ModelAttribute User user,
+	public ModelAndView change(@ModelAttribute UserDto userDto,
 			@RequestParam String newPassword) {
 
-		ModelAndView mav = new ModelAndView("changePassword", "user", user);
-		mav.addObject("buttonValue", change );
-		mav.addObject("action","/changePassword");
-		mav.addObject("message", "Problem in Updating Password");
-		mav.addObject("method","Post");
+		ModelAndView mav = new ModelAndView("changePassword", userDataDto, userDto);
+		mav.addObject(buttonValue, change );
+		mav.addObject(action,"/changePassword");
+		mav.addObject(msg, "Problem in Updating Password");
+		mav.addObject(method,"Post");
 
 		if(StringUtils.isNotEmpty(newPassword)) {
 			User LoggedInUser =
 					(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-			Optional<User> userOptional = userService.changePassword(LoggedInUser.getUsername(),
-					user.getPassword(), newPassword);
+			Optional<UserDto> userOptional =
+					userService.changePassword(LoggedInUser.getUsername(),
+							userDto.getPassword(), newPassword);
 
-			if(userOptional.isPresent()) {
-				if(userOptional.get().getUserId() > 0) {
-					mav.addObject("message", "Password Updated");
-				}
+			if(userOptional.isPresent() && userOptional.get().getUserId() > 0) {
+				mav.addObject(msg, "Password Updated");
 			}
 		}
 		return mav;
@@ -135,136 +135,123 @@ public class UserController {
 	@GetMapping("/admin/usersList")
 	public ModelAndView list() {
 
-		ModelAndView mav = new ModelAndView("usersList", "user", new User());
+		ModelAndView mav = new ModelAndView(usersList, userDataDto, new UserDto());
 
-		mav.addObject("buttonValue", "Get" );
-		mav.addObject("action","/admin/usersList");
-		mav.addObject("method","post");
-		loadDbData(mav);
-
+		mav.addObject(buttonValue, "Get" );
+		mav.addObject(action,"/admin/usersList");
+		mav.addObject(method,"post");
+		mav.addObject(roles, userService.getRoles());
 		return mav;
 	}
 
 	@PostMapping("/admin/usersList")
-	public ModelAndView list(@ModelAttribute("user") User userData) {
+	public ModelAndView list(@ModelAttribute("userDto") UserDto userDto) {
 
-		ModelAndView mav = new ModelAndView("usersList", "user", new User());
-		mav.addObject("buttonValue", "Get" );
-		mav.addObject("action","/admin/usersList");
-		mav.addObject("method","Post");
-		loadDbData(mav);
+		ModelAndView mav = new ModelAndView(usersList, userDataDto, userDto);
+		mav.addObject(buttonValue, "Get" );
+		mav.addObject(action,"/admin/usersList");
+		mav.addObject(method,"Post");
 		mav.addObject("Role", "/admin");
-
-		List<User> usersList =
-				userRepository.findAllByRoles(userData.getRoles());
-
-		mav.addObject("usersList", usersList);
-
+		mav.addObject(usersList, userService.findUsersByRoles(userDto));
+		mav.addObject(selectedRoleIds, getSelectedRoles(userDto.getRoles()));
+		mav.addObject(roles, userService.getRoles());
 		return mav;
 	}
-
 
 	@GetMapping("/admin/user/edit/{userId}/{operation}")
 	public ModelAndView findByUserId(@PathVariable("userId") long userId,
 			@PathVariable("operation") String operation) {
 
-		ModelAndView mav = new ModelAndView("user", "user", new User());
+		ModelAndView mav = new ModelAndView("user", userDataDto, new UserDto());
 
-		Optional<User> userData = userRepository.findById(userId);
-
-		if(userData.isPresent()) {
-			User user = userData.get();
-
-			mav.addObject("user", user);
-
-			List<Long> selectedRoleIds = user.getRoles()
-					.stream()
-					.map(Role::getRoleId)
-					.distinct()
-					.collect(Collectors.toList());
-			mav.addObject("selectedRoleIds", selectedRoleIds);
-
-//			System.out.println(selectedRoles);
+		Optional<UserDto> userOptional = userService.findUsersById(userId);
+		if(userOptional.isPresent()) {
+			UserDto userDto = userOptional.get();
+			mav.addObject(userDataDto, userDto);
+			mav.addObject(selectedRoleIds, getSelectedRoles(userDto.getRoles()));
 		}
 
-		mav.addObject("buttonValue", operation.toUpperCase());
-		mav.addObject("action","/admin/user/" + operation); // operation as Update /
-		// Delete
-		mav.addObject("method","post");
+		mav.addObject(roles, userService.getRoles());
+		mav.addObject(buttonValue, operation.toUpperCase());
+		mav.addObject(action,"/admin/user/" + operation); // operation as Update/Delete
+		mav.addObject(method,"post");
 		mav.addObject("Role", "/admin");
-
-		loadDbData(mav);
 		return mav;
 	}
 
 	@PostMapping("/admin/user/delete")
-	public ModelAndView delete(@ModelAttribute("user") User user)  {
+	public ModelAndView delete(@ModelAttribute("userDto") UserDto userDto)  {
 
-		Optional<User> userOptional = userRepository.findById(user.getUserId());
+		ModelAndView mav = new ModelAndView(usersList, userDataDto, userDto);
+		Optional<UserDto> userOptional = userService.delete(userDto);
 
-
-
-//		userRepository.delete(user);
-
-		/*if(result > 0) {
-
-			mav.addObject("message", "User Information deleted successfully");
-
-			mav.addObject("buttonValue","Save");
-			mav.addObject("action","/admin/user/add");
-
+		if(!userOptional.isPresent()) {
+			message = "User Information deleted successfully";
 		} else {
+			message = "Problem in User deletion";
+		}
 
-			mav = new ModelAndView("user", "user", user);
-			mav.addObject("message", "User Information is not deleted");
-
-			mav.addObject("buttonValue","Delete");
-			mav.addObject("action","/admin/user/delete");
-		}*/
-
-		ModelAndView mav = new ModelAndView("usersList", "user", user);
-
-		mav.addObject("buttonValue", "Get" );
-		mav.addObject("action","/admin/usersList");
-		mav.addObject("method","Post");
+		mav.addObject(msg, message);
+		mav.addObject(buttonValue, "Get" );
+		mav.addObject(action,"/admin/usersList");
+		mav.addObject(method,"Post");
 		mav.addObject("Role", "/admin");
-		loadDbData(mav);
+		mav.addObject(usersList, userService.findUsersByRoles(userDto));
+		mav.addObject(roles, userService.getRoles());
+		mav.addObject(selectedRoleIds, getSelectedRoles(userDto.getRoles()));
 
 		return mav;
 	}
 
-	// Get //
+	@PostMapping("/admin/user/update")
+	public ModelAndView update(@ModelAttribute UserDto userDto,
+			BindingResult bindingResult) { // @Valid
 
-	/*// Update //
-	@PostMapping("/student/update")
-	public ModelAndView update(@ModelAttribute("studentData") StudentForm studentData)  {
+		new UserValidator().validate(userDto, bindingResult);
 
-		ModelAndView mav = new ModelAndView("studentList", "studentData", studentData);
+		ModelAndView mav = new ModelAndView(usersList, userDataDto, userDto);
+		mav.addObject(selectedRoleIds, getSelectedRoles(userDto.getRoles()));
+		mav.addObject(method,"Post");
+		mav.addObject(roles, userService.getRoles());
 
-		loadDbData(dbDataUtils, mav);
-
-		int result = studentJdbcService.updateStudentData(studentData);
-
-		if(result > 0) {
-
-			mav.addObject("message", "Student Information updated successfully");
-			mav.addObject("studentList", studentJdbcService.getSpecifiedStudentsData(studentData));
+		if(bindingResult.hasErrors()) {
+			mav.setViewName("user");
+			mav.addObject(msg, "User Information is not updated");
+			mav.addObject(buttonValue, update );
+			mav.addObject(action,"/admin/user/update");
+			return mav;
 
 		} else {
-			mav.setViewName("studentAdd");
-			mav.addObject("message", "Students Information is not updated");
+			Optional<UserDto> userOptional = userService.update(userDto);
+
+			if (userOptional.isPresent()) {
+				message = "User Information updated successfully";
+				mav.addObject(userDataDto, userOptional.get());
+			} else {
+				userDto.setPassword("");
+				message = "User Information is not updated";
+			}
 		}
 
-		mav.addObject("Role", Role);
+		mav.addObject(msg, message);
+		mav.addObject(buttonValue, "Get" );
+		mav.addObject(action,"/admin/usersList");
+		mav.addObject("Role", "/admin");
+
+		mav.addObject(usersList, userService.findUsersByRoles(userDto));
+		mav.addObject(selectedRoleIds, getSelectedRoles(userDto.getRoles()));
+
 		return mav;
-	}*/
+	}
 
-	// Delete //
-
-
+	private List<Long> getSelectedRoles(List<Role> roles) {
+		return roles
+				.stream()
+				.map(Role::getRoleId)
+				.distinct()
+				.collect(Collectors.toList());
+	}
 }
-
-
 
 /*Map<Long, String> selectedRoles = user.getRoles()
 					.stream()

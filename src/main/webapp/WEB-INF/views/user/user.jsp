@@ -13,10 +13,10 @@
 	<script>
 		function submitData(action, method)
 		{
-			var studentForm = document.getElementById('user');
-			studentForm.action = action;
-			studentForm.method = method;
-			studentForm.submit();
+			var student = document.getElementById('user');
+			student.action = action;
+			student.method = method;
+			student.submit();
 		}
 	</script>
 	<style>
@@ -41,9 +41,7 @@
 					<div class="span12">
 						<div class="centered">
 							<h3>
-								<%!
-									private Object selectedRole;
-								%><spring:message code="user.operations"/>
+								<spring:message code="user.operations"/>
 							</h3>
 						</div>
 					</div>
@@ -54,9 +52,8 @@
 
 	<section id="maincontent">
 		<div class="container">
-
 			<form:form action="/admin/user" id="user" method="${method}"
-					   modelAttribute="user" enctype="multipart/form-data"
+					   modelAttribute="userDto" enctype="multipart/form-data"
 					   cssClass="form-horizontal">
 			<form:hidden path="userId" name="userId" id="userId" />
 
@@ -75,13 +72,15 @@
 							</label>
 
 							<div class="controls">
+
 								<form:input path="username" name="username" id="username"
 											cssClass="span3" maxlength="25"
 											onkeyup="charOnly(this)"
 								/>
-								<span class="help-block">
+								<span class="help-inline">
 									<form:errors path="username" cssClass="error" />
 								</span>
+
 							</div>
 						</div>
 
@@ -94,7 +93,7 @@
 								<form:password path="password" name="password"
 										id="password" maxlength="20"
 											cssClass="span3" />
-								<span class="help-block">
+								<span class="help-inline">
 									<form:errors path="password" cssClass="error" />
 								</span>
 							</div>
@@ -105,38 +104,57 @@
 								<spring:message code="user.roles"/>
 							</label>
 
-						<div class="controls">
+							<div class="controls">
 
-							<%--${selectedRoles}--%>
+								<%--${selectedRoles}--%>
 
-								<%--<form:select path="roles" name="roles" id="roles" multiple="true"
-											 cssClass="span3" cssStyle="height: 100px">
-									<form:options items="${roles}" selected="false" />
-								</form:select>--%>
+									<%--<form:select path="roles" name="roles" id="roles" multiple="true"
+												 cssClass="span3" cssStyle="height: 100px">
+										<form:options items="${roles}" selected="false" />
+									</form:select>--%>
 
-						<form:select path="roles" name="roles" id="roles" multiple="true"
-									 cssClass="span3" cssStyle="height: 100px">
-								<c:forEach items="${roles}" var="role">
-									<option value="${role.key}"
-										<c:forEach items="${selectedRoleIds}" var="selectedRoleId">
-											<c:if test="${role.key eq selectedRoleId}">selected="true"</c:if>
-										</c:forEach>
-										> ${role.value}
-									</option>
-								</c:forEach>
-						</form:select>
+								<form:select path="roles" name="roles" id="roles" multiple="true"
+										 cssClass="span3" cssStyle="height: 100px">
+									<c:forEach items="${roles}" var="role">
+										<option value="${role.key}"
+											<c:forEach items="${selectedRoleIds}" var="selectedRoleId">
+												<c:if test="${role.key eq selectedRoleId}">selected="true"</c:if>
+											</c:forEach>
+											> ${role.value}
+										</option>
+									</c:forEach>
+								</form:select>
 
-							<%--
-								<% System.out.println(pageContext.findAttribute("role")); %>--%>
+								<%--
+									<% System.out.println(pageContext.findAttribute("role")); %>--%>
 
-							<span class="help-block">
-							<form:errors path="roles" cssClass="error" />
-						</span>
-						</div>
+								<span class="help-inline">
+									<form:errors path="roles" cssClass="error" />
+								</span>
+							</div>
 						</div>
 
 						<div class="control-group">
-							<label class="control-label align-left" for="username">
+
+							<label class="control-label align-left" for="disabled">
+								<spring:message code="user.disabled"/>
+							</label>
+							<div class="controls">
+								<i class="fa fa-user" aria-hidden="true"></i>
+
+								<form:radiobutton path="disabled" value="false"
+												  id="disabled"/> Yes
+								<form:radiobutton path="disabled" value="true"
+												  id="disabled"/> No
+
+								<form:errors path="disabled" cssClass="error" />
+
+							</div>
+						</div>
+
+
+						<div class="control-group">
+							<label class="control-label align-left" for="email">
 								<spring:message code="user.email"/>
 							</label>
 
@@ -145,7 +163,7 @@
 								<%--<div class="input-prepend"> <span class="add-on"><i class="icon-envelope"></i></span>--%>
 								<form:input path="email" name="email" id="email"
 											maxlength="50" cssClass="span3" />
-								<span class="help-block">
+								<span class="help-inline">
 									<form:errors path="email" cssClass="error" />
 								</span>
 							</div>
@@ -160,7 +178,7 @@
 								<form:textarea path="userDesc" name="userDesc" id="userDesc"
 											   cssClass="span3" rows="3"
 											   cssStyle="height: 100px"/>
-								<span class="help-block">
+								<span class="help-inline">
 								<form:errors path="userDesc" cssClass="error" />
 							</span>
 							</div>

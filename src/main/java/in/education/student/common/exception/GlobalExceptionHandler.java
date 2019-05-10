@@ -3,10 +3,15 @@ package in.education.student.common.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindException;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @ControllerAdvice
@@ -36,9 +41,18 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.PRECONDITION_FAILED);
 	}*/
 
-	@ExceptionHandler
+
+	@ExceptionHandler(BindException.class)
+	public List<String> handleBindException(BindException ex) {
+		return ex.getBindingResult()
+				.getAllErrors().stream()
+				.map(ObjectError::getDefaultMessage)
+				.collect(Collectors.toList());
+	}
+
+	@ExceptionHandler(Exception.class)
 	public ModelAndView handleException(Exception ex) {
-		ModelAndView mav = new ModelAndView("error");	// shows 404.jsp
+		ModelAndView mav = new ModelAndView("error");	// shows error.jsp
 
 		System.out.println(ex.getMessage());
 		mav.addObject("message", ex.getMessage());

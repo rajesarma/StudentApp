@@ -3,7 +3,7 @@ package in.education.student.student;
 import in.education.student.common.util.DBUtils;
 import in.education.student.common.util.GeneralQueries;
 import in.education.student.model.Gender;
-import in.education.student.model.StudentForm;
+import in.education.student.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -25,7 +25,7 @@ public class StudentJdbcRepository {
 		this.dbUtils = dbUtils;
 	}
 
-	int addStudentData(StudentForm studentForm) {
+	int addStudentData(Student student) {
 
 		PreparedStatement pstmt;
 
@@ -46,13 +46,13 @@ public class StudentJdbcRepository {
 				studentId = rs.getString("student_id");
 			}
 
-//			if(studentForm.getPhoto()!=null && !"".equals(studentForm.getPhoto().toString().trim()) && studentForm.getPhoto().getBytes().length >0 ) {
+//			if(student.getPhoto()!=null && !"".equals(student.getPhoto().toString().trim()) && student.getPhoto().getBytes().length >0 ) {
 
-//			if(studentForm.getPhoto()!=null && !"".equals(studentForm.getPhoto().toString().trim()) && studentForm.getPhoto().length() >0 ) {
+//			if(student.getPhoto()!=null && !"".equals(student.getPhoto().toString().trim()) && student.getPhoto().length() >0 ) {
 //				photoName =
-//						"stu_"+studentId+"_"+studentForm.getPhoto().getOriginalFilename().toLowerCase().replace("_","-");
+//						"stu_"+studentId+"_"+student.getPhoto().getOriginalFilename().toLowerCase().replace("_","-");
 
-				photoName ="stu_"+studentId+"_"+studentForm.getPhotoName();
+				photoName ="stu_"+studentId+"_"+ student.getPhotoName();
 //			}
 
 			sql = " insert into student_details " +
@@ -66,8 +66,8 @@ public class StudentJdbcRepository {
 					" roll_no, mobile_no, mother_name, " +
 					" gender, academic_year_id, aadhar, " +
 					" height, joining_year_no " +
-//					"" + ((studentForm.getPhoto().getBytes().length >0) ? ",photo_name, photo" :
-//					"" + ((studentForm.getPhoto().length() >0) ? ",photo_name, photo" :
+//					"" + ((student.getPhoto().getBytes().length >0) ? ",photo_name, photo" :
+//					"" + ((student.getPhoto().length() >0) ? ",photo_name, photo" :
 //					"" )+
 					" , photo_name, photo) " +
 					" values (" +
@@ -80,8 +80,8 @@ public class StudentJdbcRepository {
 					" ?, ?, ?," +
 					" ?, ?, ?," +
 					" ?, ?" +
-//					"" + ((studentForm.getPhoto().getBytes().length >0) ? ",? , ?" : "" ) +
-//					"" + ((studentForm.getPhoto().length() >0) ? ",? , ?" : "" ) +
+//					"" + ((student.getPhoto().getBytes().length >0) ? ",? , ?" : "" ) +
+//					"" + ((student.getPhoto().length() >0) ? ",? , ?" : "" ) +
 					" ,? , ? "  +
 					" )";
 
@@ -89,34 +89,34 @@ public class StudentJdbcRepository {
 
 			pstmt.setObject( (++index), Long.parseLong(studentId));
 
-			pstmt.setObject( (++index), studentForm.getName());
-			pstmt.setObject((++index), studentForm.getFatherName());
-			pstmt.setObject((++index), studentForm.getDob());
+			pstmt.setObject( (++index), student.getName());
+			pstmt.setObject((++index), student.getFatherName());
+			pstmt.setObject((++index), student.getDob());
 
-			pstmt.setObject((++index), studentForm.getDoj());
-			pstmt.setObject((++index), studentForm.getAddress());
-			pstmt.setObject((++index), studentForm.getEmail());
+			pstmt.setObject((++index), student.getDoj());
+			pstmt.setObject((++index), student.getAddress());
+			pstmt.setObject((++index), student.getEmail());
 
-			pstmt.setObject((++index), studentForm.getParentPhoneNo());
-//			pstmt.setObject((++index), studentForm.getBloodGroupId());
-			pstmt.setObject((++index), studentForm.getBranchId());
+			pstmt.setObject((++index), student.getParentPhoneNo());
+//			pstmt.setObject((++index), student.getBloodGroupId());
+			pstmt.setObject((++index), student.getBranchId());
 
-			pstmt.setObject((++index), studentForm.getRollNo());
-			pstmt.setObject((++index), studentForm.getAlternativePhoneNo());
-			pstmt.setObject((++index), studentForm.getMotherName());
+			pstmt.setObject((++index), student.getRollNo());
+			pstmt.setObject((++index), student.getAlternativePhoneNo());
+			pstmt.setObject((++index), student.getMotherName());
 
-			pstmt.setObject((++index), studentForm.getGender());
-			pstmt.setObject((++index), studentForm.getAcademicYearId());
-			pstmt.setObject((++index), studentForm.getAadharNo());
+			pstmt.setObject((++index), student.getGender());
+			pstmt.setObject((++index), student.getAcademicYearId());
+			pstmt.setObject((++index), student.getAadharNo());
 
-			pstmt.setObject((++index), studentForm.getHeight());
-			pstmt.setObject((++index), studentForm.getJoiningYearNo());
+			pstmt.setObject((++index), student.getHeight());
+			pstmt.setObject((++index), student.getJoiningYearNo());
 
-//			if(studentForm.getPhoto().getBytes().length >0) {
-//			if(studentForm.getPhoto().length() >0) {
+//			if(student.getPhoto().getBytes().length >0) {
+//			if(student.getPhoto().length() >0) {
 				pstmt.setObject((++index), photoName);
-//				pstmt.setBlob((++index), studentForm.getPhoto().getInputStream());
-				pstmt.setBytes((++index), studentForm.getPhoto());
+//				pstmt.setBlob((++index), student.getPhoto().getInputStream());
+				pstmt.setBytes((++index), student.getPhoto());
 //			}
 
 			result = pstmt.executeUpdate();
@@ -128,11 +128,11 @@ public class StudentJdbcRepository {
 		return result;
 	}
 
-	List getSpecifiedStudentsData(StudentForm studentData) {
+	List getSpecifiedStudentsData(Student studentData) {
 
 		String sql;
 		ResultSet rs;
-		ArrayList<StudentForm> studentList = new ArrayList<>();
+		ArrayList<Student> studentList = new ArrayList<>();
 
 		Statement stmt = dbUtils.getDBStatement();
 
@@ -162,29 +162,29 @@ public class StudentJdbcRepository {
 
 			while(rs != null && rs.next())
 			{
-				StudentForm studentForm = new StudentForm();
-				studentForm.setStudentId(rs.getInt("student_id"));
-				studentForm.setYear(rs.getString("year"));
+				Student student = new Student();
+				student.setStudentId(rs.getInt("student_id"));
+//				student.setYear(rs.getString("year"));
 
-				studentForm.setBranch(rs.getString("branch_name"));
-				studentForm.setRollNo(rs.getString("roll_no"));
+//				student.setBranch(rs.getString("branch_name"));
+				student.setRollNo(rs.getString("roll_no"));
 
-				studentForm.setName(rs.getString("student_name"));
-				studentForm.setFatherName(rs.getString("father_name"));
-				studentForm.setDob(rs.getDate("dob"));
-				studentForm.setDoj(rs.getDate("doj"));
-//				studentForm.setPhotoName(rs.getString("photo_name").split("_")[2]);
-				studentForm.setPhotoName(rs.getString("photo_name"));
-				studentForm.setPhoto(rs.getBytes("photo"));
+				student.setName(rs.getString("student_name"));
+				student.setFatherName(rs.getString("father_name"));
+				student.setDob(rs.getDate("dob"));
+				student.setDoj(rs.getDate("doj"));
+//				student.setPhotoName(rs.getString("photo_name").split("_")[2]);
+				student.setPhotoName(rs.getString("photo_name"));
+				student.setPhoto(rs.getBytes("photo"));
 
-//				studentForm.setPhotoData(new String(Base64.getEncoder().encode(rs.getBytes("photo"))) );
+//				student.setPhotoData(new String(Base64.getEncoder().encode(rs.getBytes("photo"))) );
 
 //				byte[] b = rs.getBytes("photo");
 
-//				studentForm.setPhotoData(new String(Base64.getEncoder().encode(rs.getBytes("photo"))) );
-//				studentForm.setPhotoData(new String(Base64.getEncoder().encode(b) ));
+//				student.setPhotoData(new String(Base64.getEncoder().encode(rs.getBytes("photo"))) );
+//				student.setPhotoData(new String(Base64.getEncoder().encode(b) ));
 
-				studentList.add(studentForm);
+				studentList.add(student);
 			}
 
 		} catch (SQLException e) {
@@ -194,11 +194,11 @@ public class StudentJdbcRepository {
 		return studentList;
 	}
 
-	StudentForm getStudentData(int studentId) {
+	Student getStudentData(int studentId) {
 
 		String sql;
 		ResultSet rs;
-		StudentForm studentForm = new StudentForm();
+		Student student = new Student();
 
 		Statement stmt = dbUtils.getDBStatement();
 
@@ -224,42 +224,43 @@ public class StudentJdbcRepository {
 
 			if(rs.next())
 			{
-				studentForm.setStudentId(rs.getInt("student_id"));
-				studentForm.setName(rs.getString("student_name"));
-				studentForm.setFatherName(rs.getString("father_name"));
-//				studentForm.setDob(rs.getString("dob"));
-				studentForm.setDob(rs.getDate("dob"));
-//				studentForm.setDoj(rs.getString("doj"));
-				studentForm.setDoj(rs.getDate("doj"));
-				studentForm.setPhotoName(rs.getString("photo"));
-				studentForm.setAadharNo(rs.getString("aadhar"));
-				studentForm.setEmail(rs.getString("email"));
-				studentForm.setParentPhoneNo(rs.getString("guardian_mobile"));
-//				studentForm.setBloodGroup(rs.getString("blood_group"));
-				studentForm.setJoiningYearNo(rs.getInt("joining_year_no"));
-				studentForm.setAcademicYearId(rs.getInt("academic_year_id"));
-				studentForm.setBranchId(rs.getString("branch_id"));
-				studentForm.setRollNo(rs.getString("roll_no"));
-				studentForm.setAlternativePhoneNo(rs.getString("mobile_no"));
-				studentForm.setMotherName(rs.getString("mother_name"));
-				studentForm.setGender(Gender.valueOf(rs.getString("gender")));
-				studentForm.setAddress(rs.getString("address"));
-				studentForm.setJoiningYearNo(rs.getInt("joining_year_no"));
-//				studentForm.setBloodGroupId(rs.getInt("blood_group_id"));
-				studentForm.setHeight(rs.getInt("height"));
-				//studentForm.setPhotoName(rs.getString("photo_name").split("_")[2]);
-				studentForm.setPhotoName(rs.getString("photo_name"));
-				studentForm.setPhotoData(new String(Base64.getEncoder().encode(rs.getBytes("photo"))) );
+				student.setStudentId(rs.getInt("student_id"));
+				student.setName(rs.getString("student_name"));
+				student.setFatherName(rs.getString("father_name"));
+//				student.setDob(rs.getString("dob"));
+				student.setDob(rs.getDate("dob"));
+//				student.setDoj(rs.getString("doj"));
+				student.setDoj(rs.getDate("doj"));
+				student.setPhotoName(rs.getString("photo"));
+				student.setAadharNo(rs.getString("aadhar"));
+				student.setEmail(rs.getString("email"));
+				student.setParentPhoneNo(rs.getString("guardian_mobile"));
+//				student.setBloodGroup(rs.getString("blood_group"));
+				student.setJoiningYearNo(rs.getInt("joining_year_no"));
+				student.setAcademicYearId(rs.getInt("academic_year_id"));
+				student.setBranchId(rs.getString("branch_id"));
+				student.setRollNo(rs.getString("roll_no"));
+				student.setAlternativePhoneNo(rs.getString("mobile_no"));
+				student.setMotherName(rs.getString("mother_name"));
+				student.setGender(Gender.valueOf(rs.getString("gender")));
+				student.setAddress(rs.getString("address"));
+				student.setJoiningYearNo(rs.getInt("joining_year_no"));
+//				student.setBloodGroupId(rs.getInt("blood_group_id"));
+				student.setHeight(rs.getInt("height"));
+				//student.setPhotoName(rs.getString("photo_name").split("_")[2]);
+				student.setPhotoName(rs.getString("photo_name"));
+
+//				student.setPhotoData(new String(Base64.getEncoder().encode(rs.getBytes("photo"))) );
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		return studentForm;
+		return student;
 	}
 
-	int updateStudentData(StudentForm studentForm) {
+	int updateStudentData(Student student) {
 
 		PreparedStatement pstmt;
 
@@ -289,47 +290,47 @@ public class StudentJdbcRepository {
 			" aadhar = ?, " +
 			" height = ?, " +
 			" joining_year_no = ? " +
-//			((studentForm.getPhoto().getBytes().length >0) ? ",photo_name = ?, photo = ?" :"" )+
-//			((studentForm.getPhoto().length() >0) ? ",photo_name = ?, photo = ?" :"" )+
-			((studentForm.getPhoto().length >0) ? ",photo_name = ?, photo = ?" :"" )+
+//			((student.getPhoto().getBytes().length >0) ? ",photo_name = ?, photo = ?" :"" )+
+//			((student.getPhoto().length() >0) ? ",photo_name = ?, photo = ?" :"" )+
+			((student.getPhoto().length >0) ? ",photo_name = ?, photo = ?" :"" )+
 			"  " +
 			" where student_id = ?";
 
 			pstmt = dbUtils.getDBConnection().prepareStatement(sql);
 
-			pstmt.setObject( (++index), studentForm.getName());
-			pstmt.setObject((++index), studentForm.getFatherName());
-			pstmt.setObject((++index), studentForm.getDob());
+			pstmt.setObject( (++index), student.getName());
+			pstmt.setObject((++index), student.getFatherName());
+			pstmt.setObject((++index), student.getDob());
 
-			pstmt.setObject((++index), studentForm.getDoj());
-			pstmt.setObject((++index), studentForm.getAddress());
-			pstmt.setObject((++index), studentForm.getEmail());
+			pstmt.setObject((++index), student.getDoj());
+			pstmt.setObject((++index), student.getAddress());
+			pstmt.setObject((++index), student.getEmail());
 
-			pstmt.setObject((++index), studentForm.getParentPhoneNo());
-//			pstmt.setObject((++index), studentForm.getBloodGroupId());
-			pstmt.setObject((++index), studentForm.getBranchId());
+			pstmt.setObject((++index), student.getParentPhoneNo());
+//			pstmt.setObject((++index), student.getBloodGroupId());
+			pstmt.setObject((++index), student.getBranchId());
 
-			pstmt.setObject((++index), studentForm.getRollNo());
-			pstmt.setObject((++index), studentForm.getAlternativePhoneNo());
-			pstmt.setObject((++index), studentForm.getMotherName());
+			pstmt.setObject((++index), student.getRollNo());
+			pstmt.setObject((++index), student.getAlternativePhoneNo());
+			pstmt.setObject((++index), student.getMotherName());
 
-			pstmt.setObject((++index), studentForm.getGender());
-			pstmt.setObject((++index), studentForm.getAcademicYearId());
-			pstmt.setObject((++index), studentForm.getAadharNo());
+			pstmt.setObject((++index), student.getGender());
+			pstmt.setObject((++index), student.getAcademicYearId());
+			pstmt.setObject((++index), student.getAadharNo());
 
-			pstmt.setObject((++index), studentForm.getHeight());
-			pstmt.setObject((++index), studentForm.getJoiningYearNo());
+			pstmt.setObject((++index), student.getHeight());
+			pstmt.setObject((++index), student.getJoiningYearNo());
 
-//			if(studentForm.getPhoto().getBytes().length >0) {
-//			if(studentForm.getPhoto().length() >0) {
-			if(studentForm.getPhoto().length >0) {
+//			if(student.getPhoto().getBytes().length >0) {
+//			if(student.getPhoto().length() >0) {
+			if(student.getPhoto().length >0) {
 				pstmt.setObject((++index), photoName);
-//				pstmt.setBlob((++index), studentForm.getPhoto().getInputStream());
-				pstmt.setBytes((++index), studentForm.getPhoto());
-//				pstmt.setBlob((++index), studentForm.getPhoto());
+//				pstmt.setBlob((++index), student.getPhoto().getInputStream());
+				pstmt.setBytes((++index), student.getPhoto());
+//				pstmt.setBlob((++index), student.getPhoto());
 			}
 
-			pstmt.setObject((++index), studentForm.getStudentId());
+			pstmt.setObject((++index), student.getStudentId());
 
 			result = pstmt.executeUpdate();
 
@@ -340,7 +341,7 @@ public class StudentJdbcRepository {
 		return result;
 	}
 
-	int deleteStudentData(StudentForm studentForm) {
+	int deleteStudentData(Student student) {
 
 		String sql;
 		int saResult = 1;
@@ -350,16 +351,16 @@ public class StudentJdbcRepository {
 		Statement stmt = dbUtils.getDBStatement();
 
 		try {
-			if(dbUtils.recordExists(GeneralQueries.isAttendanceExists(studentForm.getStudentId()))) {
-				saResult = stmt.executeUpdate(GeneralQueries.deleteStudentAttendance(studentForm.getStudentId()));
+			if(dbUtils.recordExists(GeneralQueries.isAttendanceExists(student.getStudentId()))) {
+				saResult = stmt.executeUpdate(GeneralQueries.deleteStudentAttendance(student.getStudentId()));
 			}
 
-			if(dbUtils.recordExists(GeneralQueries.isMarksExists(studentForm.getStudentId()))) {
-				smResult = stmt.executeUpdate(GeneralQueries.deleteStudentMarks(studentForm.getStudentId()));
+			if(dbUtils.recordExists(GeneralQueries.isMarksExists(student.getStudentId()))) {
+				smResult = stmt.executeUpdate(GeneralQueries.deleteStudentMarks(student.getStudentId()));
 			}
 
 			if(saResult > 0 && smResult > 0 ) {
-				sdResult = stmt.executeUpdate(GeneralQueries.deleteStudenData(studentForm.getStudentId()));
+				sdResult = stmt.executeUpdate(GeneralQueries.deleteStudenData(student.getStudentId()));
 			}
 
 		} catch (SQLException e) {

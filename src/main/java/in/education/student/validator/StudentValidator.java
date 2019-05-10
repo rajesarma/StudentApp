@@ -1,6 +1,7 @@
-package in.education.student.student;
+package in.education.student.validator;
 
-import in.education.student.model.StudentForm;
+import in.education.student.dto.StudentDto;
+//import in.education.student.model.Student;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -21,7 +22,7 @@ public class StudentValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> candidate) {
-		return StudentForm.class.isAssignableFrom(candidate);
+		return StudentDto.class.isAssignableFrom(candidate);
 	}
 
 	@Override
@@ -39,46 +40,46 @@ public class StudentValidator implements Validator {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "doj", "required.student.doj");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "aadharNo", "required.student.aadharNo");
 
-		StudentForm studentForm = (StudentForm) obj;
+		StudentDto studentDto = (StudentDto) obj;
 
-		if(studentForm.getAcademicYearId() == 0) {
+		if(studentDto.getAcademicYearId() == 0) {
 			errors.rejectValue("academicYearId", "zeroValue.student.academicYearId", new Object[]{
 					"Academic Year"}, "Please select this");
 		}
 
-		if(studentForm.getBranchId().equalsIgnoreCase("0")) {
+		if(studentDto.getBranchId().equalsIgnoreCase("0")) {
 			errors.rejectValue("branchId", "zeroValue.student.branchId", new Object[]{
 					"Branch Id"}, "Please select this");
 		}
 
-		/*if(studentForm.getBloodGroupId() == 0 ) {
+		/*if(student.getBloodGroupId() == 0 ) {
 			errors.rejectValue("bloodGroupId", "zeroValue.student.bloodGroupId", new Object[]{
 					"Blood Group"}, "Please select this");
 		}*/
 
-		if(studentForm.getJoiningYearNo() == 0) {
+		if(studentDto.getJoiningYearNo() == 0) {
 			errors.rejectValue("joiningYearNo", "zeroValue.student.joiningYearNo", new Object[]{
 					"Joining Year"}, "Please select this");
 		}
 
-		if (studentForm.getEmail() != null && !EMAIL_REGEX.matcher(studentForm.getEmail()).matches()) {
+		if (studentDto.getEmail() != null && !EMAIL_REGEX.matcher(studentDto.getEmail()).matches()) {
 			errors.rejectValue("email", "invalid.student.email");
 		}
 
-		if(studentForm.getHeight() <= 0 ) {
+		if(studentDto.getHeight() <= 0 ) {
 			errors.rejectValue("height", "required.student.height", null, "Please Enter" +
 					" this");
 		}
 
-		if(studentForm.getParentPhoneNo() != null && !NUMERIC_REGEX.matcher(studentForm.getParentPhoneNo()).matches()
-			&& studentForm.getParentPhoneNo().length() != 10) {
+		if(studentDto.getParentPhoneNo() != null && !NUMERIC_REGEX.matcher(studentDto.getParentPhoneNo()).matches()
+			&& studentDto.getParentPhoneNo().length() != 10) {
 			errors.rejectValue("parentPhoneNo", "invalid.student.parentPhoneNo",
 					new Object[]{"Parent Phone No."}, "Please Enter valid Parent Phone " +
 							"No.");
 		}
 
-		if(studentForm.getAlternativePhoneNo() != null && !NUMERIC_REGEX.matcher(studentForm.getAlternativePhoneNo()).matches()
-				&& studentForm.getAlternativePhoneNo().length() != 10) {
+		if(studentDto.getAlternativePhoneNo() != null && !NUMERIC_REGEX.matcher(studentDto.getAlternativePhoneNo()).matches()
+				&& studentDto.getAlternativePhoneNo().length() != 10) {
 			errors.rejectValue("alternativePhoneNo", "invalid.student.alternativePhoneNo",
 					new Object[]{"Alternate Phone No."}, "Please Enter valid Alternate " +
 							"Phone " +

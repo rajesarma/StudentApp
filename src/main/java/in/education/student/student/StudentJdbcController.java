@@ -1,7 +1,7 @@
 package in.education.student.student;
 
 import in.education.student.common.util.DBDataUtils;
-import in.education.student.model.StudentForm;
+import in.education.student.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,10 +69,10 @@ public class StudentJdbcController {
 	@GetMapping(value = "/student/add")
 	public ModelAndView save()  {
 
-		StudentForm studentForm = new StudentForm();
-//		studentForm.setGender("M");
+		Student student = new Student();
+//		student.setGender("M");
 
-		ModelAndView mav = new ModelAndView("studentAdd", "studentData", studentForm);
+		ModelAndView mav = new ModelAndView("studentAdd", "studentData", student);
 
 		loadDbData(dbDataUtils, mav);
 
@@ -85,7 +85,7 @@ public class StudentJdbcController {
 	}
 
 	@PostMapping("/student/add")
-	public ModelAndView save( @Valid @ModelAttribute("studentData") StudentForm studentData,
+	public ModelAndView save( @Valid @ModelAttribute("studentData") Student studentData,
 			@RequestParam("image") MultipartFile image,
 			BindingResult bindingResult) {
 
@@ -106,11 +106,11 @@ public class StudentJdbcController {
 			return mav;
 		}
 
-		StudentForm studentForm = new StudentForm();
-//		studentForm.setGender("M");
+		Student student = new Student();
+//		student.setGender("M");
 
 		ModelAndView mav = new ModelAndView("studentAdd", "studentData",
-				studentForm);
+				student);
 
 		try {
 			studentData.setPhotoName(image.getOriginalFilename());
@@ -170,7 +170,7 @@ public class StudentJdbcController {
 	public ModelAndView list() {
 
 		ModelAndView mav = new ModelAndView("studentList", "studentData",
-				new StudentForm());
+				new Student());
 		loadDbData(dbDataUtils, mav);
 
 		mav.addObject("Role", Role);
@@ -178,7 +178,7 @@ public class StudentJdbcController {
 	}
 
 	@PostMapping("/student/list")
-	public ModelAndView list(@ModelAttribute("studentData") StudentForm studentData) {
+	public ModelAndView list(@ModelAttribute("studentData") Student studentData) {
 
 		ModelAndView mav = new ModelAndView("studentList");
 		loadDbData(dbDataUtils, mav);
@@ -195,12 +195,12 @@ public class StudentJdbcController {
 			@PathVariable("operation") String operation) {
 
 		ModelAndView mav = new ModelAndView("studentAdd");
-		StudentForm studentData = studentJdbcService.getStudentData(studentId);
+		Student studentData = studentJdbcService.getStudentData(studentId);
 
-		if(studentData.getPhotoData() != null) {
+		/*if(studentData.getPhotoData() != null) {
 			mav.addObject("photoExt", studentData.getPhotoName().substring(studentData.getPhotoName().indexOf('.') + 1));
 			mav.addObject("photoData", studentData.getPhotoData());
-		}
+		}*/
 
 		mav.addObject("studentData", studentData);
 
@@ -217,7 +217,7 @@ public class StudentJdbcController {
 
 	// Update //
 	@PostMapping("/student/update")
-	public ModelAndView update(@ModelAttribute("studentData") StudentForm studentData)  {
+	public ModelAndView update(@ModelAttribute("studentData") Student studentData)  {
 
 		ModelAndView mav = new ModelAndView("studentList", "studentData", studentData);
 
@@ -241,10 +241,10 @@ public class StudentJdbcController {
 
 	// Delete //
 	@PostMapping("/student/delete")
-	public ModelAndView delete(@ModelAttribute("studentData") StudentForm studentData)  {
+	public ModelAndView delete(@ModelAttribute("studentData") Student studentData)  {
 
 		ModelAndView mav = new ModelAndView("studentAdd", "studentData",
-				new StudentForm());
+				new Student());
 
 		int result = studentJdbcService.deleteStudentData(studentData);
 

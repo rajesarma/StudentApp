@@ -53,10 +53,10 @@
 
 		function submitData(action)
 		{
-			var studentForm = document.getElementById('studentForm');
-			studentForm.action = action;
-			studentForm.method = "post";
-			studentForm.submit();
+			var student = document.getElementById('student');
+			student.action = action;
+			student.method = "post";
+			student.submit();
 		}
 
 		function deleteStudentData(actionType)
@@ -113,7 +113,7 @@
 				<div class="top-content-style-pages">
 					<p class="title-heading"><spring:message code="student.add"/></p>
 				</div>
-				<form:form action="${Role}/student/add" id="studentForm"
+				<form:form action="${Role}/student/add" id="student"
 						   modelAttribute="studentData" enctype="multipart/form-data">
 
 					<a style="color: green; text-decoration: underline;" href="${Role}/student/list">Back to Student Report</a>

@@ -11,9 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
@@ -68,11 +67,13 @@ public class User implements Serializable {
 	@Column(name="failed_login_attempts")
 	private Long failedLoginAttempts;
 
-	@OneToMany(fetch= FetchType.EAGER) //cascade= CascadeType.ALL,
+//	@OneToMany(fetch= FetchType.EAGER) //cascade= CascadeType.ALL,
+	@ManyToMany(fetch= FetchType.EAGER)
 	@Cascade({CascadeType.SAVE_UPDATE})
 	@JoinTable(name="user_roles",
 			joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")},
-			inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="role_id")}
+			inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName=
+					"role_id", unique = false)}
 	)
 	private List<Role> roles;
 

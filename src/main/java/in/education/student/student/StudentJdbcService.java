@@ -1,12 +1,9 @@
 package in.education.student.student;
 
-import in.education.student.model.StudentForm;
+import in.education.student.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.sql.Blob;
 import java.util.List;
 
 @Service
@@ -19,38 +16,38 @@ public class StudentJdbcService {
 		this.studentRepository = studentRepository;
 	}
 
-	public int addStudentData(StudentForm studentForm) {
+	public int addStudentData(Student student) {
 
-//		Blob file = studentForm.getPhotoFile();
+//		Blob file = student.getPhotoFile();
 
 		/*try {
-			studentForm.setPhoto(file.getBytes());
-			studentForm.setPhotoName(file.getOriginalFilename());
+			student.setPhoto(file.getBytes());
+			student.setPhotoName(file.getOriginalFilename());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}*/
 
-		return studentRepository.addStudentData(studentForm);
+		return studentRepository.addStudentData(student);
 	}
 
-	public List getSpecifiedStudentsData(StudentForm studentData) {
+	public List getSpecifiedStudentsData(Student studentData) {
 
 		return studentRepository.getSpecifiedStudentsData(studentData);
 	}
 
-	public StudentForm getStudentData(int studentId) {
-		StudentForm studentData = studentRepository.getStudentData(studentId);
+	public Student getStudentData(int studentId) {
+		Student studentData = studentRepository.getStudentData(studentId);
 		return studentData;
 	}
 
-	public int updateStudentData(StudentForm studentForm) {
+	public int updateStudentData(Student student) {
 
-		return studentRepository.updateStudentData(studentForm);
+		return studentRepository.updateStudentData(student);
 	}
 
-	public int deleteStudentData(StudentForm studentForm) {
+	public int deleteStudentData(Student student) {
 
-		return studentRepository.deleteStudentData(studentForm);
+		return studentRepository.deleteStudentData(student);
 	}
 
 }

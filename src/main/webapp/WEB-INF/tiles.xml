@@ -70,6 +70,10 @@
         <put-attribute name="body" value="/WEB-INF/views/user/usersList.jsp" />
     </definition>
 
+    <definition name="roleServices" extends="tilesTemplate">
+        <put-attribute name="body" value="/WEB-INF/views/role/roleServices.jsp" />
+    </definition>
+
 
 
 

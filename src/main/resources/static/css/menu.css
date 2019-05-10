@@ -103,7 +103,7 @@
   background-image: -o-linear-gradient(to bottom, #3298c8, #2e8cb8);
   background-image: linear-gradient(to bottom, #3298c8, #2e8cb8);*/
   /*color: white;*/
-  color: white;
+  color: black;
   font-size: 12px;
   font-weight: bold;
 
@@ -176,9 +176,11 @@
 }
 .sm-blue ul a, .sm-blue ul a:hover, .sm-blue ul a:focus, .sm-blue ul a:active {
   background: transparent;
-  color: #2b82ac;
+  /*color: #2b82ac;*/
   /* font-size: 14px; */
   text-shadow: none;
+  color: black;
+  background: #D9F8CE;
   border-left: 8px solid transparent;
 }
 .sm-blue ul a.current {

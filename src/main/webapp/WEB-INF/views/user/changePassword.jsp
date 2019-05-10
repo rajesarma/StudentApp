@@ -17,10 +17,10 @@
 	<script>
 		function submitData(action, method)
 		{
-			var studentForm = document.getElementById('user');
-			studentForm.action = action;
-			studentForm.method = method;
-			studentForm.submit();
+			var student = document.getElementById('user');
+			student.action = action;
+			student.method = method;
+			student.submit();
 		}
 	</script>
 	<style>
@@ -58,7 +58,7 @@
 		<div class="container">
 
 			<form:form action="/changePassword" id="user" method="${method}"
-					   modelAttribute="user" cssClass="form-horizontal">
+					   modelAttribute="userDto" cssClass="form-horizontal">
 			<form:hidden path="userId" name="userId" id="userId" />
 
 			<div class="row ">

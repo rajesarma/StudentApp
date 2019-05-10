@@ -49,7 +49,7 @@
 					<div class="centered">
 
 					<form:form action="/admin/usersList" cssClass="form-inline"
-							   method="post" modelAttribute="user" >
+							   method="post" modelAttribute="userDto" >
 
 						<label class="control-label align-left" for="roles">
 							<spring:message code="user.roles"/>
@@ -57,7 +57,15 @@
 
 						<form:select path="roles" name="roles" id="roles" multiple="false"
 									 cssClass="span2">
-							<form:options items="${roles}" />
+							<%--<form:options items="${roles}" />--%>
+							<c:forEach items="${roles}" var="role">
+								<option value="${role.key}"
+										<c:forEach items="${selectedRoleIds}" var="selectedRoleId">
+											<c:if test="${role.key eq selectedRoleId}">selected="true"</c:if>
+										</c:forEach>
+								> ${role.value}
+								</option>
+							</c:forEach>
 						</form:select>
 
 						<span style="padding: 20px"></span>
@@ -85,6 +93,7 @@
 									<th scope="row">Name</th>
 									<th scope="row">e-mail</th>
 									<th scope="row">Desc</th>
+									<th scope="row">Is Active</th>
 									<th scope="row">Action</th>
 								</thead>
 								<tbody>
@@ -93,6 +102,7 @@
 											<td>${user.username }</td>
 											<td>${user.email }</td>
 											<td>${user.userDesc }</td>
+											<td>${user.activeStatus }</td>
 
 											<td>
 												<a style="color: green; text-decoration: underline;" href="${Role}/user/edit/${user.userId}/update

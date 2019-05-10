@@ -5,6 +5,7 @@ import in.education.student.model.Role;
 import in.education.student.model.Service;
 import in.education.student.model.User;
 import in.education.student.model.repository.RoleRepository;
+import in.education.student.user.UserService;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -27,6 +28,9 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
 	@Autowired
 	private RoleRepository roleRepository;
 
+	@Autowired
+	private UserService userService;
+
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 		HttpSession session = request.getSession(true);
@@ -36,6 +40,9 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
 		// Get the Principal User object
 //		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = (User) authentication.getPrincipal();
+
+		// Update the LastLogin of User
+		userService.registerSuccessfulLogin(user.getUserId());
 
 		// To get Role Names
 		/*Set<String> roles = authentication.getAuthorities().stream()
@@ -69,6 +76,15 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
 
 		roleRepository.findByRoleNameIn(roleNames)
 						.forEach(role -> services.addAll(role.getServices()));
+
+		List<Service> services1 = new ArrayList<>();
+
+		/*roleRepository.findByRoleNameIn(roleNames)
+				.stream()
+				.map(role -> role.getServices())
+				.forEach(service -> Collectors.toCollection(() -> services1));
+
+		System.out.println(services1);*/
 
 		services.sort(Comparator.comparing(Service :: getParentId)
 								.thenComparing(Service :: getServiceId));

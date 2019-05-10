@@ -28,6 +28,7 @@ spring:
   mvc:
     locale: en_US
     locale-resolver: accept_header #fixed
+    #throw-exception-if-no-handler-found: false
 
   # MVC ====================================================================================
 

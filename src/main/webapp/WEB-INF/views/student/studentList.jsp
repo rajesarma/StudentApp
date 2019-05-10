@@ -59,7 +59,7 @@
 					<div class="centered">
 
 					<form:form action="${Role}/student/list" cssClass="form-inline"
-							   modelAttribute="studentData" >
+							   modelAttribute="studentDto" >
 
 							<label class="control-label align-left" for="academicYearId">
 								<spring:message code="student.academicYear"/>
