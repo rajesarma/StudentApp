@@ -7,10 +7,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
 @Table(name="blood_group")
-public class BloodGroup {
+public class BloodGroup implements Serializable {
+
+	private static final long serialVersionUID = 5502334730669218426L;
 
 	@Id
 	@NotNull

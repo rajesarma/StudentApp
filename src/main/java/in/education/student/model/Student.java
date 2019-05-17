@@ -12,11 +12,14 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "student_details")
-public class Student {
+public class Student implements Serializable {
+
+	private static final long serialVersionUID = -5889999597722728860L;
 
 	@Id
 	@Column(name = "student_id")
@@ -75,8 +78,8 @@ public class Student {
 	@Column(name = "blood_group_id")
 	private long bloodGroupId = 0;
 
-	@Column(name = "academic_year_id")
-	private long academicYearId = 0;
+	@Column(name = "batch_id")
+	private long batchId = 0;
 
 	@Column(name = "branch_id")
 	private String branchId= null;
@@ -89,13 +92,6 @@ public class Student {
 	@Column(name = "gender", length = 10)
 	private Gender gender = Gender.MALE;
 
-	/*
-	@Lob
-	private Blob photo;*/
-
-	/*@Transient
-	private MultipartFile image;*/
-
 	@Column(name = "photo")
 	@Lob
 	private byte[] photo;
@@ -104,14 +100,10 @@ public class Student {
 	private int height;
 
 	@Column(name = "joining_year_no")
-	private int joiningYearNo;
+	private long joiningYearNo;
 
-//	private String branch = null;
-//	private String bloodGroup = null;
-//	private String year = null;
-
-	/*@Transient
-	private String photoData;*/
+	@Column(name = "joining_semester_id")
+	private long joiningSemesterId;
 
 	public long getStudentId() {
 		return studentId;
@@ -201,12 +193,12 @@ public class Student {
 		this.bloodGroupId = bloodGroupId;
 	}
 
-	public long getAcademicYearId() {
-		return academicYearId;
+	public long getBatchId() {
+		return batchId;
 	}
 
-	public void setAcademicYearId(long academicYearId) {
-		this.academicYearId = academicYearId;
+	public void setBatchId(long batchId) {
+		this.batchId = batchId;
 	}
 
 	public String getBranchId() {
@@ -265,59 +257,21 @@ public class Student {
 		this.height = height;
 	}
 
-	public int getJoiningYearNo() {
+	public long getJoiningYearNo() {
 		return joiningYearNo;
 	}
 
-	public void setJoiningYearNo(int joiningYearNo) {
+	public void setJoiningYearNo(long joiningYearNo) {
 		this.joiningYearNo = joiningYearNo;
 	}
 
-	/*public MultipartFile getImage() {
-		return image;
+	public long getJoiningSemesterId() {
+		return joiningSemesterId;
 	}
 
-	public void setImage(MultipartFile image) {
-		this.image = image;
-	}*/
-
-	/*public String getBranch() {
-		return branch;
+	public void setJoiningSemesterId(long joiningSemesterId) {
+		this.joiningSemesterId = joiningSemesterId;
 	}
-
-	public void setBranch(String branch) {
-		this.branch = branch;
-	}
-
-	public String getBloodGroup() {
-		return bloodGroup;
-	}
-
-	public void setBloodGroup(String bloodGroup) {
-		this.bloodGroup = bloodGroup;
-	}*/
-
-	/*public String getYear() {
-		return year;
-	}
-
-	public void setYear(String year) {
-		this.year = year;
-	}*/
-
-	/*public String getPhotoData() {
-
-		if (getPhoto() != null && getPhoto().length > 0) {
-			return new String(java.util.Base64.getEncoder().encode(getPhoto()));
-		}
-		return null;
-	}*/
-
-//	public void setPhotoData(String photoData) {
-//		this.photoData = photoData;
-//	}
-
-
 }
 
 

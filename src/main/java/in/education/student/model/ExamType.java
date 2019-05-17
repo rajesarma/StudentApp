@@ -7,10 +7,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-//@Entity
+@Entity
 @Table(name="exam_type")
-public class ExamType {
+public class ExamType implements Serializable {
+
+	private static final long serialVersionUID = 9135836134122181132L;
 
 	@Id
 	@NotNull

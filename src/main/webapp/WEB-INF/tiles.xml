@@ -50,12 +50,21 @@
 
     <!--Common-->
 
-    <definition name="studentAdd" extends="tilesTemplate">
+    <definition name="addStudent" extends="tilesTemplate">
         <put-attribute name="body" value="/WEB-INF/views/student/addStudent.jsp" />
     </definition>
 
     <definition name="studentList" extends="tilesTemplate">
         <put-attribute name="body" value="/WEB-INF/views/student/studentList.jsp" />
+    </definition>
+
+    <definition name="searchStudent" extends="tilesTemplate">
+        <put-attribute name="body" value="/WEB-INF/views/student/searchStudent.jsp" />
+    </definition>
+
+    <definition name="addStudentAttendance" extends="tilesTemplate">
+        <put-attribute name="body"
+                       value="/WEB-INF/views/studentAttendance/addStudentAttendance.jsp" />
     </definition>
 
     <definition name="user" extends="tilesTemplate">

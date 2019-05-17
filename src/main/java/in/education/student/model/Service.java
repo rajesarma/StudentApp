@@ -8,7 +8,9 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "services")
-public class Service implements Serializable { // , Comparable<Service>
+public class Service implements Serializable {
+
+	private static final long serialVersionUID = 7444887444468987431L; // , Comparable<Service>
 
 	@Id
 	@Column(name = "service_id")

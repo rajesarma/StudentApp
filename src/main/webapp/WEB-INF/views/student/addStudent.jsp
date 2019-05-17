@@ -48,7 +48,7 @@
 			student.submit();
 		}
 
-		function checkData(type,obj) {
+		function checkData(type,obj, targetId) {
 			if(obj.value.length > 0) {
 				var url = '${Role}/student/' + type + '/' + obj.value;
 				var message;
@@ -60,14 +60,28 @@
 						$("#wait").html("");
 						var response = jQuery.parseJSON(response);
 
-						if(type == "checkRollNo")
-						{
+						if(type == "checkRollNo") {
 							var rollNoExists = response.rollNoExists;
-							var message = response.message;
 							if(rollNoExists == "true")
 							{
+								var message = response.message;
 								$("#wait").html("<center style='font-size: 14px' ><span id='loading' style='font-size: 14px; color:red'><i class='fa fa-spinner fa-spin' style='font-size:24px'></i> <b>" + message + "</b></span></center>");
-								document.forms[0].rollNo.value = "";
+								document.getElementById(targetId).value = "";
+							}
+						} else if(type == "getSemesters") {
+
+							if(response.semestersExists == "true")
+							{
+								var semesters =
+										response.semesters.replace("{","").replace("}","").replace(",","");
+								var semOptions =
+										JSON.parse('{"'+semesters.replace(/ /g, '", "').replace(/=/g, '": "')+ '"}');
+
+								$("#"+targetId).empty().append('<option selected="selected" value="0">Select</option>');
+
+								$.each(semOptions, function(val, text) {
+									$("#"+targetId).append($('<option></option>').val(val).html(text));
+								});
 							}
 						}
 					}, error: function(response) {
@@ -154,7 +168,7 @@
 							</label>
 							<div class="controls">
 								<form:input path="fatherName" name="fatherName" id="fatherName"
-											cssClass="span3"
+											cssClass="span3" maxlength="50"
 											onkeyup="charOnly(this)" />
 								<span class="help-block">
 									<form:errors path="fatherName" cssClass="error" />
@@ -167,7 +181,8 @@
 								<spring:message code="student.motherName"/>
 							</label>
 							<div class="controls">
-								<form:input path="motherName" name="motherName" id="motherName"
+								<form:input path="motherName" name="motherName"
+											id="motherName" maxlength="50"
 											cssClass="span3" onkeyup="charOnly(this)" />
 								<span class="help-block">
 									<form:errors path="motherName" cssClass="error" />
@@ -208,7 +223,8 @@
 								<spring:message code="student.aadharNo"/>
 							</label>
 							<div class="controls">
-								<form:input path="aadharNo" name="aadharNo" id="aadharNo"
+								<form:input path="aadharNo" name="aadharNo"
+											id="aadharNo" maxlength="12"
 											cssClass="span3" onkeyup="intOnly(this)"/>
 								<span class="help-block">
 									<form:errors path="aadharNo" cssClass="error" />
@@ -221,9 +237,10 @@
 								<spring:message code="student.rollNo"/>
 							</label>
 							<div class="controls">
-								<form:input path="rollNo" name="rollNo" id="rollNo" cssClass="span3"
+								<form:input path="rollNo" name="rollNo" id="rollNo"
+											cssClass="span3" maxlength="10"
 											onkeypress="javascript:return isAlphaNumeric(event,this.value);"
-											onChange="checkData('checkRollNo', this)" />
+											onChange="checkData('checkRollNo', this, this.id)" />
 								<span class="help-block">
 									<form:errors path="rollNo" cssClass="error" />
 								</span>
@@ -236,6 +253,7 @@
 							</label>
 							<div class="controls">
 								<form:input path="email" name="email" id="email"
+											maxlength="50"
 											cssClass="span3" onblur="checkEmail(this);"/>
 								<span class="help-block">
 									<form:errors path="email" cssClass="error" />
@@ -250,6 +268,12 @@
 							<div class="controls">
 								<input type="file" name="image" id="image"
 									   cssClass="span3" onchange="openFile(event)" />
+
+								<%--<input type="file" name="imageBkp" id="imageBkp"
+									   cssClass="span3" onchange="openFile(event)" />--%>
+
+								<form:hidden path="photoData" name="photoData" id="photoData" />
+
 								<div id="applicantPhotoName" ></div>
 								<span class="help-block">
 									<form:errors path="image" cssClass="error" />
@@ -281,20 +305,20 @@
 						<%--<a style="color: green; text-decoration: underline;" href="${Role}/student/list">Back to Student Report</a>--%>
 
 							<div class="control-group">
-								<label class="control-label align-left" for="academicYearId">
-									<spring:message code="student.academicYear"/>
+								<label class="control-label align-left" for="batchId">
+									<spring:message code="student.batch"/>
 								</label>
 
 								<div class="controls">
-									<form:select path="academicYearId" name="academicYearId" id="academicYearId"
+									<form:select path="batchId" name="batchId" id="batchId"
 												 multiple="false"
 												 cssClass="span3"
-												 onchange="checkSelection(this, 'Academic Year')">
+												 onchange="checkSelection(this, 'Batch')">
 										<form:option value="0" label="Select" />
-										<form:options items="${academicYears}" />
+										<form:options items="${batches}" />
 									</form:select>
 									<span class="help-block">
-									<form:errors path="academicYearId" cssClass="error" />
+									<form:errors path="batchId" cssClass="error" />
 								</span>
 								</div>
 							</div>
@@ -326,12 +350,31 @@
 								<div class="controls">
 									<form:select path="joiningYearNo" name="joiningYearNo" id="joiningYearNo"
 												 multiple="false"
-												 cssClass="span3" onchange="checkSelection(this, 'Joined in Year')">
+												 cssClass="span3"
+												 onChange="checkData('getSemesters', this, joiningSemesterId.id)">
 										<form:option value="0" label="Select" />
 										<form:options items="${years}" />
 									</form:select>
 									<span class="help-block">
 									<form:errors path="joiningYearNo" cssClass="error" />
+								</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+
+								<label class="control-label align-left" for="joiningSemesterId">
+									<spring:message code="student.joiningSemester"/>
+								</label>
+								<div class="controls">
+									<form:select path="joiningSemesterId" name="joiningSemesterId" id="joiningSemesterId"
+												 multiple="false"
+												 cssClass="span3">
+										<form:option value="0" label="Select" />
+										<form:options items="${semesters}" />
+									</form:select>
+									<span class="help-block">
+									<form:errors path="joiningSemesterId" cssClass="error" />
 								</span>
 								</div>
 							</div>
@@ -360,6 +403,7 @@
 								</label>
 								<div class="controls">
 									<form:input path="height" name="height" id="height"
+												maxlength="5"
 												cssClass="span3" onkeyup="intOnly(this)"/>
 									<span class="help-block">
 									<form:errors path="height" cssClass="error" />

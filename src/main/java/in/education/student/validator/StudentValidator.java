@@ -42,9 +42,10 @@ public class StudentValidator implements Validator {
 
 		StudentDto studentDto = (StudentDto) obj;
 
-		if(studentDto.getAcademicYearId() == 0) {
-			errors.rejectValue("academicYearId", "zeroValue.student.academicYearId", new Object[]{
-					"Academic Year"}, "Please select this");
+		if(studentDto.getBatchId() == 0) {
+			errors.rejectValue("batchId", "zeroValue.student.batchId",
+					new Object[]{
+					"Batch"}, "Please select this");
 		}
 
 		if(studentDto.getBranchId().equalsIgnoreCase("0")) {
@@ -52,7 +53,7 @@ public class StudentValidator implements Validator {
 					"Branch Id"}, "Please select this");
 		}
 
-		/*if(student.getBloodGroupId() == 0 ) {
+		/*if(studentDto.getBloodGroupId() == 0 ) {
 			errors.rejectValue("bloodGroupId", "zeroValue.student.bloodGroupId", new Object[]{
 					"Blood Group"}, "Please select this");
 		}*/
@@ -60,6 +61,12 @@ public class StudentValidator implements Validator {
 		if(studentDto.getJoiningYearNo() == 0) {
 			errors.rejectValue("joiningYearNo", "zeroValue.student.joiningYearNo", new Object[]{
 					"Joining Year"}, "Please select this");
+		}
+
+		if(studentDto.getJoiningSemesterId() == 0) {
+			errors.rejectValue("joiningSemesterId", "zeroValue.student.joiningSemesterId",
+					new Object[]{
+					"Joining Semester"}, "Please select this");
 		}
 
 		if (studentDto.getEmail() != null && !EMAIL_REGEX.matcher(studentDto.getEmail()).matches()) {

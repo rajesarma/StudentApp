@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 @Repository
@@ -106,7 +105,7 @@ public class StudentJdbcRepository {
 			pstmt.setObject((++index), student.getMotherName());
 
 			pstmt.setObject((++index), student.getGender());
-			pstmt.setObject((++index), student.getAcademicYearId());
+			pstmt.setObject((++index), student.getBatchId());
 			pstmt.setObject((++index), student.getAadharNo());
 
 			pstmt.setObject((++index), student.getHeight());
@@ -154,7 +153,7 @@ public class StudentJdbcRepository {
 					" left join academic_year ay on (ay.year_id = sd.academic_year_id)" +
 					" left join branch b on (b.branch_id = sd.branch_id)" +
 					" where" +
-					" ay.year_id = " +studentData.getAcademicYearId()+
+					" ay.year_id = " +studentData.getBatchId()+
 					" " + branchPart +
 					" order by branch_name, roll_no, student_name";
 
@@ -164,7 +163,7 @@ public class StudentJdbcRepository {
 			{
 				Student student = new Student();
 				student.setStudentId(rs.getInt("student_id"));
-//				student.setYear(rs.getString("year"));
+//				student.setBatch(rs.getString("year"));
 
 //				student.setBranch(rs.getString("branch_name"));
 				student.setRollNo(rs.getString("roll_no"));
@@ -237,7 +236,7 @@ public class StudentJdbcRepository {
 				student.setParentPhoneNo(rs.getString("guardian_mobile"));
 //				student.setBloodGroup(rs.getString("blood_group"));
 				student.setJoiningYearNo(rs.getInt("joining_year_no"));
-				student.setAcademicYearId(rs.getInt("academic_year_id"));
+				student.setBatchId(rs.getInt("academic_year_id"));
 				student.setBranchId(rs.getString("branch_id"));
 				student.setRollNo(rs.getString("roll_no"));
 				student.setAlternativePhoneNo(rs.getString("mobile_no"));
@@ -315,7 +314,7 @@ public class StudentJdbcRepository {
 			pstmt.setObject((++index), student.getMotherName());
 
 			pstmt.setObject((++index), student.getGender());
-			pstmt.setObject((++index), student.getAcademicYearId());
+			pstmt.setObject((++index), student.getBatchId());
 			pstmt.setObject((++index), student.getAadharNo());
 
 			pstmt.setObject((++index), student.getHeight());

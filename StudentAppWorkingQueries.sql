@@ -57,7 +57,7 @@ select * from users;
 select * FROM student_details;
 
 
-select sd.student_id, ay.year, b.branch_name,  roll_no, student_name, father_name, 
+select sd.student_id, ay.batch, b.branch_name,  roll_no, student_name, father_name,
 -- STR_TO_DATE(dob,'%d/%m/%y') as dob, STR_TO_DATE(doj,'%d/%m/%y') as doj 
 date_format(dob,'%d/%m/%Y') as dob, STR_TO_DATE(doj,'%d/%m/%y') as doj 
 

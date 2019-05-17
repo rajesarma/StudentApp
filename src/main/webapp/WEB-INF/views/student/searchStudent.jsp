@@ -9,7 +9,7 @@
 <html>
 <head>
 	<meta charset="ISO-8859-1">
-	<title>Students List</title>
+	<title>Search Student</title>
 
 	<link rel="stylesheet" type="text/css"  href="<c:url
 	value="${pageContext.request.contextPath}/css/custom/form-data.css" />" />
@@ -17,14 +17,8 @@
 	<link rel="stylesheet" type="text/css"  href="<c:url
 	value="${pageContext.request.contextPath}/css/custom/dataTables.jqueryui.min.css" />" />
 
-	<%--<link rel="stylesheet" type="text/css"  href="<c:url
-	value="${pageContext.request.contextPath}/css/custom/jquery-ui.css" />" />--%>
-
-	<%--<script src="${pageContext.request.contextPath}/js/jquery-3.3.1.js"></script>--%>
 	<script
 			src="${pageContext.request.contextPath}/js/custom/jquery.dataTables.min.js"></script>
-	<%--<script src="${pageContext.request.contextPath}/js/dataTables.jqueryui.min.js"></script>
-	<script src="${pageContext.request.contextPath}/js/jquery-ui.js"></script>--%>
 
 	<script>
 		$(document).ready(function() {
@@ -40,7 +34,6 @@
 
 	</script>
 
-
 </head>
 <body>
 	<section id="subintro">
@@ -50,7 +43,7 @@
 					<div class="span12">
 						<div class="centered">
 							<h3>
-								List
+								Search
 							</h3>
 						</div>
 					</div>
@@ -65,71 +58,37 @@
 				<div class="span12">
 					<div class="centered">
 
-					<form:form action="${Role}/student/list" cssClass="form-inline"
+					<form:form action="/super/searchStudent"
+							   cssClass="form-inline"
 							   id="studentListForm"
 							   modelAttribute="studentDto">
 
+						<label class="control-label align-left" for="name">
+							<spring:message code="student.name"/>
+						</label>
 
+						<form:input path="name" name="name" id="name" cssClass="span2"
+									onkeyup="charOnly(this)" />
 
-							<label class="control-label align-left" for="batchId">
-								<spring:message code="student.batch"/>
-							</label>
+						<span style="padding: 10px"></span>
 
-							<form:select path="batchId" name="batchId" id="batchId"
-										 multiple="false" cssClass="span2">
-								<form:option value="0" label="Select" />
-								<%--<form:options items="${academicYears}" />--%>
+						<span style="padding: 10px">(OR)</span>
 
-								<c:forEach items="${batches}" var="batch">
-									<option value="${batch.key}"
-										<c:if test="${batch.key eq selectedBatchId}">selected="true"</c:if>
-									> ${batch.value}
-									</option>
-								</c:forEach>
+						<span style="padding: 10px"></span>
 
-							</form:select>
+						<label class="control-label align-left" for="rollNo">
+							<spring:message code="student.rollNo"/>
+						</label>
 
-							<span style="padding: 10px"></span>
+						<form:input path="rollNo" name="rollNo" id="rollNo"
+									cssClass="span2"
+									onkeypress="javascript:return isAlphaNumeric(event,this.value);"
+									 />
 
-							<label class="control-label align-left" for="branchId">
-								<spring:message code="student.branch"/>
-							</label>
-
-							<form:select path="branchId" name="branchId" id="branchId"
-										 multiple="false" cssClass="span2">
-								<form:option value="0" label="Select" />
-								<%--<form:options items="${branches}" />--%>
-
-								<c:forEach items="${branches}" var="branch">
-									<option value="${branch.key}"
-											<c:if test="${branch.key eq selectedBranchId}">selected="true"</c:if>
-									> ${branch.value}
-									</option>
-								</c:forEach>
-
-							</form:select>
-
-							<span style="padding: 10px"></span>
-
-							<label class="control-label align-left" for="joiningYearNo">
-								<spring:message code="student.joiningYearNo"/>
-							</label>
-
-							<form:select path="joiningYearNo" name="joiningYearNo" id="joiningYearNo"
-										 multiple="false" cssClass="span2">
-								<form:option value="0" label="Select" />
-								<c:forEach items="${years}" var="batch">
-									<option value="${batch.key}"
-											<c:if test="${batch.key eq selectedYearId}">selected="true"</c:if>
-									> ${batch.value}
-									</option>
-								</c:forEach>
-							</form:select>
-
-							<span style="padding: 10px"></span>
+						<span style="padding: 10px"></span>
 
 						<button type="submit" class="btn btn-primary">
-							Get Data
+							Search
 						</button>
 					</form:form>
 					</div>
@@ -148,10 +107,9 @@
 
 							<table class="table " id="studentList" >
 								<thead>
-									<th scope="row">Batch</th>
-									<th scope="row">Branch</th>
 									<th scope="row">Joined Year</th>
-									<th scope="row">Joined Semester</th>
+									<th scope="row">Academic Year</th>
+									<th scope="row">Branch</th>
 									<th scope="row">Roll No</th>
 									<th scope="row">Name</th>
 									<th scope="row">Father Name</th>
@@ -164,9 +122,8 @@
 									<c:forEach items="${studentList }" var="student" >
 										<tr>
 											<td>${student.batch }</td>
+											<td>${student.batch }</td>
 											<td>${student.branch }</td>
-											<td>${student.year }</td>
-											<td>${student.semester }</td>
 											<td>${student.rollNo }</td>
 											<td>${student.name }</td>
 											<td>${student.fatherName }</td>

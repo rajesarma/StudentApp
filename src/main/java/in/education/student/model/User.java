@@ -22,6 +22,8 @@ import java.util.List;
 @Table(name = "users")
 public class User implements Serializable {
 
+	private static final long serialVersionUID = -6820586948643587814L;
+
 	@Id
 	@Column(name="id", updatable = false, nullable = false)
 	@NotNull

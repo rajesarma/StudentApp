@@ -7,10 +7,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
 @Table(name="semester")
-public class Semester {
+public class Semester implements Serializable {
+
+	private static final long serialVersionUID = 7720738217464101162L;
 
 	@Id
 	@NotNull
@@ -21,6 +24,10 @@ public class Semester {
 	@NotNull
 	@Column(name="semester_name")
 	private String semesterName;
+
+	@NotNull
+	@Column(name="year_no")
+	private String yearId;
 
 	/*@NotNull
 	@OneToOne(fetch = FetchType.LAZY)
@@ -49,13 +56,21 @@ public class Semester {
 		this.semesterName = semesterName;
 	}
 
-	/*public Year getYear() {
+	/*public Year getBatch() {
 		return year;
 	}
 
-	public void setYear(Year year) {
+	public void setBatch(Year year) {
 		this.year = year;
 	}*/
+
+	public String getYearId() {
+		return yearId;
+	}
+
+	public void setYearId(String yearId) {
+		this.yearId = yearId;
+	}
 }
 
 

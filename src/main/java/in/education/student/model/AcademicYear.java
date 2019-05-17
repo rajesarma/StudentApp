@@ -7,33 +7,36 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "academic_year")
-public class AcademicYear {
+public class AcademicYear implements Serializable {
+
+	private static final long serialVersionUID = -3927031149215943806L;
 
 	@Id
 	@NotNull
 	@Column(name = "year_id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private long yearId;
+	private long academicYearId;
 
 	@Column(name="year")
-	private String year;
+	private String academicYear;
 
-	public long getYearId() {
-		return yearId;
+	public long getAcademicYearId() {
+		return academicYearId;
 	}
 
-	public void setYearId(long yearId) {
-		this.yearId = yearId;
+	public void setAcademicYearId(long academicYearId) {
+		this.academicYearId = academicYearId;
 	}
 
-	public String getYear() {
-		return year;
+	public String getAcademicYear() {
+		return academicYear;
 	}
 
-	public void setYear(String year) {
-		this.year = year;
+	public void setAcademicYear(String academicYear) {
+		this.academicYear = academicYear;
 	}
 }

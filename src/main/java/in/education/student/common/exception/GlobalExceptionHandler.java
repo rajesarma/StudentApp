@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,12 +36,20 @@ public class GlobalExceptionHandler {
 		return mav;
 	}
 
+	@ExceptionHandler
+	public ModelAndView handleIoException(IOException ex) {
+		ModelAndView mav = new ModelAndView("error");	// shows error.jsp
+		mav.addObject("message", ex.getMessage());
+//		System.out.println(ex.getMessage());
+
+		return mav;
+	}
+
 	/*@ExceptionHandler
 	public ResponseEntity<String> handleInvalidHeaderFieldException1(InvalidHeaderFieldException ex) {
 
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.PRECONDITION_FAILED);
 	}*/
-
 
 	@ExceptionHandler(BindException.class)
 	public List<String> handleBindException(BindException ex) {

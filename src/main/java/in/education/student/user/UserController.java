@@ -159,7 +159,7 @@ public class UserController {
 	}
 
 	@GetMapping("/admin/user/edit/{userId}/{operation}")
-	public ModelAndView findByUserId(@PathVariable("userId") long userId,
+	public ModelAndView edit(@PathVariable("userId") long userId,
 			@PathVariable("operation") String operation) {
 
 		ModelAndView mav = new ModelAndView("user", userDataDto, new UserDto());

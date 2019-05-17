@@ -4,6 +4,7 @@ import in.education.student.dto.StudentDto;
 import in.education.student.validator.StudentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -25,6 +28,8 @@ public class StudentController {
 
 	@Value("${save}")
 	String save;
+	@Value("${update}")
+	String update;
 
 	private static String Role = "/super";
 
@@ -33,28 +38,31 @@ public class StudentController {
 		this.studentService = studentService;
 	}
 
-	private String academicYears = "academicYears";
+	private String batches = "batches";
 	private String bloodGroups = "bloodGroups";
 	private String branches = "branches";
 	private String years = "years";
 	private String role = "Role";
 	private String message = "";
 
+	private void getData(ModelAndView mav) {
+		mav.addObject(years, studentService.getYears());
+		mav.addObject(bloodGroups, studentService.getBloodGroups());
+		mav.addObject(branches, studentService.getBranches());
+		mav.addObject(batches, studentService.getBatches());
+	}
+
 
 //	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERVIZOR')")
 	@GetMapping(value = "/student/add")
 	public ModelAndView save()  {
 
-		ModelAndView mav = new ModelAndView("studentAdd", "studentDto", new StudentDto());
+		ModelAndView mav = new ModelAndView("addStudent", "studentDto", new StudentDto());
 
 		mav.addObject("buttonValue", save );
 		mav.addObject("action",Role + "/student/add");
 		mav.addObject(role, Role);
-		mav.addObject(academicYears, studentService.getAcademicYears());
-		mav.addObject(bloodGroups, studentService.getBloodGroups());
-		mav.addObject(branches, studentService.getBranches());
-		mav.addObject(years, studentService.getYears());
-		mav.addObject(role, Role);
+		getData(mav);
 
 		return mav;
 	}
@@ -63,11 +71,8 @@ public class StudentController {
 	public ModelAndView save(@ModelAttribute("studentDto") StudentDto studentDto,
 			BindingResult bindingResult) { //@Valid
 
-		ModelAndView mav = new ModelAndView("studentAdd", "studentDto", studentDto);
-		mav.addObject(academicYears, studentService.getAcademicYears());
-		mav.addObject(bloodGroups, studentService.getBloodGroups());
-		mav.addObject(branches, studentService.getBranches());
-		mav.addObject(years, studentService.getYears());
+		ModelAndView mav = new ModelAndView("addStudent", "studentDto", studentDto);
+		getData(mav);
 		mav.addObject(role, Role);
 		mav.addObject("buttonValue", "Save");
 		mav.addObject("action", Role + "/student/add");
@@ -87,6 +92,7 @@ public class StudentController {
 		}
 
 		mav.addObject("message", "Student Information is added successfully");
+		mav.addObject("studentDto", new StudentDto());
 
 		return mav;
 	}
@@ -105,10 +111,7 @@ public class StudentController {
 
 		ModelAndView mav = new ModelAndView("studentList", "studentDto",
 				new StudentDto());
-		mav.addObject(academicYears, studentService.getAcademicYears());
-		mav.addObject(bloodGroups, studentService.getBloodGroups());
-		mav.addObject(branches, studentService.getBranches());
-		mav.addObject(years, studentService.getYears());
+		getData(mav);
 
 		mav.addObject(role, Role);
 		return mav;
@@ -118,16 +121,26 @@ public class StudentController {
 	public ModelAndView list(@ModelAttribute("studentDto") StudentDto studentDto) {
 
 		ModelAndView mav = new ModelAndView("studentList");
-		mav.addObject(academicYears, studentService.getAcademicYears());
-		mav.addObject(bloodGroups, studentService.getBloodGroups());
-		mav.addObject(branches, studentService.getBranches());
-		mav.addObject(years, studentService.getYears());
+		getData(mav);
 		mav.addObject(role, Role);
-		mav.addObject("studentList", studentService.list(studentDto.getBranchId(),
-				studentDto.getAcademicYearId()));
+
+		List studentsList = studentService.list(studentDto.getBranchId(),
+				studentDto.getBatchId(), studentDto.getJoiningYearNo());
+
+		if(studentsList.isEmpty()) {
+			mav.addObject("message", "No records found based on your selection");
+		}
+
+		mav.addObject("studentList", studentsList);
+
+		mav.addObject("selectedBatchId", studentDto.getBatchId());
+		mav.addObject("selectedBranchId", studentDto.getBranchId());
+		mav.addObject("selectedYearId", studentDto.getJoiningYearNo());
+
 		return mav;
 	}
 
+	// Ajax request
 	@GetMapping(value = "/student/{type}/{value}")
 	public ResponseEntity<?> find(@PathVariable("type") String type,
 			@PathVariable("value") String value) {
@@ -143,9 +156,152 @@ public class StudentController {
 			} else {
 				result = "{\"rollNoExists\":\"false\" }";
 			}
+		} else if(type.equalsIgnoreCase("getSemesters")) {
+
+			Optional<Map<Long,String>> semestersOptional =
+					studentService.getSemesetersByYearId(Long.parseLong(value));
+
+			if(semestersOptional.isPresent()) {
+
+				result =
+						"{\"semestersExists\":\"true\", \"semesters\":\""+semestersOptional.get()+"\"  }";
+			} else {
+				result = "{\"semestersExists\":\"false\" }";
+			}
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+
+	@GetMapping("/student/edit/{studentId}/{operation}")
+	public ModelAndView edit(@PathVariable("studentId") long studentId,
+			@PathVariable("operation") String operation) {
+
+		ModelAndView mav = new ModelAndView("addStudent", "studentDto", new StudentDto());
+
+		Optional<StudentDto> studentOptional = studentService.findById(studentId);
+		if(studentOptional.isPresent()) {
+			StudentDto studentDto = studentOptional.get();
+
+			mav.addObject("selectedBatchId", studentDto.getBatchId());
+			mav.addObject("selectedBranchId", studentDto.getBranchId());
+			mav.addObject("selectedYearId", studentDto.getJoiningYearNo());
+
+			mav.addObject("photoData",studentDto.getPhotoData());
+			mav.addObject("studentDto", studentDto);
+		}
+
+		mav.addObject(role, Role);
+		getData(mav);
+
+		mav.addObject("buttonValue", update );
+		mav.addObject("action",Role + "/student/update");
+
+		return mav;
+	}
+
+	@PostMapping("/student/update")
+	public ModelAndView update(@ModelAttribute("studentDto") StudentDto studentDto,
+			BindingResult bindingResult) {
+
+		ModelAndView mav = new ModelAndView("studentList", "studentDto", studentDto);
+		getData(mav);
+		mav.addObject(role, Role);
+
+		mav.addObject("buttonValue", update);
+		mav.addObject("action", Role + "/student/update");
+
+		mav.addObject("selectedBatchId", studentDto.getBatchId());
+		mav.addObject("selectedBranchId", studentDto.getBranchId());
+		mav.addObject("selectedYearId", studentDto.getJoiningYearNo());
+
+		new StudentValidator().validate(studentDto, bindingResult);
+
+		if(bindingResult.hasErrors()) {
+
+			mav.setViewName("addStudent");
+			mav.addObject("message", "Student Information is not updated");
+			mav.addObject("buttonValue", update );
+			mav.addObject("action","/student/update");
+			return mav;
+		}
+
+		Optional<StudentDto> studentDtoOptional = studentService.update(studentDto);
+
+		if(studentDtoOptional.isPresent()) {
+			StudentDto updatedStudent = studentDtoOptional.get();
+
+			mav.addObject("studentList", studentService.list(updatedStudent.getBranchId(),
+					updatedStudent.getBatchId(), updatedStudent.getJoiningYearNo()));
+
+			mav.addObject("selectedBatchId", updatedStudent.getBatchId());
+			mav.addObject("selectedBranchId", updatedStudent.getBranchId());
+			mav.addObject("selectedYearId", updatedStudent.getJoiningYearNo());
+
+			mav.addObject("message", "Student Information updated successfully");
+			return mav;
+		}
+
+		mav.addObject("studentList", studentService.list(studentDto.getBranchId(),
+				studentDto.getBatchId(), studentDto.getJoiningYearNo()));
+
+		mav.addObject("message", "Problem in Updating Student Data");
+		return mav;
+
+	}
+
+	@PostMapping("/student/delete")
+	public ModelAndView delete(@ModelAttribute("studentDto") StudentDto studentDto) {
+
+		ModelAndView mav = new ModelAndView("studentList", "studentDto", studentDto);
+		getData(mav);
+		mav.addObject(role, Role);
+
+		mav.addObject("buttonValue", update);
+		mav.addObject("action", Role + "/student/delete");
+
+		mav.addObject("selectedBatchId", studentDto.getBatchId());
+		mav.addObject("selectedBranchId", studentDto.getBranchId());
+		mav.addObject("selectedYearId", studentDto.getJoiningYearNo());
+
+		Optional<StudentDto> studentDtoOptional = studentService.delete(studentDto);
+
+		if(!studentDtoOptional.isPresent()) {
+			mav.addObject("message", "Student Information deleted successfully");
+		}  else {
+			mav.addObject("message", "Problem in deletion");
+		}
+
+		mav.addObject("studentList", studentService.list(studentDto.getBranchId(),
+				studentDto.getBatchId(), studentDto.getJoiningYearNo()));
+
+		return mav;
+	}
+
+	@GetMapping("/searchStudent")
+	public ModelAndView search() {
+
+		return new ModelAndView("searchStudent", "studentDto",
+				new StudentDto());
+	}
+
+	@PostMapping("/searchStudent")
+	public ModelAndView search(@ModelAttribute("studentDto") StudentDto studentDto) {
+
+		ModelAndView mav = new ModelAndView("searchStudent", "studentDto",
+				new StudentDto());
+
+		Pair<String, List> studentData = studentService.search(studentDto);
+
+//		if(studentData.getSecond().isEmpty()) {
+//			mav.addObject("message", "No records found based on your selection");
+//		}
+
+		mav.addObject("message", studentData.getFirst());
+		mav.addObject("studentList", studentData.getSecond());
+
+		return mav;
+	}
+
 }
 
 	/*@GetMapping(value = "/student/add")

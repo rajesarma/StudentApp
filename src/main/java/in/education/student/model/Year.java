@@ -10,11 +10,14 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "year")
-public class Year {
+public class Year implements Serializable {
+
+	private static final long serialVersionUID = -138442090517411105L;
 
 	@Id
 	@NotNull

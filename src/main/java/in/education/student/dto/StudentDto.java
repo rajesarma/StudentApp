@@ -3,8 +3,6 @@ package in.education.student.dto;
 import in.education.student.model.Gender;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
-
 public class StudentDto {
 
 	private long studentId;
@@ -20,18 +18,22 @@ public class StudentDto {
 	private String parentPhoneNo=null;
 	private String alternativePhoneNo=null;
 	private long bloodGroupId = 0;
-	private long academicYearId = 0;
+	private long batchId = 0;
 	private String branchId= null;
 	private String rollNo =null;
 	private Gender gender = Gender.MALE;
 	private MultipartFile image;
-//	private byte[] photo;
 	private int height;
-	private int joiningYearNo;
+
 	private String branch = null;
 	private String bloodGroup = null;
 	private String year = null;
 	private String photoData;
+	private String batch = null;
+
+	private long joiningYearNo;
+	private long joiningSemesterId;
+	private String semester= null;
 
 	public long getStudentId() {
 		return studentId;
@@ -72,22 +74,6 @@ public class StudentDto {
 	public void setDoj(String doj) {
 		this.doj = doj;
 	}
-
-	/*public Date getDob() {
-		return dob;
-	}
-
-	public void setDob(Date dob) {
-		this.dob = dob;
-	}
-
-	public Date getDoj() {
-		return doj;
-	}
-
-	public void setDoj(Date doj) {
-		this.doj = doj;
-	}*/
 
 	public String getPhotoName() {
 		return photoName;
@@ -137,12 +123,12 @@ public class StudentDto {
 		this.bloodGroupId = bloodGroupId;
 	}
 
-	public long getAcademicYearId() {
-		return academicYearId;
+	public long getBatchId() {
+		return batchId;
 	}
 
-	public void setAcademicYearId(long academicYearId) {
-		this.academicYearId = academicYearId;
+	public void setBatchId(long batchId) {
+		this.batchId = batchId;
 	}
 
 	public String getBranchId() {
@@ -193,14 +179,6 @@ public class StudentDto {
 		this.image = image;
 	}
 
-	/*public byte[] getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(byte[] photo) {
-		this.photo = photo;
-	}*/
-
 	public String getBranch() {
 		return branch;
 	}
@@ -249,12 +227,36 @@ public class StudentDto {
 		this.photoData = photoData;
 	}
 
-	public int getJoiningYearNo() {
+	public long getJoiningYearNo() {
 		return joiningYearNo;
 	}
 
-	public void setJoiningYearNo(int joiningYearNo) {
+	public void setJoiningYearNo(long joiningYearNo) {
 		this.joiningYearNo = joiningYearNo;
+	}
+
+	public String getBatch() {
+		return batch;
+	}
+
+	public void setBatch(String batch) {
+		this.batch = batch;
+	}
+
+	public long getJoiningSemesterId() {
+		return joiningSemesterId;
+	}
+
+	public void setJoiningSemesterId(long joiningSemesterId) {
+		this.joiningSemesterId = joiningSemesterId;
+	}
+
+	public String getSemester() {
+		return semester;
+	}
+
+	public void setSemester(String semester) {
+		this.semester = semester;
 	}
 }
 

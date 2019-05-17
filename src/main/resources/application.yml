@@ -66,7 +66,7 @@ spring:
 
   #Set the SQL Dialect to “default” in your labels.properties to let Spring autodetect the different SQL Dialects of each datasource
   jpa:
-  #  show-sql: true
+    show-sql: true
     hibernate:
       ddl-auto: update
     properties:

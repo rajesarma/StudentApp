@@ -20,7 +20,7 @@ import java.util.List;
 //@SecondaryTable(name="roles")
 public class Role implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -5034389007096787876L;
 
 	@Id
 	@Column(name="role_id", unique=true, nullable = false)
